@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>Movus Lojistik | Depo Arayışı Kontrol Formu</title>
+<title>Movus Lojistik | Depolama Alanı Bilgi Toplama Formu</title>
 <style>
   :root{
     --navy-950:#0B1220;
@@ -29,7 +29,7 @@
     color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     -webkit-tap-highlight-color:transparent;
-    padding-bottom:96px;
+    padding-bottom:24px;
   }
 
   /* ---------- HEADER ---------- */
@@ -82,9 +82,9 @@
     display:flex; gap:8px; margin:14px 18px 0; position:relative; z-index:1;
   }
   .view-tab{
-    flex:1; background:var(--navy-900); border:1px solid var(--navy-700);
-    color:var(--steel-200); padding:10px 8px; border-radius:8px;
-    font-size:13.5px; font-weight:700; text-align:center;
+    flex:none; background:var(--navy-900); border:1px solid var(--navy-700);
+    color:var(--steel-200); padding:10px 16px; border-radius:8px;
+    font-size:13.5px; font-weight:700; text-align:center; margin-left:auto;
   }
   .view-tab.active{ background:var(--amber-500); color:var(--navy-950); border-color:var(--amber-500); }
 
@@ -135,14 +135,13 @@
     margin:0 4px 12px; overflow:hidden;
   }
   section.card > summary{
-    list-style:none; cursor:pointer; padding:14px 15px;
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    font-weight:700; font-size:15px;
+    list-style:none; cursor:pointer; padding:0;
+    display:flex; flex-direction:column;
   }
   section.card > summary::-webkit-details-marker{display:none;}
-  .grp-eyebrow{
-    font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:var(--amber-600);
-    font-weight:700; display:block; margin-bottom:2px;
+  .summary-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:13px 15px; font-weight:800; font-size:16px;
   }
   .chev{
     flex:none; width:20px; height:20px; color:var(--ink-soft);
@@ -152,10 +151,12 @@
   .card-body{padding:4px 15px 16px;}
   .subgroup{ margin-top:10px; padding-top:12px; border-top:1px dashed var(--steel-200); }
   .subgroup:first-child{border-top:none; margin-top:0; padding-top:0;}
-  .subgroup-title{ font-size:13px; font-weight:700; color:var(--navy-800); margin:0 0 10px; }
+  .subgroup-title{ font-size:13.5px; font-weight:800; color:var(--navy-800); margin:0 0 10px; }
 
   .field{margin-bottom:12px;}
   .field.split{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .field.split3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;}
+  .field.split3 label{font-size:11.5px;}
   .field.split .sub{margin:0;}
 
   input[type=text], input[type=number], select, textarea{
@@ -193,11 +194,11 @@
   }
   .recent-empty{font-size:13px; color:var(--ink-soft); padding:4px;}
 
-  /* ---------- FOOTER ACTIONS ---------- */
-  footer.actions{
-    position:fixed; bottom:0; left:0; right:0; background:#fff;
-    border-top:1px solid var(--steel-200); padding:10px 14px calc(10px + env(safe-area-inset-bottom));
-    display:flex; gap:10px; z-index:10;
+  /* ---------- ÜST AKSİYON BARI (Yeni Form / Kaydet) ---------- */
+  .top-actions{
+    display:flex; gap:10px; padding:12px 14px; max-width:640px; margin:0 auto;
+    position:sticky; top:0; background:var(--paper); z-index:9;
+    border-bottom:1px solid var(--steel-200);
   }
   .btn{
     flex:1; border:none; border-radius:9px; padding:13px 10px; font-size:15px;
@@ -208,8 +209,35 @@
   .btn-secondary{background:var(--steel-100); color:var(--ink); flex:0 0 auto; padding:13px 16px;}
   .btn:disabled{opacity:.55;}
 
+  /* ---------- ALTTAKİ KAYITLAR BUTONU ---------- */
+  .view-tab-bottom{
+    display:block; width:calc(100% - 8px); margin:20px 4px 8px; background:var(--navy-900);
+    color:#fff; border:none; border-radius:10px; padding:14px; font-size:14.5px; font-weight:700;
+  }
+
   .req-mark{color:var(--amber-600);}
   svg{display:block;}
+
+  /* ---------- KAYITLAR EKRANI GERİ DÖN ---------- */
+  .btn-back{
+    background:none; border:none; color:var(--navy-800); font-size:14px; font-weight:700;
+    padding:4px 4px 14px; margin:0 4px;
+  }
+  .all-records-block{ margin-top:22px; }
+
+  /* ---------- PASİF KAYIT NO ROZETİ ---------- */
+  .formno-badge{
+    background:var(--steel-100); border:1px dashed var(--steel-200); border-radius:8px;
+    padding:10px 11px; font-size:14.5px; color:var(--ink-soft); font-weight:600;
+    letter-spacing:.02em;
+  }
+
+  /* ---------- DAHA BELİRGİN ANA BAŞLIKLAR ---------- */
+  .grp-eyebrow{
+    display:block; width:100%; background:var(--navy-950); color:var(--amber-500);
+    font-size:13.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:800;
+    padding:9px 15px;
+  }
 </style>
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -217,27 +245,40 @@
 
 <header class="top">
   <div class="brand"><span class="dot"></span>Movus Lojistik Yatırım A.Ş.</div>
-  <h1 class="form-title">Depo Arayışı Kontrol Formu</h1>
-  <div class="form-sub">Bina arayışı esnasında aşağıdaki bilgilerin kontrolü sağlanacaktır.</div>
-
-  <div class="formno-bar">
-    <input type="text" id="formNoInput" placeholder="Kayıt No ile ara (ör. MVS-0001)" autocomplete="off">
-    <button class="btn-fetch" id="fetchBtn" type="button">Getir</button>
-  </div>
-
-  <div class="view-tabs">
-    <button class="view-tab active" id="tabFormBtn" type="button">Form Doldur</button>
-    <button class="view-tab" id="tabAllBtn" type="button">Tüm Kayıtlar</button>
-  </div>
+  <h1 class="form-title">Depolama Alanı Bilgi Toplama Formu</h1>
+  <div class="form-sub">DEPOLAMA ALANI BİLGİ TOPLAMA FORMU</div>
 </header>
+
+<div class="top-actions" id="topActions">
+  <button class="btn btn-secondary" id="newBtn" type="button">Yeni Form</button>
+  <button class="btn btn-primary" id="saveBtn" type="button">Kaydet</button>
+</div>
 
 <main>
   <section id="allRecordsView" style="display:none;">
-    <div class="all-records-search">
-      <input type="text" id="arSearchInput" placeholder="Bina adı, kayıt no veya dolduran kişi ile ara…">
+    <button class="btn-back" id="tabFormBtn" type="button">← Forma Dön</button>
+
+    <div class="formno-bar">
+      <input type="text" id="formNoInput" placeholder="Kayıt No ile ara (ör. MVS-0001)" autocomplete="off">
+      <button class="btn-fetch" id="fetchBtn" type="button">Getir</button>
     </div>
-    <p class="ar-count" id="arCount"></p>
-    <div id="arList"><p class="recent-empty">Yükleniyor…</p></div>
+
+    <div class="recent">
+      <h2>Son Kayıtlar</h2>
+      <div id="recentList"><p class="recent-empty">Yükleniyor…</p></div>
+    </div>
+
+    <div class="all-records-block">
+      <div class="recent-head">
+        <h2>Tüm Kayıtlar</h2>
+        <button class="btn-export" id="exportBtn" type="button">⬇ Excel'e Aktar</button>
+      </div>
+      <div class="all-records-search">
+        <input type="text" id="arSearchInput" placeholder="Bina adı, kayıt no veya dolduran kişi ile ara…">
+      </div>
+      <p class="ar-count" id="arCount"></p>
+      <div id="arList"><p class="recent-empty">Yükleniyor…</p></div>
+    </div>
   </section>
 
   <section id="formView">
@@ -246,45 +287,103 @@
   <div class="meta-row">
     <div class="field">
       <label>Kayıt No</label>
-      <input type="text" id="displayFormNo" placeholder="Kayıt sonrası otomatik atanır" disabled>
+      <div class="formno-badge" id="displayFormNo">Kayıt sonrası otomatik atanır</div>
     </div>
     <div class="field">
-      <label>Formu Dolduran</label>
-      <input type="text" id="doldurmaKisi" placeholder="Ad Soyad">
+      <label>Formu Dolduran <span class="req-mark">*</span></label>
+      <input type="text" id="doldurmaKisi" placeholder="Ad Soyad" required>
+    </div>
+  </div>
+  <div class="meta-row">
+    <div class="field">
+      <label>Bölge</label>
+      <select id="bolge">
+        <option value="">Seçiniz</option>
+        <option>Marmara Bölgesi</option>
+        <option>Ege Bölgesi</option>
+        <option>Akdeniz Bölgesi</option>
+        <option>İç Anadolu Bölgesi</option>
+        <option>Karadeniz Bölgesi</option>
+        <option>Doğu Anadolu Bölgesi</option>
+        <option>Güneydoğu Anadolu Bölgesi</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Şehir</label>
+      <select id="sehir" disabled>
+        <option value="">Önce bölge seçiniz</option>
+      </select>
     </div>
   </div>
 
+
   <!-- BİNA HAKKINDA GENEL BİLGİLER -->
   <details class="card" open>
-    <summary><span><span class="grp-eyebrow">Genel</span>Bina Hakkında Gelen Bilgiler</span>
-      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <summary>
+      <span class="grp-eyebrow">Genel</span>
+      <span class="summary-row">
+        <span>Bina Hakkında Gelen Bilgiler</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
     </summary>
     <div class="card-body">
       <div class="field"><label>Bina Adı</label><input type="text" id="binaAdi"></div>
-      <div class="field"><label>Bina Adresi</label><textarea id="binaAdresi"></textarea></div>
+
+      <div class="field"><label>Şehir</label><div class="formno-badge" id="binaSehirDisplay">Önce Bölge / Şehir seçiniz</div></div>
       <div class="field split">
+        <div><label>Mahalle</label><input type="text" id="mahalle"></div>
+        <div><label>Cadde</label><input type="text" id="cadde"></div>
+      </div>
+      <div class="field split">
+        <div><label>Sokak</label><input type="text" id="sokak"></div>
+        <div><label>Numara</label><input type="text" id="numara"></div>
+      </div>
+
+      <div class="field split3">
         <div><label>Bina Arazi Alanı (m²)</label><input type="number" id="binaAraziAlani"></div>
         <div><label>Bina Kapalı Alanı (m²)</label><input type="number" id="binaKapaliAlani"></div>
+        <div><label>Bina Ofis Alanı (m²)</label><input type="number" id="binaOfisAlaniGenel"></div>
       </div>
-      <div class="field"><label>Bina Ofis Alanı (m²)</label><input type="number" id="binaOfisAlaniGenel"></div>
     </div>
   </details>
 
   <!-- İÇ ALAN -->
   <details class="card">
-    <summary><span><span class="grp-eyebrow">İç Alan</span>Depolama Alanı</span>
-      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <summary>
+      <span class="grp-eyebrow">İç Alan</span>
+      <span class="summary-row">
+        <span>Depolama, Ofis ve Diğer Alanlar</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
     </summary>
     <div class="card-body">
 
       <div class="subgroup">
         <p class="subgroup-title">Zemin Kontrolü</p>
-        <div class="field"><label>Zemin durumu hakkında bilgi</label><textarea id="zeminDurumu"></textarea></div>
+        <div class="field"><label>Zemin durumu hakkında bilgi</label>
+          <select id="zeminDurumu">
+            <option value="">Seçiniz</option>
+            <option>KISMİ ÇATLAKLAR MEVCUT</option>
+            <option>ZEMİNDE KIRIMA VE ÇÖKME MEVCUT</option>
+            <option>SORUNSUZ</option>
+          </select>
+        </div>
       </div>
 
       <div class="subgroup">
         <p class="subgroup-title">Çatı Kontrolü</p>
-        <div class="field"><label>Çatı malzemesi hakkında bilgi</label><textarea id="catiMalzemesi"></textarea></div>
+        <div class="field"><label>Çatı malzemesi hakkında bilgi</label>
+          <select id="catiMalzemesi">
+            <option value="">Seçiniz</option>
+            <option>SANDVİÇ PANEL</option>
+            <option>SAC</option>
+            <option>DİĞER</option>
+          </select>
+        </div>
+        <div class="field" id="catiMalzemesiDigerWrap" style="display:none;">
+          <label>Diğer — lütfen belirtin</label>
+          <input type="text" id="catiMalzemesiDiger">
+        </div>
       </div>
 
       <div class="subgroup">
@@ -361,22 +460,28 @@
       </div>
 
       <div class="subgroup">
-        <p class="subgroup-title">Yangın Sistem Kontrolü</p>
+        <p class="subgroup-title">Yangın Kontrolleri</p>
         <div class="field"><label>Binada faal halde bir yangın algılama sistemi var mı?</label>
           <select id="yanginAlgilamaVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
         </div>
         <div class="field"><label>Var ise dedektör türü nedir?</label>
           <select id="dedektorTuru"><option value="">Seçiniz</option><option>Duman</option><option>Isı</option><option>Işın</option></select>
         </div>
-      </div>
-
-      <div class="subgroup">
-        <p class="subgroup-title">Yangın Dolabı Kontrolü</p>
         <div class="field split">
           <div><label>Yangın dolabı var mı?</label>
             <select id="yanginDolabiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
           <div><label>Var ise kaç adet</label><input type="number" id="yanginDolabiAdet"></div>
+        </div>
+        <div class="field"><label>Yangın Sprinkler Sistemi Var mı?</label>
+          <select id="yanginSprinklerVarMi"><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option></select>
+        </div>
+        <div class="field"><label>Yangın Su Deposu Var mı?</label>
+          <select id="yanginSuDeposuVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div class="field" id="yanginSuDeposuKapasiteWrap" style="display:none;">
+          <label>Su Deposu Kapasitesi (m³)</label>
+          <input type="number" id="yanginSuDeposuKapasite">
         </div>
       </div>
 
@@ -390,14 +495,6 @@
         </div>
       </div>
 
-    </div>
-  </details>
-
-  <details class="card">
-    <summary><span><span class="grp-eyebrow">İç Alan</span>Ofis, Diğer Alanlar &amp; Şarj İstasyonu</span>
-      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </summary>
-    <div class="card-body">
       <div class="subgroup">
         <p class="subgroup-title">Ofis Alanı</p>
         <div class="field split">
@@ -427,8 +524,12 @@
 
   <!-- DIŞ ALAN -->
   <details class="card">
-    <summary><span><span class="grp-eyebrow">Dış Alan</span>Operasyonel Alanlar</span>
-      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <summary>
+      <span class="grp-eyebrow">Dış Alan</span>
+      <span class="summary-row">
+        <span>Operasyonel Alanlar ve Güvenlik</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
     </summary>
     <div class="card-body">
       <div class="subgroup">
@@ -456,14 +557,6 @@
           <select id="paratonerVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
         </div>
       </div>
-    </div>
-  </details>
-
-  <details class="card">
-    <summary><span><span class="grp-eyebrow">Dış Alan</span>Güvenlik</span>
-      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </summary>
-    <div class="card-body">
       <div class="subgroup">
         <p class="subgroup-title">Güvenlik Binası</p>
         <div class="field"><label>Genel fiziki durumu hakkında bilgi</label><textarea id="guvenlikFizikiDurum"></textarea></div>
@@ -479,8 +572,12 @@
 
   <!-- DİĞER KONTROLLER -->
   <details class="card">
-    <summary><span><span class="grp-eyebrow">Diğer Kontroller</span>Kamera &amp; Jeneratör</span>
-      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <summary>
+      <span class="grp-eyebrow">Diğer Kontroller</span>
+      <span class="summary-row">
+        <span>Kamera &amp; Jeneratör</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
     </summary>
     <div class="card-body">
       <div class="subgroup">
@@ -509,53 +606,58 @@
   </details>
 
   <details class="card">
-    <summary><span><span class="grp-eyebrow">Ek</span>Notlar</span>
-      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <summary>
+      <span class="grp-eyebrow">Ek</span>
+      <span class="summary-row">
+        <span>Notlar</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
     </summary>
     <div class="card-body">
       <div class="field"><label>Genel değerlendirme / serbest not</label><textarea id="genelNot"></textarea></div>
     </div>
   </details>
 
-  <div class="recent">
-    <div class="recent-head">
-      <h2>Son Kayıtlar</h2>
-      <button class="btn-export" id="exportBtn" type="button">⬇ Excel'e Aktar</button>
-    </div>
-    <div id="recentList"><p class="recent-empty">Yükleniyor…</p></div>
-  </div>  </section>
+  <button class="view-tab-bottom" id="tabAllBtn" type="button">📋 Kayıtları Görüntüle / Kayıt Sorgula</button>
+  </section>
 </main>
-
-<footer class="actions" id="footerActions">
-  <button class="btn btn-secondary" id="newBtn" type="button">Yeni Form</button>
-  <button class="btn btn-primary" id="saveBtn" type="button">Kaydet</button>
-</footer>
 
 <script>
 (function(){
   const FIELD_IDS = [
-    "binaAdi","binaAdresi","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel",
-    "zeminDurumu","catiMalzemesi",
+    "binaAdi","mahalle","cadde","sokak","numara","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel",
+    "zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
     "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet","acilCikisKapisiVarMi","acilCikisKapisiAdet",
     "korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
     "yagmurIniciKonum","yagmurIniciDurumu","logarVarMi","logarDurumu",
     "elektrikTrafoKonumu","elektrikPanoVarMi","aydinlatmaMalzemesi",
     "yanginAlgilamaVarMi","dedektorTuru","yanginDolabiVarMi","yanginDolabiAdet",
+    "yanginSprinklerVarMi","yanginSuDeposuVarMi","yanginSuDeposuKapasite",
     "dumanDamperiVarMi","dumanDamperiAdet",
     "ofisAlaniVarMi","ofisAlaniMetrekare","tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","doldurmaKisi"
+    "genelNot","doldurmaKisi","bolge","sehir"
   ];
 
+  const REGION_CITIES = {
+    "Marmara Bölgesi": ["Balıkesir","Bilecik","Bursa","Çanakkale","Edirne","İstanbul","Kırklareli","Kocaeli","Sakarya","Tekirdağ","Yalova"],
+    "Ege Bölgesi": ["Afyonkarahisar","Aydın","Denizli","İzmir","Kütahya","Manisa","Muğla","Uşak"],
+    "Akdeniz Bölgesi": ["Adana","Antalya","Burdur","Hatay","Isparta","Kahramanmaraş","Mersin","Osmaniye"],
+    "İç Anadolu Bölgesi": ["Ankara","Aksaray","Çankırı","Eskişehir","Karaman","Kayseri","Kırıkkale","Kırşehir","Konya","Nevşehir","Niğde","Sivas","Yozgat"],
+    "Karadeniz Bölgesi": ["Amasya","Artvin","Bartın","Bayburt","Bolu","Çorum","Düzce","Giresun","Gümüşhane","Karabük","Kastamonu","Ordu","Rize","Samsun","Sinop","Tokat","Trabzon","Zonguldak"],
+    "Doğu Anadolu Bölgesi": ["Ağrı","Ardahan","Bingöl","Bitlis","Elazığ","Erzincan","Erzurum","Hakkari","Iğdır","Kars","Malatya","Muş","Tunceli","Van"],
+    "Güneydoğu Anadolu Bölgesi": ["Adıyaman","Batman","Diyarbakır","Gaziantep","Kilis","Mardin","Siirt","Şanlıurfa","Şırnak"]
+  };
+
   const FIELD_LABELS = {
-    formNo: "Kayıt No", doldurmaKisi: "Formu Dolduran",
+    formNo: "Kayıt No", doldurmaKisi: "Formu Dolduran", bolge: "Bölge", sehir: "Şehir",
     createdAt: "Oluşturma Tarihi", updatedAt: "Güncelleme Tarihi",
-    binaAdi: "Bina Adı", binaAdresi: "Bina Adresi",
+    binaAdi: "Bina Adı", mahalle: "Mahalle", cadde: "Cadde", sokak: "Sokak", numara: "Numara",
     binaAraziAlani: "Bina Arazi Alanı (m²)", binaKapaliAlani: "Bina Kapalı Alanı (m²)",
     binaOfisAlaniGenel: "Bina Ofis Alanı - Genel (m²)",
-    zeminDurumu: "Zemin Durumu (İç)", catiMalzemesi: "Çatı Malzemesi",
+    zeminDurumu: "Zemin Durumu (İç)", catiMalzemesi: "Çatı Malzemesi", catiMalzemesiDiger: "Çatı Malzemesi - Diğer",
     forkliftKapisiVarMi: "Forklift Giriş Kapısı Var mı", forkliftKapisiAdet: "Forklift Kapısı Adedi",
     rampaKapisiVarMi: "Rampa Kapısı Var mı", rampaKapisiAdet: "Rampa Kapısı Adedi",
     acilCikisKapisiVarMi: "Acil Çıkış Kapısı Var mı", acilCikisKapisiAdet: "Acil Çıkış Kapısı Adedi",
@@ -567,6 +669,8 @@
     aydinlatmaMalzemesi: "Aydınlatma Malzemesi (İç)",
     yanginAlgilamaVarMi: "Yangın Algılama Sistemi Var mı", dedektorTuru: "Dedektör Türü",
     yanginDolabiVarMi: "Yangın Dolabı Var mı", yanginDolabiAdet: "Yangın Dolabı Adedi",
+    yanginSprinklerVarMi: "Yangın Sprinkler Sistemi Var mı", yanginSuDeposuVarMi: "Yangın Su Deposu Var mı",
+    yanginSuDeposuKapasite: "Su Deposu Kapasitesi (m³)",
     dumanDamperiVarMi: "Duman Damperi Var mı", dumanDamperiAdet: "Duman Damperi Adedi",
     ofisAlaniVarMi: "Ofis Alanı Var mı", ofisAlaniMetrekare: "Ofis Alanı (m²)",
     tuvaletKisilik: "Tuvalet Kişilik", dusKisilik: "Duş Kişilik",
@@ -582,13 +686,14 @@
     jeneratorVarMi: "Jeneratör Var mı", jeneratorKva: "Jeneratör Gücü (kVA)",
     genelNot: "Genel Not"
   };
-  const EXPORT_ORDER = ["formNo","doldurmaKisi","createdAt","updatedAt","binaAdi","binaAdresi",
-    "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","zeminDurumu","catiMalzemesi",
+  const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","binaAdi","mahalle","cadde","sokak","numara",
+    "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
     "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet",
     "acilCikisKapisiVarMi","acilCikisKapisiAdet","korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
     "yagmurIniciKonum","yagmurIniciDurumu","logarVarMi","logarDurumu","elektrikTrafoKonumu",
     "elektrikPanoVarMi","aydinlatmaMalzemesi","yanginAlgilamaVarMi","dedektorTuru",
-    "yanginDolabiVarMi","yanginDolabiAdet","dumanDamperiVarMi","dumanDamperiAdet",
+    "yanginDolabiVarMi","yanginDolabiAdet","yanginSprinklerVarMi","yanginSuDeposuVarMi","yanginSuDeposuKapasite",
+    "dumanDamperiVarMi","dumanDamperiAdet",
     "ofisAlaniVarMi","ofisAlaniMetrekare","tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
@@ -630,10 +735,18 @@
   const tabAllBtn = $("tabAllBtn");
   const formView = $("formView");
   const allRecordsView = $("allRecordsView");
-  const footerActions = $("footerActions");
+  const topActions = $("topActions");
   const arSearchInput = $("arSearchInput");
   const arList = $("arList");
   const arCount = $("arCount");
+  const bolgeSelect = $("bolge");
+  const sehirSelect = $("sehir");
+  const binaSehirDisplay = $("binaSehirDisplay");
+  const catiMalzemesiSelect = $("catiMalzemesi");
+  const catiMalzemesiDigerWrap = $("catiMalzemesiDigerWrap");
+  const catiMalzemesiDigerInput = $("catiMalzemesiDiger");
+  const yanginSuDeposuSelect = $("yanginSuDeposuVarMi");
+  const yanginSuDeposuKapasiteWrap = $("yanginSuDeposuKapasiteWrap");
   let allRecordsCache = null;
 
   let currentFormNo = null; // null => yeni kayıt
@@ -646,6 +759,37 @@
     banner.className = "status-banner";
   }
 
+  function syncBinaSehirDisplay(){
+    binaSehirDisplay.textContent = sehirSelect.value || "Önce Bölge / Şehir seçiniz";
+  }
+
+  function populateSehir(bolgeAdi, selectedSehir){
+    const cities = REGION_CITIES[bolgeAdi] || [];
+    if(!cities.length){
+      sehirSelect.innerHTML = '<option value="">Önce bölge seçiniz</option>';
+      sehirSelect.disabled = true;
+      syncBinaSehirDisplay();
+      return;
+    }
+    sehirSelect.disabled = false;
+    sehirSelect.innerHTML = '<option value="">Seçiniz</option>' +
+      cities.map(c => `<option${c === selectedSehir ? " selected" : ""}>${c}</option>`).join("");
+    syncBinaSehirDisplay();
+  }
+
+  function updateCatiDigerVisibility(){
+    catiMalzemesiDigerWrap.style.display = (catiMalzemesiSelect.value === "DİĞER") ? "" : "none";
+  }
+
+  function updateSuDeposuKapasiteVisibility(){
+    yanginSuDeposuKapasiteWrap.style.display = (yanginSuDeposuSelect.value === "Var") ? "" : "none";
+  }
+
+  bolgeSelect.addEventListener("change", () => populateSehir(bolgeSelect.value, ""));
+  sehirSelect.addEventListener("change", syncBinaSehirDisplay);
+  catiMalzemesiSelect.addEventListener("change", updateCatiDigerVisibility);
+  yanginSuDeposuSelect.addEventListener("change", updateSuDeposuKapasiteVisibility);
+
   function collectFormData(){
     const data = {};
     FIELD_IDS.forEach(id => { data[id] = $(id).value; });
@@ -653,13 +797,19 @@
   }
 
   function fillForm(data){
-    FIELD_IDS.forEach(id => { $(id).value = (data && data[id] != null) ? data[id] : ""; });
+    FIELD_IDS.forEach(id => {
+      if(id === "sehir") return; // bolge'den sonra ayrıca dolduruluyor
+      $(id).value = (data && data[id] != null) ? data[id] : "";
+    });
+    populateSehir(data && data.bolge, data && data.sehir);
+    updateCatiDigerVisibility();
+    updateSuDeposuKapasiteVisibility();
   }
 
   function clearForm(){
     fillForm({});
     currentFormNo = null;
-    displayFormNo.value = "";
+    displayFormNo.textContent = "Kayıt sonrası otomatik atanır";
     formNoInput.value = "";
     document.querySelectorAll("section.card").forEach((el,i)=>{ el.open = (i===0); });
   }
@@ -712,7 +862,7 @@
       }
       fillForm(result.record);
       currentFormNo = formNo;
-      displayFormNo.value = formNo;
+      displayFormNo.textContent = formNo;
       formNoInput.value = formNo;
       document.querySelectorAll("section.card").forEach(el => el.open = true);
       showBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
@@ -723,6 +873,13 @@
   }
 
   async function saveForm(){
+    const doldurmaKisiVal = $("doldurmaKisi").value.trim();
+    if(!doldurmaKisiVal){
+      showBanner("err","Kaydetmeden önce \"Formu Dolduran\" alanına ad soyad girmelisiniz.");
+      $("doldurmaKisi").focus();
+      document.querySelectorAll("section.card").forEach((el,i)=>{ el.open = (i===0); });
+      return;
+    }
     saveBtn.disabled = true;
     saveBtn.textContent = "Kaydediliyor…";
     try{
@@ -733,7 +890,7 @@
       if(!result.ok){ throw new Error(result.error || "Kayıt başarısız"); }
 
       currentFormNo = result.formNo;
-      displayFormNo.value = result.formNo;
+      displayFormNo.textContent = result.formNo;
       formNoInput.value = result.formNo;
       showBanner("ok", "Kaydedildi. Kayıt No: " + result.formNo);
       allRecordsCache = null;
@@ -782,18 +939,17 @@
   function showFormView(){
     allRecordsView.style.display = "none";
     formView.style.display = "";
-    footerActions.style.display = "flex";
-    tabFormBtn.classList.add("active");
+    topActions.style.display = "flex";
     tabAllBtn.classList.remove("active");
   }
 
   function showAllRecordsView(){
     formView.style.display = "none";
     allRecordsView.style.display = "";
-    footerActions.style.display = "none";
+    topActions.style.display = "none";
     tabAllBtn.classList.add("active");
-    tabFormBtn.classList.remove("active");
     hideBanner();
+    loadRecent();
     loadAllRecords();
   }
 
@@ -821,7 +977,7 @@
     if(!allRecordsCache){ return; }
     const q = (filterText || "").trim().toLocaleLowerCase("tr");
     const filtered = !q ? allRecordsCache : allRecordsCache.filter(d => {
-      const haystack = [d.formNo, d.binaAdi, d.binaAdresi, d.doldurmaKisi].join(" ").toLocaleLowerCase("tr");
+      const haystack = [d.formNo, d.binaAdi, d.sehir, d.mahalle, d.cadde, d.doldurmaKisi].join(" ").toLocaleLowerCase("tr");
       return haystack.includes(q);
     });
     arCount.textContent = filtered.length + " kayıt bulundu (toplam " + allRecordsCache.length + " kayıt)";
@@ -840,7 +996,7 @@
           <span class="ar-badge">${escapeHtml(d.formNo || "")}</span>
         </div>
         <div class="ar-sub">
-          ${d.binaAdresi ? escapeHtml(d.binaAdresi) + "<br>" : ""}
+          ${(d.sehir || d.mahalle) ? escapeHtml([d.mahalle, d.sehir].filter(Boolean).join(", ")) + "<br>" : ""}
           ${d.doldurmaKisi ? "Dolduran: " + escapeHtml(d.doldurmaKisi) + " · " : ""}${dateStr}
         </div>
       `;
@@ -865,8 +1021,6 @@
   fetchBtn.addEventListener("click", () => loadByFormNo(formNoInput.value));
   exportBtn.addEventListener("click", exportAllToExcel);
   formNoInput.addEventListener("keydown", (e) => { if(e.key === "Enter") loadByFormNo(formNoInput.value); });
-
-  loadRecent();
 })();
 </script>
 
