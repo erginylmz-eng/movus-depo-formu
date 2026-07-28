@@ -241,6 +241,26 @@
   }
 
   .req-mark{color:var(--amber-600);}
+
+  /* ---------- ÜST DÜZEY ANA BAŞLIKLAR (mega şeritler) ---------- */
+  .mega-card{
+    max-width:640px; margin:0 auto 14px; background:#fff;
+    border:1px solid var(--steel-200); border-radius:var(--radius); overflow:hidden;
+  }
+  .mega-card > summary{
+    list-style:none; cursor:pointer;
+    background:var(--navy-950); color:var(--amber-500);
+    padding:18px; font-size:17px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .mega-card > summary::-webkit-details-marker{display:none;}
+  .mega-chev{ flex:none; width:22px; height:22px; color:var(--amber-500); transition:transform .18s ease; }
+  .mega-card[open] > summary .mega-chev{ transform:rotate(180deg); }
+  .mega-body{ padding-top:14px; }
+  .mega-placeholder{
+    text-align:center; color:var(--ink-soft); font-weight:800; letter-spacing:.03em;
+    padding:64px 20px; font-size:15px;
+  }
   svg{display:block;}
 
   /* ---------- KAYITLAR EKRANI GERİ DÖN ---------- */
@@ -273,6 +293,13 @@
   <h1 class="form-title">Depolama Alanı Bilgi Toplama Formu</h1>
   <div class="form-sub">DEPOLAMA ALANI BİLGİ TOPLAMA FORMU</div>
 </header>
+
+<details class="mega-card" open id="megaDepoFormu">
+  <summary class="mega-summary">
+    <span>DEPO FORMU</span>
+    <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </summary>
+  <div class="mega-body">
 
 <div class="top-actions" id="topActions">
   <button class="btn btn-secondary" id="newBtn" type="button">Yeni Form</button>
@@ -642,6 +669,29 @@
   <button class="view-tab-bottom" id="tabAllBtn" type="button">📋 Kayıtları Görüntüle / Kayıt Sorgula</button>
   </section>
 </main>
+
+  </div>
+</details>
+
+<details class="mega-card" id="megaDepolamaBilgilendirme">
+  <summary class="mega-summary">
+    <span>DEPOLAMA ALANI BİLGİLENDİRME</span>
+    <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </summary>
+  <div class="mega-body">
+    <p class="mega-placeholder">YAPIM AŞAMASINDA....</p>
+  </div>
+</details>
+
+<details class="mega-card" id="megaEgitimler">
+  <summary class="mega-summary">
+    <span>EĞİTİMLER</span>
+    <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </summary>
+  <div class="mega-body">
+    <p class="mega-placeholder">YAPIM AŞAMASINDA....</p>
+  </div>
+</details>
 
 <script>
 (function(){
