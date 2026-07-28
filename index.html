@@ -327,29 +327,6 @@
     </div>
   </div>
 
-  <div class="meta-row">
-    <div class="field">
-      <label>Bölge</label>
-      <select id="bolge">
-        <option value="">Seçiniz</option>
-        <option>Marmara Bölgesi</option>
-        <option>Ege Bölgesi</option>
-        <option>Akdeniz Bölgesi</option>
-        <option>İç Anadolu Bölgesi</option>
-        <option>Karadeniz Bölgesi</option>
-        <option>Doğu Anadolu Bölgesi</option>
-        <option>Güneydoğu Anadolu Bölgesi</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Şehir</label>
-      <select id="sehir" disabled>
-        <option value="">Önce bölge seçiniz</option>
-      </select>
-    </div>
-  </div>
-
-
   <!-- BİNA HAKKINDA GENEL BİLGİLER -->
   <details class="card" open>
     <summary>
@@ -362,7 +339,28 @@
     <div class="card-body">
       <div class="field"><label>Bina Adı</label><input type="text" id="binaAdi"></div>
 
-      <div class="field"><label>Şehir</label><div class="formno-badge" id="binaSehirDisplay">Önce Bölge / Şehir seçiniz</div></div>
+      <div class="field split">
+        <div>
+          <label>Bölge</label>
+          <select id="bolge">
+            <option value="">Seçiniz</option>
+            <option>Marmara Bölgesi</option>
+            <option>Ege Bölgesi</option>
+            <option>Akdeniz Bölgesi</option>
+            <option>İç Anadolu Bölgesi</option>
+            <option>Karadeniz Bölgesi</option>
+            <option>Doğu Anadolu Bölgesi</option>
+            <option>Güneydoğu Anadolu Bölgesi</option>
+          </select>
+        </div>
+        <div>
+          <label>Şehir</label>
+          <select id="sehir" disabled>
+            <option value="">Önce bölge seçiniz</option>
+          </select>
+        </div>
+      </div>
+
       <div class="field split">
         <div><label>Mahalle</label><input type="text" id="mahalle"></div>
         <div><label>Cadde</label><input type="text" id="cadde"></div>
@@ -529,16 +527,6 @@
       </div>
 
       <div class="subgroup">
-        <p class="subgroup-title">Ofis Alanı</p>
-        <div class="field split">
-          <div><label>Ofis Alanı var mı?</label>
-            <select id="ofisAlaniVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
-          </div>
-          <div><label>Var ise kaç m²</label><input type="number" id="ofisAlaniMetrekare"></div>
-        </div>
-      </div>
-
-      <div class="subgroup">
         <p class="subgroup-title">Diğer Alanlar</p>
         <div class="field split">
           <div><label>Tuvalet kaç kişilik</label><input type="number" id="tuvaletKisilik"></div>
@@ -667,7 +655,7 @@
     "yanginAlgilamaVarMi","dedektorTuru","yanginDolabiVarMi","yanginDolabiAdet",
     "yanginSprinklerVarMi","yanginSuDeposuVarMi","yanginSuDeposuKapasite",
     "dumanDamperiVarMi","dumanDamperiAdet",
-    "ofisAlaniVarMi","ofisAlaniMetrekare","tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
+    "tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
@@ -705,7 +693,6 @@
     yanginSprinklerVarMi: "Yangın Sprinkler Sistemi Var mı", yanginSuDeposuVarMi: "Yangın Su Deposu Var mı",
     yanginSuDeposuKapasite: "Su Deposu Kapasitesi (m³)",
     dumanDamperiVarMi: "Duman Damperi Var mı", dumanDamperiAdet: "Duman Damperi Adedi",
-    ofisAlaniVarMi: "Ofis Alanı Var mı", ofisAlaniMetrekare: "Ofis Alanı (m²)",
     tuvaletKisilik: "Tuvalet Kişilik", dusKisilik: "Duş Kişilik",
     sarjIstasyonuAlaniVarMi: "Şarj İstasyonu Alanı Var mı",
     disZeminDurumu: "Dış Zemin Durumu", yanasmaMesafesi: "Yanaşma Mesafesi (m)",
@@ -727,7 +714,7 @@
     "elektrikPanoVarMi","aydinlatmaMalzemesi","yanginAlgilamaVarMi","dedektorTuru",
     "yanginDolabiVarMi","yanginDolabiAdet","yanginSprinklerVarMi","yanginSuDeposuVarMi","yanginSuDeposuKapasite",
     "dumanDamperiVarMi","dumanDamperiAdet",
-    "ofisAlaniVarMi","ofisAlaniMetrekare","tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
+    "tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
@@ -774,7 +761,6 @@
   const arCount = $("arCount");
   const bolgeSelect = $("bolge");
   const sehirSelect = $("sehir");
-  const binaSehirDisplay = $("binaSehirDisplay");
   const catiMalzemesiSelect = $("catiMalzemesi");
   const catiMalzemesiDigerWrap = $("catiMalzemesiDigerWrap");
   const catiMalzemesiDigerInput = $("catiMalzemesiDiger");
@@ -798,22 +784,16 @@
     banner.className = "status-banner";
   }
 
-  function syncBinaSehirDisplay(){
-    binaSehirDisplay.textContent = sehirSelect.value || "Önce Bölge / Şehir seçiniz";
-  }
-
   function populateSehir(bolgeAdi, selectedSehir){
     const cities = REGION_CITIES[bolgeAdi] || [];
     if(!cities.length){
       sehirSelect.innerHTML = '<option value="">Önce bölge seçiniz</option>';
       sehirSelect.disabled = true;
-      syncBinaSehirDisplay();
       return;
     }
     sehirSelect.disabled = false;
     sehirSelect.innerHTML = '<option value="">Seçiniz</option>' +
       cities.map(c => `<option${c === selectedSehir ? " selected" : ""}>${c}</option>`).join("");
-    syncBinaSehirDisplay();
   }
 
   function updateCatiDigerVisibility(){
@@ -825,7 +805,6 @@
   }
 
   bolgeSelect.addEventListener("change", () => populateSehir(bolgeSelect.value, ""));
-  sehirSelect.addEventListener("change", syncBinaSehirDisplay);
   catiMalzemesiSelect.addEventListener("change", updateCatiDigerVisibility);
   yanginSuDeposuSelect.addEventListener("change", updateSuDeposuKapasiteVisibility);
 
