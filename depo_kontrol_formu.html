@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Movus Lojistik | Depo Arayışı Kontrol Formu</title>
+<style>
+  :root{
+    --navy-950:#0B1220;
+    --navy-900:#111C2E;
+    --navy-800:#182740;
+    --navy-700:#22344F;
+    --steel-200:#D7DEE8;
+    --steel-100:#EEF1F6;
+    --paper:#F6F7FA;
+    --amber-500:#F4A11B;
+    --amber-600:#DB8E0E;
+    --ok-600:#1E8E5A;
+    --err-600:#C4453B;
+    --ink:#141B2A;
+    --ink-soft:#5A6478;
+    --radius:10px;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-tap-highlight-color:transparent;
+    padding-bottom:96px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header.top{
+    background:linear-gradient(135deg,var(--navy-950),var(--navy-800) 70%);
+    color:#fff;
+    padding:18px 18px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:160px;height:160px;
+    background:repeating-linear-gradient(45deg,var(--amber-500) 0 10px,transparent 10px 20px);
+    opacity:.12;
+    border-radius:50%;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-size:12.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--steel-200); opacity:.85;
+  }
+  .brand .dot{width:6px;height:6px;background:var(--amber-500);border-radius:1px;flex:none;}
+  h1.form-title{
+    margin:8px 0 2px; font-size:21px; line-height:1.25; font-weight:700;
+  }
+  .form-sub{ font-size:13px; color:var(--steel-200); opacity:.8; }
+
+  /* ---------- FORM NO BAR ---------- */
+  .formno-bar{
+    margin:14px 18px 0; background:var(--navy-900);
+    border:1px solid var(--navy-700); border-radius:var(--radius);
+    padding:12px; display:flex; gap:8px; align-items:center;
+    position:relative; z-index:1;
+  }
+  .formno-bar input{
+    flex:1; min-width:0; background:var(--navy-950); border:1px solid var(--navy-700);
+    color:#fff; border-radius:8px; padding:10px 11px; font-size:15px;
+  }
+  .formno-bar input::placeholder{color:#7A8598;}
+  .btn-fetch{
+    flex:none; background:transparent; border:1px solid var(--steel-200);
+    color:#fff; padding:10px 14px; border-radius:8px; font-size:14px; font-weight:600;
+  }
+
+  /* ---------- TABS ---------- */
+  .view-tabs{
+    display:flex; gap:8px; margin:14px 18px 0; position:relative; z-index:1;
+  }
+  .view-tab{
+    flex:1; background:var(--navy-900); border:1px solid var(--navy-700);
+    color:var(--steel-200); padding:10px 8px; border-radius:8px;
+    font-size:13.5px; font-weight:700; text-align:center;
+  }
+  .view-tab.active{ background:var(--amber-500); color:var(--navy-950); border-color:var(--amber-500); }
+
+  /* ---------- ALL RECORDS VIEW ---------- */
+  .all-records-search{
+    display:flex; gap:8px; margin:0 4px 14px;
+  }
+  .all-records-search input{ flex:1; }
+  .ar-count{ font-size:12.5px; color:var(--ink-soft); margin:0 4px 10px; }
+  .ar-item{
+    background:#fff; border:1px solid var(--steel-200); border-radius:var(--radius);
+    padding:12px 13px; margin:0 4px 10px;
+  }
+  .ar-item-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:6px; }
+  .ar-item-top b{ font-size:14.5px; }
+  .ar-badge{
+    flex:none; font-size:11px; font-weight:700; color:var(--amber-600);
+    background:#FDF1DD; border-radius:5px; padding:3px 7px;
+  }
+  .ar-item .ar-sub{ font-size:12.5px; color:var(--ink-soft); margin-bottom:8px; line-height:1.5;}
+  .ar-item button{
+    background:var(--navy-900); color:#fff; border:none; border-radius:6px;
+    padding:7px 13px; font-size:12.5px; font-weight:600;
+  }
+
+  main{padding:16px 14px 6px; max-width:640px; margin:0 auto;}
+
+  .status-banner{
+    display:none; margin:0 4px 14px; padding:11px 13px; border-radius:8px;
+    font-size:13.5px; font-weight:600; align-items:center; gap:8px;
+  }
+  .status-banner.show{display:flex;}
+  .status-banner.ok{background:#E4F5EC; color:var(--ok-600); border:1px solid #BEE7D2;}
+  .status-banner.err{background:#FBEAE8; color:var(--err-600); border:1px solid #F1C7C2;}
+  .status-banner.info{background:#EAF1FB; color:#2456A6; border:1px solid #CBDCF3;}
+
+  .meta-row{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 4px 16px;
+  }
+  .field label, .meta-row label{
+    display:block; font-size:12.5px; font-weight:600; color:var(--ink-soft);
+    margin-bottom:5px;
+  }
+  .meta-row input{width:100%;}
+
+  section.card{
+    background:#fff; border:1px solid var(--steel-200); border-radius:var(--radius);
+    margin:0 4px 12px; overflow:hidden;
+  }
+  section.card > summary{
+    list-style:none; cursor:pointer; padding:14px 15px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-weight:700; font-size:15px;
+  }
+  section.card > summary::-webkit-details-marker{display:none;}
+  .grp-eyebrow{
+    font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:var(--amber-600);
+    font-weight:700; display:block; margin-bottom:2px;
+  }
+  .chev{
+    flex:none; width:20px; height:20px; color:var(--ink-soft);
+    transition:transform .18s ease;
+  }
+  section.card[open] > summary .chev{transform:rotate(180deg);}
+  .card-body{padding:4px 15px 16px;}
+  .subgroup{ margin-top:10px; padding-top:12px; border-top:1px dashed var(--steel-200); }
+  .subgroup:first-child{border-top:none; margin-top:0; padding-top:0;}
+  .subgroup-title{ font-size:13px; font-weight:700; color:var(--navy-800); margin:0 0 10px; }
+
+  .field{margin-bottom:12px;}
+  .field.split{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .field.split .sub{margin:0;}
+
+  input[type=text], input[type=number], select, textarea{
+    width:100%; border:1px solid var(--steel-200); background:var(--paper);
+    border-radius:8px; padding:10px 11px; font-size:15px; color:var(--ink);
+    font-family:inherit;
+  }
+  textarea{min-height:64px; resize:vertical;}
+  select{ appearance:none; -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%235A6478' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat; background-position:right 12px center; padding-right:32px;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none; border-color:var(--amber-500); box-shadow:0 0 0 3px rgba(244,161,27,.18);
+  }
+
+  .recent{margin:18px 4px 8px;}
+  .recent-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;}
+  .recent h2{font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin:0;}
+  .btn-export{
+    flex:none; background:var(--navy-900); color:#fff; border:none; border-radius:7px;
+    padding:8px 12px; font-size:12.5px; font-weight:700;
+  }
+  .btn-export:disabled{opacity:.55;}
+  .recent-item{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    background:#fff; border:1px solid var(--steel-200); border-radius:8px;
+    padding:10px 12px; margin-bottom:8px; font-size:13.5px;
+  }
+  .recent-item b{font-size:13.5px;}
+  .recent-item span.meta{color:var(--ink-soft); font-size:12px; display:block;}
+  .recent-item button{
+    flex:none; background:var(--navy-900); color:#fff; border:none; border-radius:6px;
+    padding:7px 12px; font-size:12.5px; font-weight:600;
+  }
+  .recent-empty{font-size:13px; color:var(--ink-soft); padding:4px;}
+
+  /* ---------- FOOTER ACTIONS ---------- */
+  footer.actions{
+    position:fixed; bottom:0; left:0; right:0; background:#fff;
+    border-top:1px solid var(--steel-200); padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    display:flex; gap:10px; z-index:10;
+  }
+  .btn{
+    flex:1; border:none; border-radius:9px; padding:13px 10px; font-size:15px;
+    font-weight:700; display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .btn-primary{background:var(--amber-500); color:var(--navy-950);}
+  .btn-primary:active{background:var(--amber-600);}
+  .btn-secondary{background:var(--steel-100); color:var(--ink); flex:0 0 auto; padding:13px 16px;}
+  .btn:disabled{opacity:.55;}
+
+  .req-mark{color:var(--amber-600);}
+  svg{display:block;}
+</style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<body>
+
+<header class="top">
+  <div class="brand"><span class="dot"></span>Movus Lojistik Yatırım A.Ş.</div>
+  <h1 class="form-title">Depo Arayışı Kontrol Formu</h1>
+  <div class="form-sub">Bina arayışı esnasında aşağıdaki bilgilerin kontrolü sağlanacaktır.</div>
+
+  <div class="formno-bar">
+    <input type="text" id="formNoInput" placeholder="Kayıt No ile ara (ör. MVS-0001)" autocomplete="off">
+    <button class="btn-fetch" id="fetchBtn" type="button">Getir</button>
+  </div>
+
+  <div class="view-tabs">
+    <button class="view-tab active" id="tabFormBtn" type="button">Form Doldur</button>
+    <button class="view-tab" id="tabAllBtn" type="button">Tüm Kayıtlar</button>
+  </div>
+</header>
+
+<main>
+  <section id="allRecordsView" style="display:none;">
+    <div class="all-records-search">
+      <input type="text" id="arSearchInput" placeholder="Bina adı, kayıt no veya dolduran kişi ile ara…">
+    </div>
+    <p class="ar-count" id="arCount"></p>
+    <div id="arList"><p class="recent-empty">Yükleniyor…</p></div>
+  </section>
+
+  <section id="formView">
+  <div class="status-banner" id="statusBanner"></div>
+
+  <div class="meta-row">
+    <div class="field">
+      <label>Kayıt No</label>
+      <input type="text" id="displayFormNo" placeholder="Kayıt sonrası otomatik atanır" disabled>
+    </div>
+    <div class="field">
+      <label>Formu Dolduran</label>
+      <input type="text" id="doldurmaKisi" placeholder="Ad Soyad">
+    </div>
+  </div>
+
+  <!-- BİNA HAKKINDA GENEL BİLGİLER -->
+  <details class="card" open>
+    <summary><span><span class="grp-eyebrow">Genel</span>Bina Hakkında Gelen Bilgiler</span>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="card-body">
+      <div class="field"><label>Bina Adı</label><input type="text" id="binaAdi"></div>
+      <div class="field"><label>Bina Adresi</label><textarea id="binaAdresi"></textarea></div>
+      <div class="field split">
+        <div><label>Bina Arazi Alanı (m²)</label><input type="number" id="binaAraziAlani"></div>
+        <div><label>Bina Kapalı Alanı (m²)</label><input type="number" id="binaKapaliAlani"></div>
+      </div>
+      <div class="field"><label>Bina Ofis Alanı (m²)</label><input type="number" id="binaOfisAlaniGenel"></div>
+    </div>
+  </details>
+
+  <!-- İÇ ALAN -->
+  <details class="card">
+    <summary><span><span class="grp-eyebrow">İç Alan</span>Depolama Alanı</span>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="card-body">
+
+      <div class="subgroup">
+        <p class="subgroup-title">Zemin Kontrolü</p>
+        <div class="field"><label>Zemin durumu hakkında bilgi</label><textarea id="zeminDurumu"></textarea></div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Çatı Kontrolü</p>
+        <div class="field"><label>Çatı malzemesi hakkında bilgi</label><textarea id="catiMalzemesi"></textarea></div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Kapı Kontrolü</p>
+        <div class="field split">
+          <div><label>Forklift Giriş Kapısı Var mı</label>
+            <select id="forkliftKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç adet</label><input type="number" id="forkliftKapisiAdet"></div>
+        </div>
+        <div class="field split">
+          <div><label>Rampa Kapısı Var mı?</label>
+            <select id="rampaKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç adet</label><input type="number" id="rampaKapisiAdet"></div>
+        </div>
+        <div class="field split">
+          <div><label>Acil Çıkış Kapısı Var mı</label>
+            <select id="acilCikisKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç adet</label><input type="number" id="acilCikisKapisiAdet"></div>
+        </div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Körük Kontrolü</p>
+        <div class="field"><label>Körük Var mı?</label>
+          <select id="korukVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div class="field"><label>Var ise durumu?</label><input type="text" id="korukDurumu"></div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Rampa Kontrolü</p>
+        <div class="field"><label>Rampa Var mı?</label>
+          <select id="rampaVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div class="field"><label>Var ise durumu?</label><input type="text" id="rampaDurumu"></div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Yağmur İniş Kontrolü</p>
+        <div class="field"><label>Yağmur iniş boruları bina içinde mi? Dışında mı?</label>
+          <select id="yagmurIniciKonum"><option value="">Seçiniz</option><option>İçinde</option><option>Dışında</option></select>
+        </div>
+        <div class="field"><label>Yağmur iniş borularının durumu hakkında bilgi</label><textarea id="yagmurIniciDurumu"></textarea></div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Logar Kontrolü</p>
+        <div class="field"><label>Bina içerisinde logar var mı?</label>
+          <select id="logarVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div class="field"><label>Var ise durumu?</label><input type="text" id="logarDurumu"></div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Elektrik Trafo Kontrolü</p>
+        <div class="field"><label>Elektrik trafosunun konumu</label>
+          <select id="elektrikTrafoKonumu"><option value="">Seçiniz</option><option>Dış saha içerisinde</option><option>İç saha içerisinde</option></select>
+        </div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Elektrik Pano Kontrolü</p>
+        <div class="field"><label>Kompanzasyon / Dağıtım panoları mevcut mu?</label>
+          <select id="elektrikPanoVarMi"><option value="">Seçiniz</option><option>Mevcut</option><option>Mevcut Değil</option></select>
+        </div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Aydınlatma Kontrolü</p>
+        <div class="field"><label>Aydınlatma malzemesi ürünü nedir?</label><input type="text" id="aydinlatmaMalzemesi"></div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Yangın Sistem Kontrolü</p>
+        <div class="field"><label>Binada faal halde bir yangın algılama sistemi var mı?</label>
+          <select id="yanginAlgilamaVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div class="field"><label>Var ise dedektör türü nedir?</label>
+          <select id="dedektorTuru"><option value="">Seçiniz</option><option>Duman</option><option>Isı</option><option>Işın</option></select>
+        </div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Yangın Dolabı Kontrolü</p>
+        <div class="field split">
+          <div><label>Yangın dolabı var mı?</label>
+            <select id="yanginDolabiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç adet</label><input type="number" id="yanginDolabiAdet"></div>
+        </div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Duman Damperi Kontrolü</p>
+        <div class="field split">
+          <div><label>Duman damperi var mı?</label>
+            <select id="dumanDamperiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç adet</label><input type="number" id="dumanDamperiAdet"></div>
+        </div>
+      </div>
+
+    </div>
+  </details>
+
+  <details class="card">
+    <summary><span><span class="grp-eyebrow">İç Alan</span>Ofis, Diğer Alanlar &amp; Şarj İstasyonu</span>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="card-body">
+      <div class="subgroup">
+        <p class="subgroup-title">Ofis Alanı</p>
+        <div class="field split">
+          <div><label>Ofis Alanı var mı?</label>
+            <select id="ofisAlaniVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç m²</label><input type="number" id="ofisAlaniMetrekare"></div>
+        </div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Diğer Alanlar</p>
+        <div class="field split">
+          <div><label>Tuvalet kaç kişilik</label><input type="number" id="tuvaletKisilik"></div>
+          <div><label>Duş kaç kişilik</label><input type="number" id="dusKisilik"></div>
+        </div>
+      </div>
+
+      <div class="subgroup">
+        <p class="subgroup-title">Şarj İstasyonu</p>
+        <div class="field"><label>Bina dışında forklift şarj istasyonu kurulabilecek bir alan var mı?</label>
+          <select id="sarjIstasyonuAlaniVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DIŞ ALAN -->
+  <details class="card">
+    <summary><span><span class="grp-eyebrow">Dış Alan</span>Operasyonel Alanlar</span>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="card-body">
+      <div class="subgroup">
+        <p class="subgroup-title">Zemin Kontrolü</p>
+        <div class="field"><label>Zemin hakkında genel bilgi</label>
+          <select id="disZeminDurumu"><option value="">Seçiniz</option><option>Kırık</option><option>Çatlak</option><option>Temiz</option></select>
+        </div>
+      </div>
+      <div class="subgroup">
+        <p class="subgroup-title">Yanaşma Mesafeleri Kontrolü</p>
+        <div class="field"><label>Araç yanaşma mesafesi (metre)</label><input type="number" id="yanasmaMesafesi"></div>
+      </div>
+      <div class="subgroup">
+        <p class="subgroup-title">Aydınlatma Kontrolü</p>
+        <div class="field split">
+          <div><label>Dış aydınlatma var mı?</label>
+            <select id="disAydinlatmaVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç adet</label><input type="number" id="disAydinlatmaAdet"></div>
+        </div>
+      </div>
+      <div class="subgroup">
+        <p class="subgroup-title">Paratoner Kontrolü</p>
+        <div class="field"><label>Binada paratoner bulunmakta mı?</label>
+          <select id="paratonerVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary><span><span class="grp-eyebrow">Dış Alan</span>Güvenlik</span>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="card-body">
+      <div class="subgroup">
+        <p class="subgroup-title">Güvenlik Binası</p>
+        <div class="field"><label>Genel fiziki durumu hakkında bilgi</label><textarea id="guvenlikFizikiDurum"></textarea></div>
+        <div class="field"><label>Güvenlik binası içerisinde kullanılabilir bir elektrik sistemi var mı?</label>
+          <select id="guvenlikElektrikVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div class="field"><label>Güvenlik binası içerisinde internet var mı?</label>
+          <select id="guvenlikInternetVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DİĞER KONTROLLER -->
+  <details class="card">
+    <summary><span><span class="grp-eyebrow">Diğer Kontroller</span>Kamera &amp; Jeneratör</span>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="card-body">
+      <div class="subgroup">
+        <p class="subgroup-title">Kamera Kontrolü</p>
+        <div class="field split">
+          <div><label>Binada aktif kamera sistemi var mı?</label>
+            <select id="kameraVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç adet</label><input type="number" id="kameraAdet"></div>
+        </div>
+        <div class="field"><label>Ne kadar süreli geriye dönük kayıt tutmaktadır (gün)</label><input type="number" id="kayitSuresiGun"></div>
+        <div class="field"><label>Kameralar internet üzerinden izlenebilmekte mi?</label>
+          <select id="kameraInternetIzleme"><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option></select>
+        </div>
+      </div>
+      <div class="subgroup">
+        <p class="subgroup-title">Jeneratör Kontrolü</p>
+        <div class="field split">
+          <div><label>Binada aktif bir jeneratör var mı?</label>
+            <select id="jeneratorVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+          </div>
+          <div><label>Var ise kaç kVA</label><input type="number" id="jeneratorKva"></div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary><span><span class="grp-eyebrow">Ek</span>Notlar</span>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="card-body">
+      <div class="field"><label>Genel değerlendirme / serbest not</label><textarea id="genelNot"></textarea></div>
+    </div>
+  </details>
+
+  <div class="recent">
+    <div class="recent-head">
+      <h2>Son Kayıtlar</h2>
+      <button class="btn-export" id="exportBtn" type="button">⬇ Excel'e Aktar</button>
+    </div>
+    <div id="recentList"><p class="recent-empty">Yükleniyor…</p></div>
+  </div>  </section>
+</main>
+
+<footer class="actions" id="footerActions">
+  <button class="btn btn-secondary" id="newBtn" type="button">Yeni Form</button>
+  <button class="btn btn-primary" id="saveBtn" type="button">Kaydet</button>
+</footer>
+
+<script>
+(function(){
+  const FIELD_IDS = [
+    "binaAdi","binaAdresi","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel",
+    "zeminDurumu","catiMalzemesi",
+    "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet","acilCikisKapisiVarMi","acilCikisKapisiAdet",
+    "korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
+    "yagmurIniciKonum","yagmurIniciDurumu","logarVarMi","logarDurumu",
+    "elektrikTrafoKonumu","elektrikPanoVarMi","aydinlatmaMalzemesi",
+    "yanginAlgilamaVarMi","dedektorTuru","yanginDolabiVarMi","yanginDolabiAdet",
+    "dumanDamperiVarMi","dumanDamperiAdet",
+    "ofisAlaniVarMi","ofisAlaniMetrekare","tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
+    "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
+    "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
+    "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
+    "genelNot","doldurmaKisi"
+  ];
+
+  const FIELD_LABELS = {
+    formNo: "Kayıt No", doldurmaKisi: "Formu Dolduran",
+    createdAt: "Oluşturma Tarihi", updatedAt: "Güncelleme Tarihi",
+    binaAdi: "Bina Adı", binaAdresi: "Bina Adresi",
+    binaAraziAlani: "Bina Arazi Alanı (m²)", binaKapaliAlani: "Bina Kapalı Alanı (m²)",
+    binaOfisAlaniGenel: "Bina Ofis Alanı - Genel (m²)",
+    zeminDurumu: "Zemin Durumu (İç)", catiMalzemesi: "Çatı Malzemesi",
+    forkliftKapisiVarMi: "Forklift Giriş Kapısı Var mı", forkliftKapisiAdet: "Forklift Kapısı Adedi",
+    rampaKapisiVarMi: "Rampa Kapısı Var mı", rampaKapisiAdet: "Rampa Kapısı Adedi",
+    acilCikisKapisiVarMi: "Acil Çıkış Kapısı Var mı", acilCikisKapisiAdet: "Acil Çıkış Kapısı Adedi",
+    korukVarMi: "Körük Var mı", korukDurumu: "Körük Durumu",
+    rampaVarMi: "Rampa Var mı", rampaDurumu: "Rampa Durumu",
+    yagmurIniciKonum: "Yağmur İniş Borusu Konumu", yagmurIniciDurumu: "Yağmur İniş Borusu Durumu",
+    logarVarMi: "Logar Var mı", logarDurumu: "Logar Durumu",
+    elektrikTrafoKonumu: "Elektrik Trafo Konumu", elektrikPanoVarMi: "Elektrik Panosu Durumu",
+    aydinlatmaMalzemesi: "Aydınlatma Malzemesi (İç)",
+    yanginAlgilamaVarMi: "Yangın Algılama Sistemi Var mı", dedektorTuru: "Dedektör Türü",
+    yanginDolabiVarMi: "Yangın Dolabı Var mı", yanginDolabiAdet: "Yangın Dolabı Adedi",
+    dumanDamperiVarMi: "Duman Damperi Var mı", dumanDamperiAdet: "Duman Damperi Adedi",
+    ofisAlaniVarMi: "Ofis Alanı Var mı", ofisAlaniMetrekare: "Ofis Alanı (m²)",
+    tuvaletKisilik: "Tuvalet Kişilik", dusKisilik: "Duş Kişilik",
+    sarjIstasyonuAlaniVarMi: "Şarj İstasyonu Alanı Var mı",
+    disZeminDurumu: "Dış Zemin Durumu", yanasmaMesafesi: "Yanaşma Mesafesi (m)",
+    disAydinlatmaVarMi: "Dış Aydınlatma Var mı", disAydinlatmaAdet: "Dış Aydınlatma Adedi",
+    paratonerVarMi: "Paratoner Var mı",
+    guvenlikFizikiDurum: "Güvenlik Binası Fiziki Durumu",
+    guvenlikElektrikVarMi: "Güvenlik Binası Elektrik Sistemi Var mı",
+    guvenlikInternetVarMi: "Güvenlik Binası İnternet Var mı",
+    kameraVarMi: "Kamera Sistemi Var mı", kameraAdet: "Kamera Adedi",
+    kayitSuresiGun: "Kayıt Süresi (Gün)", kameraInternetIzleme: "Kameralar İnternetten İzlenebiliyor mu",
+    jeneratorVarMi: "Jeneratör Var mı", jeneratorKva: "Jeneratör Gücü (kVA)",
+    genelNot: "Genel Not"
+  };
+  const EXPORT_ORDER = ["formNo","doldurmaKisi","createdAt","updatedAt","binaAdi","binaAdresi",
+    "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","zeminDurumu","catiMalzemesi",
+    "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet",
+    "acilCikisKapisiVarMi","acilCikisKapisiAdet","korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
+    "yagmurIniciKonum","yagmurIniciDurumu","logarVarMi","logarDurumu","elektrikTrafoKonumu",
+    "elektrikPanoVarMi","aydinlatmaMalzemesi","yanginAlgilamaVarMi","dedektorTuru",
+    "yanginDolabiVarMi","yanginDolabiAdet","dumanDamperiVarMi","dumanDamperiAdet",
+    "ofisAlaniVarMi","ofisAlaniMetrekare","tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
+    "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
+    "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
+    "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
+    "genelNot"];
+
+  // ============================================================
+  // GOOGLE SHEETS BAĞLANTISI
+  // Apps Script'i "Web App" olarak yayınladıktan sonra size verilen
+  // URL'yi (https://script.google.com/macros/s/xxxxx/exec) aşağıya yapıştırın.
+  // ============================================================
+  const API_URL = "https://script.google.com/macros/s/AKfycbzvCUKjbeE4t7L5DUmMAx2_F1UUYSm-qjukOLdVXR7WoRKl6ujtH6N3fm_vYex494aT/exec";
+
+  async function apiGet(params){
+    const qs = new URLSearchParams(params).toString();
+    const res = await fetch(API_URL + "?" + qs, { method: "GET" });
+    return res.json();
+  }
+
+  async function apiPost(payload){
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // CORS preflight'tan kaçınmak için
+      body: JSON.stringify(payload)
+    });
+    return res.json();
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const banner = $("statusBanner");
+  const saveBtn = $("saveBtn");
+  const newBtn = $("newBtn");
+  const fetchBtn = $("fetchBtn");
+  const formNoInput = $("formNoInput");
+  const displayFormNo = $("displayFormNo");
+  const recentList = $("recentList");
+  const exportBtn = $("exportBtn");
+  const tabFormBtn = $("tabFormBtn");
+  const tabAllBtn = $("tabAllBtn");
+  const formView = $("formView");
+  const allRecordsView = $("allRecordsView");
+  const footerActions = $("footerActions");
+  const arSearchInput = $("arSearchInput");
+  const arList = $("arList");
+  const arCount = $("arCount");
+  let allRecordsCache = null;
+
+  let currentFormNo = null; // null => yeni kayıt
+
+  function showBanner(kind, msg){
+    banner.className = "status-banner show " + kind;
+    banner.textContent = msg;
+  }
+  function hideBanner(){
+    banner.className = "status-banner";
+  }
+
+  function collectFormData(){
+    const data = {};
+    FIELD_IDS.forEach(id => { data[id] = $(id).value; });
+    return data;
+  }
+
+  function fillForm(data){
+    FIELD_IDS.forEach(id => { $(id).value = (data && data[id] != null) ? data[id] : ""; });
+  }
+
+  function clearForm(){
+    fillForm({});
+    currentFormNo = null;
+    displayFormNo.value = "";
+    formNoInput.value = "";
+    document.querySelectorAll("section.card").forEach((el,i)=>{ el.open = (i===0); });
+  }
+
+  // Not: Kayıt No üretimi ve indeksleme artık Apps Script (Google Sheets) tarafında yapılıyor.
+
+  async function loadRecent(){
+    recentList.innerHTML = '<p class="recent-empty">Yükleniyor…</p>';
+    try{
+      const result = await apiGet({action:"list"});
+      const list = (result.ok && result.records) ? result.records : [];
+      if(!list.length){
+        recentList.innerHTML = '<p class="recent-empty">Henüz kayıt bulunmuyor.</p>';
+        return;
+      }
+      const sorted = list.slice().sort((a,b) => (b.updatedAt||b.createdAt||"").localeCompare(a.updatedAt||a.createdAt||""));
+      const top = sorted.slice(0, 8);
+      recentList.innerHTML = "";
+      top.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "recent-item";
+        const dateStr = (item.updatedAt||item.createdAt) ? new Date(item.updatedAt||item.createdAt).toLocaleString("tr-TR") : "";
+        row.innerHTML = `<div><b>${item.formNo}</b> — ${escapeHtml(item.binaAdi || "İsimsiz kayıt")}<span class="meta">${dateStr}</span></div>`;
+        const btn = document.createElement("button");
+        btn.textContent = "Aç";
+        btn.type = "button";
+        btn.addEventListener("click", () => loadByFormNo(item.formNo));
+        row.appendChild(btn);
+        recentList.appendChild(row);
+      });
+    }catch(e){
+      recentList.innerHTML = '<p class="recent-empty">Kayıtlar yüklenemedi. Bağlantıyı kontrol edin.</p>';
+    }
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, s => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[s]));
+  }
+
+  async function loadByFormNo(rawNo){
+    const formNo = (rawNo || "").trim().toUpperCase();
+    if(!formNo){ showBanner("err","Lütfen bir kayıt numarası girin."); return; }
+    fetchBtn.disabled = true;
+    try{
+      const result = await apiGet({action:"get", formNo});
+      if(!result.ok || !result.record){
+        showBanner("err", formNo + " numaralı kayıt bulunamadı.");
+        fetchBtn.disabled = false;
+        return;
+      }
+      fillForm(result.record);
+      currentFormNo = formNo;
+      displayFormNo.value = formNo;
+      formNoInput.value = formNo;
+      document.querySelectorAll("section.card").forEach(el => el.open = true);
+      showBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
+    }catch(e){
+      showBanner("err","Kayıt getirilirken bir hata oluştu. Bağlantıyı kontrol edin.");
+    }
+    fetchBtn.disabled = false;
+  }
+
+  async function saveForm(){
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Kaydediliyor…";
+    try{
+      const data = collectFormData();
+      if(currentFormNo){ data.formNo = currentFormNo; }
+
+      const result = await apiPost({ action:"save", data });
+      if(!result.ok){ throw new Error(result.error || "Kayıt başarısız"); }
+
+      currentFormNo = result.formNo;
+      displayFormNo.value = result.formNo;
+      formNoInput.value = result.formNo;
+      showBanner("ok", "Kaydedildi. Kayıt No: " + result.formNo);
+      allRecordsCache = null;
+      loadRecent();
+    }catch(e){
+      showBanner("err","Kaydedilemedi. Bağlantıyı kontrol edip tekrar deneyin.");
+    }
+    saveBtn.disabled = false;
+    saveBtn.textContent = "Kaydet";
+  }
+
+  async function exportAllToExcel(){
+    exportBtn.disabled = true;
+    const originalLabel = exportBtn.textContent;
+    exportBtn.textContent = "Hazırlanıyor…";
+    try{
+      const result = await apiGet({action:"list"});
+      const list = (result.ok && result.records) ? result.records : [];
+      if(!list.length){
+        showBanner("err","Dışa aktarılacak kayıt bulunamadı.");
+        exportBtn.disabled = false;
+        exportBtn.textContent = originalLabel;
+        return;
+      }
+      const valid = list.slice().sort((a,b) => (a.formNo || "").localeCompare(b.formNo || ""));
+
+      const headerRow = EXPORT_ORDER.map(id => FIELD_LABELS[id] || id);
+      const rows = valid.map(d => EXPORT_ORDER.map(id => (d[id] != null ? d[id] : "")));
+      const sheetData = [headerRow, ...rows];
+
+      const ws = XLSX.utils.aoa_to_sheet(sheetData);
+      ws["!cols"] = EXPORT_ORDER.map(id => ({ wch: Math.min(Math.max((FIELD_LABELS[id] || id).length, 12), 32) }));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Depo Kontrol Kayitlari");
+
+      const stamp = new Date().toISOString().slice(0,10);
+      XLSX.writeFile(wb, "Depo_Kontrol_Kayitlari_" + stamp + ".xlsx");
+      showBanner("ok", valid.length + " kayıt Excel dosyası olarak indirildi.");
+    }catch(e){
+      showBanner("err","Excel oluşturulurken bir hata oluştu. Bağlantıyı kontrol edin.");
+    }
+    exportBtn.disabled = false;
+    exportBtn.textContent = originalLabel;
+  }
+
+  function showFormView(){
+    allRecordsView.style.display = "none";
+    formView.style.display = "";
+    footerActions.style.display = "flex";
+    tabFormBtn.classList.add("active");
+    tabAllBtn.classList.remove("active");
+  }
+
+  function showAllRecordsView(){
+    formView.style.display = "none";
+    allRecordsView.style.display = "";
+    footerActions.style.display = "none";
+    tabAllBtn.classList.add("active");
+    tabFormBtn.classList.remove("active");
+    hideBanner();
+    loadAllRecords();
+  }
+
+  async function loadAllRecords(forceRefresh){
+    if(allRecordsCache && !forceRefresh){
+      renderAllRecords(arSearchInput.value);
+      return;
+    }
+    arList.innerHTML = '<p class="recent-empty">Yükleniyor…</p>';
+    try{
+      const result = await apiGet({action:"list"});
+      const list = (result.ok && result.records) ? result.records : [];
+      allRecordsCache = list.slice().sort((a,b) => {
+        const at = a.updatedAt || a.createdAt || "";
+        const bt = b.updatedAt || b.createdAt || "";
+        return bt.localeCompare(at);
+      });
+      renderAllRecords(arSearchInput.value);
+    }catch(e){
+      arList.innerHTML = '<p class="recent-empty">Kayıtlar yüklenemedi. Bağlantıyı kontrol edin.</p>';
+    }
+  }
+
+  function renderAllRecords(filterText){
+    if(!allRecordsCache){ return; }
+    const q = (filterText || "").trim().toLocaleLowerCase("tr");
+    const filtered = !q ? allRecordsCache : allRecordsCache.filter(d => {
+      const haystack = [d.formNo, d.binaAdi, d.binaAdresi, d.doldurmaKisi].join(" ").toLocaleLowerCase("tr");
+      return haystack.includes(q);
+    });
+    arCount.textContent = filtered.length + " kayıt bulundu (toplam " + allRecordsCache.length + " kayıt)";
+    if(!filtered.length){
+      arList.innerHTML = '<p class="recent-empty">Eşleşen kayıt yok.</p>';
+      return;
+    }
+    arList.innerHTML = "";
+    filtered.forEach(d => {
+      const dateStr = (d.updatedAt || d.createdAt) ? new Date(d.updatedAt || d.createdAt).toLocaleString("tr-TR") : "";
+      const row = document.createElement("div");
+      row.className = "ar-item";
+      row.innerHTML = `
+        <div class="ar-item-top">
+          <b>${escapeHtml(d.binaAdi || "İsimsiz kayıt")}</b>
+          <span class="ar-badge">${escapeHtml(d.formNo || "")}</span>
+        </div>
+        <div class="ar-sub">
+          ${d.binaAdresi ? escapeHtml(d.binaAdresi) + "<br>" : ""}
+          ${d.doldurmaKisi ? "Dolduran: " + escapeHtml(d.doldurmaKisi) + " · " : ""}${dateStr}
+        </div>
+      `;
+      const btn = document.createElement("button");
+      btn.textContent = "Aç ve Düzenle";
+      btn.type = "button";
+      btn.addEventListener("click", async () => {
+        showFormView();
+        await loadByFormNo(d.formNo);
+      });
+      row.appendChild(btn);
+      arList.appendChild(row);
+    });
+  }
+
+  tabFormBtn.addEventListener("click", showFormView);
+  tabAllBtn.addEventListener("click", showAllRecordsView);
+  arSearchInput.addEventListener("input", () => renderAllRecords(arSearchInput.value));
+
+  saveBtn.addEventListener("click", saveForm);
+  newBtn.addEventListener("click", () => { clearForm(); hideBanner(); });
+  fetchBtn.addEventListener("click", () => loadByFormNo(formNoInput.value));
+  exportBtn.addEventListener("click", exportAllToExcel);
+  formNoInput.addEventListener("keydown", (e) => { if(e.key === "Enter") loadByFormNo(formNoInput.value); });
+
+  loadRecent();
+})();
+</script>
+
+</body>
+</html>
