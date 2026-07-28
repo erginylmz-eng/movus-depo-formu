@@ -208,6 +208,31 @@
   .btn-primary:active{background:var(--amber-600);}
   .btn-secondary{background:var(--steel-100); color:var(--ink); flex:0 0 auto; padding:13px 16px;}
   .btn:disabled{opacity:.55;}
+  .btn-gear{
+    flex:none; width:48px; background:var(--navy-900); color:#fff; border:none;
+    border-radius:9px; font-size:18px; cursor:pointer;
+  }
+
+  /* ---------- ZORUNLU ALAN AYARLARI MODU ---------- */
+  .settings-actions{
+    display:flex; gap:10px; padding:12px 14px; max-width:640px; margin:0 auto;
+    position:sticky; top:0; background:var(--paper); z-index:9;
+    border-bottom:1px solid var(--amber-500);
+  }
+  .settings-info{
+    display:none; background:#FDF1DD; border:1px solid var(--amber-500); color:var(--navy-950);
+    font-size:13px; font-weight:600; padding:11px 13px; margin:0 4px 14px; border-radius:8px;
+  }
+  body.settings-mode .settings-info{ display:block; }
+  .required-toggle{
+    display:none; margin-right:7px; width:16px; height:16px; vertical-align:middle;
+    accent-color:var(--amber-500); cursor:pointer;
+  }
+  body.settings-mode .required-toggle{ display:inline-block; }
+  body.settings-mode label{ cursor:pointer; }
+  body.settings-mode .field, body.settings-mode .field > div{
+    outline:1px dashed var(--steel-200); outline-offset:3px; border-radius:6px;
+  }
 
   /* ---------- ALTTAKİ KAYITLAR BUTONU ---------- */
   .view-tab-bottom{
@@ -252,6 +277,12 @@
 <div class="top-actions" id="topActions">
   <button class="btn btn-secondary" id="newBtn" type="button">Yeni Form</button>
   <button class="btn btn-primary" id="saveBtn" type="button">Kaydet</button>
+  <button class="btn-gear" id="settingsBtn" type="button" title="Zorunlu Alanları Düzenle">⚙</button>
+</div>
+
+<div class="settings-actions" id="settingsActions" style="display:none;">
+  <button class="btn btn-secondary" id="settingsCancelBtn" type="button">✕ Vazgeç</button>
+  <button class="btn btn-primary" id="settingsSaveBtn" type="button">💾 Zorunlu Alanları Kaydet</button>
 </div>
 
 <main>
@@ -282,6 +313,7 @@
   </section>
 
   <section id="formView">
+  <div class="settings-info" id="settingsInfo">⚙ Zorunlu olmasını istediğiniz alanların yanındaki kutucukları işaretleyin, sonra üstteki "Zorunlu Alanları Kaydet" butonuna basın.</div>
   <div class="status-banner" id="statusBanner"></div>
 
   <div class="meta-row">
@@ -290,10 +322,11 @@
       <div class="formno-badge" id="displayFormNo">Kayıt sonrası otomatik atanır</div>
     </div>
     <div class="field">
-      <label>Formu Dolduran <span class="req-mark">*</span></label>
-      <input type="text" id="doldurmaKisi" placeholder="Ad Soyad" required>
+      <label>Formu Dolduran</label>
+      <input type="text" id="doldurmaKisi" placeholder="Ad Soyad">
     </div>
   </div>
+
   <div class="meta-row">
     <div class="field">
       <label>Bölge</label>
@@ -745,6 +778,12 @@
   const catiMalzemesiSelect = $("catiMalzemesi");
   const catiMalzemesiDigerWrap = $("catiMalzemesiDigerWrap");
   const catiMalzemesiDigerInput = $("catiMalzemesiDiger");
+  const settingsBtn = $("settingsBtn");
+  const settingsActions = $("settingsActions");
+  const settingsCancelBtn = $("settingsCancelBtn");
+  const settingsSaveBtn = $("settingsSaveBtn");
+  const settingsInfo = $("settingsInfo");
+  let requiredFieldsSet = new Set(["doldurmaKisi"]);
   const yanginSuDeposuSelect = $("yanginSuDeposuVarMi");
   const yanginSuDeposuKapasiteWrap = $("yanginSuDeposuKapasiteWrap");
   let allRecordsCache = null;
@@ -789,6 +828,112 @@
   sehirSelect.addEventListener("change", syncBinaSehirDisplay);
   catiMalzemesiSelect.addEventListener("change", updateCatiDigerVisibility);
   yanginSuDeposuSelect.addEventListener("change", updateSuDeposuKapasiteVisibility);
+
+  // ---- ZORUNLU ALAN AYARLARI ----
+  function fieldLabelWrap_(id){
+    const el = $(id);
+    if(!el) return null;
+    const wrap = el.parentElement;
+    if(!wrap) return null;
+    return wrap.querySelector("label");
+  }
+
+  function applyRequiredMarks(){
+    FIELD_IDS.forEach(id => {
+      const label = fieldLabelWrap_(id);
+      if(!label) return;
+      let mark = label.querySelector(".req-mark-dynamic");
+      if(requiredFieldsSet.has(id)){
+        if(!mark){
+          mark = document.createElement("span");
+          mark.className = "req-mark req-mark-dynamic";
+          mark.textContent = " *";
+          label.appendChild(mark);
+        }
+      } else if(mark){
+        mark.remove();
+      }
+    });
+  }
+
+  function buildRequiredCheckboxes(){
+    FIELD_IDS.forEach(id => {
+      const label = fieldLabelWrap_(id);
+      if(!label) return;
+      let cb = label.querySelector(".required-toggle");
+      if(!cb){
+        cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.className = "required-toggle";
+        cb.dataset.field = id;
+        label.insertBefore(cb, label.firstChild);
+      }
+      cb.checked = requiredFieldsSet.has(id);
+    });
+  }
+
+  async function loadRequiredConfig(){
+    try{
+      const result = await apiGet({action:"getConfig"});
+      if(result.ok && Array.isArray(result.requiredFields)){
+        requiredFieldsSet = new Set(result.requiredFields);
+      }
+    }catch(e){ /* varsayılan set ile devam */ }
+    applyRequiredMarks();
+  }
+
+  function enterSettingsMode(){
+    buildRequiredCheckboxes();
+    document.body.classList.add("settings-mode");
+    document.querySelectorAll("section.card").forEach(el => { el.open = true; });
+    topActions.style.display = "none";
+    settingsActions.style.display = "flex";
+  }
+
+  function exitSettingsMode(){
+    document.body.classList.remove("settings-mode");
+    topActions.style.display = "flex";
+    settingsActions.style.display = "none";
+  }
+
+  // Sadece yönetici bu PIN'i bilerek Zorunlu Alanlar moduna girebilir.
+  // Değiştirmek isterseniz aşağıdaki satırdaki "2026" yerine kendi PIN'inizi yazın.
+  const ADMIN_PIN = "2026";
+
+  settingsBtn.addEventListener("click", () => {
+    const entered = prompt("Bu bölüm sadece yöneticiye açıktır.\nPIN kodunu girin:");
+    if(entered === null) return; // vazgeçildi
+    if(entered !== ADMIN_PIN){
+      showBanner("err","Hatalı PIN kodu.");
+      return;
+    }
+    enterSettingsMode();
+  });
+  settingsCancelBtn.addEventListener("click", () => {
+    buildRequiredCheckboxes(); // kaydedilmemiş işaretleri sıfırla
+    exitSettingsMode();
+  });
+  settingsSaveBtn.addEventListener("click", async () => {
+    const checked = Array.from(document.querySelectorAll(".required-toggle:checked")).map(cb => cb.dataset.field);
+    settingsSaveBtn.disabled = true;
+    const originalLabel = settingsSaveBtn.textContent;
+    settingsSaveBtn.textContent = "Kaydediliyor…";
+    try{
+      const result = await apiPost({ action:"saveConfig", data:{ requiredFields: checked } });
+      if(result.ok){
+        requiredFieldsSet = new Set(checked);
+        applyRequiredMarks();
+        showBanner("ok", "Zorunlu alan ayarları kaydedildi.");
+        exitSettingsMode();
+      } else {
+        showBanner("err", "Ayarlar kaydedilemedi.");
+      }
+    }catch(e){
+      showBanner("err", "Ayarlar kaydedilemedi. Bağlantıyı kontrol edin.");
+    }
+    settingsSaveBtn.disabled = false;
+    settingsSaveBtn.textContent = originalLabel;
+  });
 
   function collectFormData(){
     const data = {};
@@ -873,11 +1018,16 @@
   }
 
   async function saveForm(){
-    const doldurmaKisiVal = $("doldurmaKisi").value.trim();
-    if(!doldurmaKisiVal){
-      showBanner("err","Kaydetmeden önce \"Formu Dolduran\" alanına ad soyad girmelisiniz.");
-      $("doldurmaKisi").focus();
-      document.querySelectorAll("section.card").forEach((el,i)=>{ el.open = (i===0); });
+    const missing = [];
+    requiredFieldsSet.forEach(id => {
+      const el = $(id);
+      if(el && !String(el.value || "").trim()){
+        missing.push(FIELD_LABELS[id] || id);
+      }
+    });
+    if(missing.length){
+      showBanner("err", "Şu alanlar zorunlu, lütfen doldurun: " + missing.join(", "));
+      document.querySelectorAll("section.card").forEach(el => { el.open = true; });
       return;
     }
     saveBtn.disabled = true;
@@ -1021,6 +1171,8 @@
   fetchBtn.addEventListener("click", () => loadByFormNo(formNoInput.value));
   exportBtn.addEventListener("click", exportAllToExcel);
   formNoInput.addEventListener("keydown", (e) => { if(e.key === "Enter") loadByFormNo(formNoInput.value); });
+
+  loadRequiredConfig();
 })();
 </script>
 
