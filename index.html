@@ -294,6 +294,34 @@
   }
   .detay-gate .field{ margin-bottom:12px; }
 
+  /* ---------- YENİ: KAYIT GÖRÜNTÜLE / SORGULA KUTUSU (her iki formun en üstünde) ---------- */
+  .kayit-sorgula-box{
+    max-width:640px; margin:0 auto 4px; padding:14px 15px; margin-left:15px; margin-right:15px;
+    background:var(--navy-950); border-radius:12px;
+  }
+  .kayit-sorgula-title{
+    color:var(--amber-500); font-size:13px; font-weight:800; letter-spacing:.02em;
+    margin:0 0 10px;
+  }
+  .kayit-sorgula-box input{
+    width:100%; border:1px solid var(--navy-700); background:var(--navy-900); color:#fff;
+    border-radius:8px; padding:11px 12px; font-size:14.5px; margin-bottom:10px;
+  }
+  .kayit-sorgula-box input::placeholder{ color:#9BAAC0; }
+  .kayit-sorgula-box input:focus{ outline:none; border-color:var(--amber-500); }
+  .kayit-sorgula-buttons{ display:flex; flex-direction:column; gap:8px; }
+  .btn-sorgu{
+    border:none; border-radius:8px; padding:12px; font-size:13.5px; font-weight:700; cursor:pointer;
+    width:100%;
+  }
+  .btn-sorgu-bilgi{ background:var(--terracotta-500); color:#3A2418; }
+  .btn-sorgu-detay{ background:var(--amber-500); color:var(--navy-950); }
+  .btn-export-shortcut{
+    display:block; width:100%; margin-top:10px; background:transparent;
+    border:1px solid var(--navy-700); color:var(--steel-200); border-radius:8px;
+    padding:9px; font-size:12.5px; font-weight:600; cursor:pointer;
+  }
+
   /* ---------- ÖN BİLGİ'DEN OTOMATİK GELEN, KİLİTLİ ALANLAR ---------- */
   .auto-locked-input{
     background:var(--steel-200) !important; color:var(--ink-soft) !important; cursor:not-allowed;
@@ -468,6 +496,15 @@
   </summary>
   <div class="mega-body">
     <div class="bilgi-wrap">
+      <div class="kayit-sorgula-box">
+        <p class="kayit-sorgula-title">🔍 Kayıt Görüntüle / Sorgula</p>
+        <input type="text" id="topSorguInputOnBilgi" placeholder="Kayıt No girin (ör. BLG-0001)" autocomplete="off">
+        <div class="kayit-sorgula-buttons">
+          <button class="btn-sorgu btn-sorgu-bilgi" id="topOpenOnBilgiBtnFromOnBilgi" type="button">📝 Ön Bilgi Formunu Görüntüle / Değiştir</button>
+          <button class="btn-sorgu btn-sorgu-detay" id="topOpenDetayBtnFromOnBilgi" type="button">📋 Detay Formunu Görüntüle / Değiştir</button>
+        </div>
+      </div>
+
       <div class="status-banner" id="bilgiBanner"></div>
 
       <div class="field">
@@ -560,11 +597,6 @@
       <button class="btn btn-primary" id="bilgiSaveBtn" type="button" style="width:100%;margin-top:6px;">Kaydet</button>
       <button class="btn btn-secondary" id="bilgiNewBtn" type="button" style="width:100%;margin-top:8px;">Yeni Kayıt</button>
 
-      <div class="formno-bar" style="margin-top:22px;">
-        <input type="text" id="bilgiSearchInput" placeholder="Kayıt No ile ara (ör. BLG-0001)" autocomplete="off">
-        <button class="btn-fetch" id="bilgiSearchBtn" type="button">Getir</button>
-      </div>
-
       <div class="recent" style="margin-top:18px;">
         <div class="recent-head">
           <h2>Depolama Alanı Ön Bilgi Kayıtları</h2>
@@ -583,9 +615,18 @@
   </summary>
   <div class="mega-body">
 
+<div class="kayit-sorgula-box">
+  <p class="kayit-sorgula-title">🔍 Kayıt Görüntüle / Sorgula</p>
+  <input type="text" id="topSorguInputDetay" placeholder="Kayıt No girin (ör. BLG-0001)" autocomplete="off">
+  <div class="kayit-sorgula-buttons">
+    <button class="btn-sorgu btn-sorgu-bilgi" id="topOpenOnBilgiBtnFromDetay" type="button">📝 Ön Bilgi Formunu Görüntüle / Değiştir</button>
+    <button class="btn-sorgu btn-sorgu-detay" id="topOpenDetayBtnFromDetay" type="button">📋 Detay Formunu Görüntüle / Değiştir</button>
+  </div>
+  <button class="btn-export-shortcut" id="detayExcelShortcutBtn" type="button">⬇ Tüm Detay Kayıtlarını Excel'e Aktar</button>
+</div>
+
 <div class="top-actions" id="topActions">
-  <button class="btn btn-secondary" id="newBtn" type="button">Yeni Form</button>
-  <button class="btn btn-primary" id="saveBtn" type="button">Kaydet</button>
+  <button class="btn btn-secondary" id="newBtn" type="button" style="flex:1;">Yeni Form</button>
 </div>
 
 
@@ -628,8 +669,6 @@
   <div class="settings-info" id="settingsInfo">⚙ Zorunlu olmasını istediğiniz alanların yanındaki kutucukları işaretleyin, sonra üstteki "Zorunlu Alanları Kaydet" butonuna basın.</div>
   <div class="status-banner" id="statusBanner"></div>
 
-  <button class="view-tab-bottom" id="tabAllBtn" type="button">📋 Kayıtları Görüntüle / Kayıt Sorgula</button>
-
   <div class="detay-gate" id="detayGate">
     <p class="detay-gate-info">Bu forma devam edebilmek için önce ilgili binanın <b>Depolama Alanı Ön Bilgi Formu</b> kaydını girmelisiniz. Ön Bilgi Formu doldurulmadan Detay formu doldurulamaz.</p>
     <div class="field">
@@ -652,8 +691,6 @@
       <input type="text" id="doldurmaKisiDiger" placeholder="Ad Soyad yazın" style="display:none;margin-top:8px;">
     </div>
   </div>
-
-  <button class="btn-pdf" id="pdfBtn" type="button" style="display:none;">📄 Bu Kaydın PDF Raporunu Oluştur</button>
 
   <!-- BİNA HAKKINDA GENEL BİLGİLER -->
   <details class="card" open>
@@ -1001,6 +1038,9 @@
     </div>
   </details>
 
+  <button class="btn btn-primary" id="saveBtn" type="button" style="width:100%;margin-top:8px;">Kaydet</button>
+  <button class="btn-pdf" id="pdfBtn" type="button" style="display:none;margin-top:10px;">📄 Bu Kaydın PDF Raporunu Oluştur</button>
+
   </div>
 
   </section>
@@ -1162,7 +1202,6 @@
   const recentList = $("recentList");
   const exportBtn = $("exportBtn");
   const tabFormBtn = $("tabFormBtn");
-  const tabAllBtn = $("tabAllBtn");
   const formView = $("formView");
   const allRecordsView = $("allRecordsView");
   const topActions = $("topActions");
@@ -1375,13 +1414,12 @@
     document.querySelectorAll("section.card").forEach(el => { el.open = true; });
   }
 
-  depoBilgiFetchBtn.addEventListener("click", async () => {
-    const formNo = normalizeFormNo_($("bilgilendirmeFormuNo").value, "BLG");
-    if(!formNo){ showBanner("err","Lütfen Ön Bilgi Formu kayıt numarasını girin."); return; }
-    $("bilgilendirmeFormuNo").value = formNo;
-    depoBilgiFetchBtn.disabled = true;
+  async function openDetayForNumber_(rawNo, btnEl){
+    const formNo = normalizeFormNo_(rawNo, "BLG");
+    if(!formNo){ showBanner("err","Lütfen bir Kayıt No girin."); return; }
+    if(btnEl) btnEl.disabled = true;
     try{
-      // Bu Ön Bilgi numarasına bağlı, daha önce başlanmış bir Detay kaydı var mı diye önce onu bulmaya çalışıyoruz.
+      // Bu numaraya bağlı, daha önce başlanmış bir Detay kaydı var mı diye önce onu bulmaya çalışıyoruz.
       let existingDetay = null;
       try{
         const existingResult = await apiGet({action:"get", formNo});
@@ -1391,7 +1429,7 @@
       const result = await apiGet({action:"getBilgilendirme", formNo});
       if(!result.ok || !result.record){
         showBanner("err", formNo + " numaralı Ön Bilgi Formu kaydı bulunamadı. Lütfen önce Ön Bilgi Formu'nu doldurun.");
-        depoBilgiFetchBtn.disabled = false;
+        if(btnEl) btnEl.disabled = false;
         return;
       }
 
@@ -1402,12 +1440,19 @@
       applyBilgiToDepoForm_(result.record);
       unlockDetayForm_();
       pdfBtn.style.display = "block";
-      showBanner("ok", formNo + " numaralı Ön Bilgi kaydındaki veriler forma dolduruldu. Devam edebilirsiniz.");
+      $("bilgilendirmeFormuNo").value = formNo;
+      $("megaDepoFormu").open = true;
+      showFormView();
+      $("megaDepoFormu").scrollIntoView({ behavior:"smooth", block:"start" });
+      showBanner("ok", formNo + " numaralı kayıt forma dolduruldu. Devam edebilirsiniz.");
     }catch(e){
       showBanner("err","Veri getirilirken bir hata oluştu. Bağlantıyı kontrol edin.");
     }
-    depoBilgiFetchBtn.disabled = false;
-  });
+    if(btnEl) btnEl.disabled = false;
+  }
+
+  depoBilgiFetchBtn.addEventListener("click", () => openDetayForNumber_($("bilgilendirmeFormuNo").value, depoBilgiFetchBtn));
+
 
   // ---- ZORUNLU ALAN AYARLARI ----
   function fieldLabelWrap_(id){
@@ -1631,11 +1676,6 @@
         row.className = "recent-item";
         const dateStr = (item.updatedAt||item.createdAt) ? new Date(item.updatedAt||item.createdAt).toLocaleString("tr-TR") : "";
         row.innerHTML = `<div><b>${item.formNo}</b> — ${escapeHtml(item.sehir || item.bolge || "Kayıt")}<span class="meta">${dateStr}</span></div>`;
-        const btn = document.createElement("button");
-        btn.textContent = "Aç";
-        btn.type = "button";
-        btn.addEventListener("click", () => loadByFormNo(item.formNo));
-        row.appendChild(btn);
         recentList.appendChild(row);
       });
     }catch(e){
@@ -1775,14 +1815,12 @@
     allRecordsView.style.display = "none";
     formView.style.display = "";
     topActions.style.display = "flex";
-    tabAllBtn.classList.remove("active");
   }
 
   function showAllRecordsView(){
     formView.style.display = "none";
     allRecordsView.style.display = "";
     topActions.style.display = "none";
-    tabAllBtn.classList.add("active");
     hideBanner();
     loadRecent();
     loadAllRecords();
@@ -1920,7 +1958,7 @@
   }
 
   tabFormBtn.addEventListener("click", showFormView);
-  tabAllBtn.addEventListener("click", showAllRecordsView);
+  $("detayExcelShortcutBtn").addEventListener("click", exportAllToExcel);
   arSearchInput.addEventListener("input", () => renderAllRecords(arSearchInput.value));
 
   saveBtn.addEventListener("click", saveForm);
@@ -1941,8 +1979,6 @@
   const bilgiSehirSelect = $("bilgiSehir");
   const bilgiSaveBtn = $("bilgiSaveBtn");
   const bilgiNewBtn = $("bilgiNewBtn");
-  const bilgiSearchInput = $("bilgiSearchInput");
-  const bilgiSearchBtn = $("bilgiSearchBtn");
   const bilgiRecentList = $("bilgiRecentList");
   const bilgiExportBtn = $("bilgiExportBtn");
   let currentBilgiFormNo = null;
@@ -2142,7 +2178,6 @@
     fillBilgiForm({});
     currentBilgiFormNo = null;
     bilgiDisplayFormNo.textContent = "Kayıt sonrası otomatik atanır";
-    bilgiSearchInput.value = "";
   }
 
   function validateBilgiForm_(data){
@@ -2195,31 +2230,31 @@
     bilgiSaveBtn.textContent = originalLabel;
   }
 
-  async function loadBilgiByFormNo(rawNo){
+  async function loadBilgiByFormNo(rawNo, btnEl){
     const formNo = normalizeFormNo_(rawNo, "BLG");
     if(!formNo){ showBilgiBanner("err","Lütfen bir kayıt numarası girin."); return; }
-    bilgiSearchBtn.disabled = true;
+    if(btnEl) btnEl.disabled = true;
     try{
       const result = await apiGet({action:"getBilgilendirme", formNo});
       if(!result.ok || !result.record){
         showBilgiBanner("err", formNo + " numaralı kayıt bulunamadı.");
-        bilgiSearchBtn.disabled = false;
+        if(btnEl) btnEl.disabled = false;
         return;
       }
       fillBilgiForm(result.record);
       currentBilgiFormNo = formNo;
       bilgiDisplayFormNo.textContent = formNo;
+      $("megaDepolamaBilgilendirme").open = true;
+      $("megaDepolamaBilgilendirme").scrollIntoView({ behavior:"smooth", block:"start" });
       showBilgiBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
     }catch(e){
       showBilgiBanner("err","Kayıt getirilirken bir hata oluştu. Bağlantıyı kontrol edin.");
     }
-    bilgiSearchBtn.disabled = false;
+    if(btnEl) btnEl.disabled = false;
   }
 
   bilgiSaveBtn.addEventListener("click", saveBilgiForm);
   bilgiNewBtn.addEventListener("click", () => { clearBilgiForm(); hideBilgiBanner(); });
-  bilgiSearchBtn.addEventListener("click", () => loadBilgiByFormNo(bilgiSearchInput.value));
-  bilgiSearchInput.addEventListener("keydown", (e) => { if(e.key === "Enter") loadBilgiByFormNo(bilgiSearchInput.value); });
 
   async function loadBilgiRecent(){
     bilgiRecentList.innerHTML = '<p class="recent-empty">Yükleniyor…</p>';
@@ -2238,11 +2273,6 @@
         row.className = "recent-item";
         const dateStr = (item.updatedAt||item.createdAt) ? new Date(item.updatedAt||item.createdAt).toLocaleString("tr-TR") : "";
         row.innerHTML = `<div><b>${item.formNo}</b> — ${escapeHtml(item.sehir || "Kayıt")}<span class="meta">${dateStr}</span></div>`;
-        const btn = document.createElement("button");
-        btn.textContent = "Aç";
-        btn.type = "button";
-        btn.addEventListener("click", () => loadBilgiByFormNo(item.formNo));
-        row.appendChild(btn);
         bilgiRecentList.appendChild(row);
       });
     }catch(e){
@@ -2366,6 +2396,20 @@
   });
 
   loadEgitimListe();
+
+  // ---- ÜSTTEKİ ORTAK "KAYIT GÖRÜNTÜLE / SORGULA" BUTONLARI (her iki formda) ----
+  $("topOpenOnBilgiBtnFromOnBilgi").addEventListener("click", () => {
+    loadBilgiByFormNo($("topSorguInputOnBilgi").value, $("topOpenOnBilgiBtnFromOnBilgi"));
+  });
+  $("topOpenDetayBtnFromOnBilgi").addEventListener("click", () => {
+    openDetayForNumber_($("topSorguInputOnBilgi").value, $("topOpenDetayBtnFromOnBilgi"));
+  });
+  $("topOpenOnBilgiBtnFromDetay").addEventListener("click", () => {
+    loadBilgiByFormNo($("topSorguInputDetay").value, $("topOpenOnBilgiBtnFromDetay"));
+  });
+  $("topOpenDetayBtnFromDetay").addEventListener("click", () => {
+    openDetayForNumber_($("topSorguInputDetay").value, $("topOpenDetayBtnFromDetay"));
+  });
 })();
 </script>
 
