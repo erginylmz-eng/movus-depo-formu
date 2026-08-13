@@ -125,6 +125,14 @@
     flex:none; font-size:11px; font-weight:700; color:var(--amber-600);
     background:#FDF1DD; border-radius:5px; padding:3px 7px;
   }
+  .status-pill{
+    display:inline-block; font-size:11px; font-weight:700; border-radius:5px;
+    padding:3px 8px; margin-bottom:6px;
+  }
+  .status-pill.st-eval{ background:#EAF1FB; color:#2456A6; }
+  .status-pill.st-meet{ background:#FDF1DD; color:#A85F45; }
+  .status-pill.st-rejected{ background:#FBEAE8; color:#C4453B; }
+  .status-pill.st-won{ background:#E4F5EC; color:#1E8E5A; }
   .ar-item .ar-sub{ font-size:12.5px; color:var(--ink-soft); margin-bottom:8px; line-height:1.5;}
   .ar-item button{
     background:var(--navy-900); color:#fff; border:none; border-radius:6px;
@@ -196,6 +204,23 @@
   input:focus, select:focus, textarea:focus{
     outline:none; border-color:var(--amber-500); box-shadow:0 0 0 3px rgba(244,161,27,.18);
   }
+
+  /* ---------- ÖZET İSTATİSTİKLER ---------- */
+  .stats-block{ margin:18px 4px 24px; }
+  .stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+  .stat-card{
+    background:#fff; border:1px solid var(--steel-200); border-radius:8px;
+    padding:12px; text-align:center;
+  }
+  .stat-card .stat-num{ font-size:22px; font-weight:800; color:var(--navy-900); }
+  .stat-card .stat-label{ font-size:11px; color:var(--ink-soft); font-weight:600; margin-top:2px; }
+  .stat-bars{ background:#fff; border:1px solid var(--steel-200); border-radius:8px; padding:12px 14px; margin-bottom:10px; }
+  .stat-bars h3{ font-size:12.5px; margin:0 0 10px; color:var(--navy-800); font-weight:800; }
+  .stat-bar-row{ display:flex; align-items:center; gap:8px; margin-bottom:7px; font-size:12px; }
+  .stat-bar-label{ flex:0 0 108px; color:var(--ink-soft); font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .stat-bar-track{ flex:1; height:9px; background:var(--steel-100); border-radius:5px; overflow:hidden; }
+  .stat-bar-fill{ height:100%; background:var(--amber-500); border-radius:5px; }
+  .stat-bar-val{ flex:0 0 30px; text-align:right; font-weight:700; color:var(--navy-900); }
 
   .recent{margin:18px 4px 8px;}
   .recent-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;}
@@ -283,6 +308,14 @@
   .mega-body{ padding-top:14px; }
   .bilgi-wrap{ padding:0 15px 18px; max-width:640px; margin:0 auto; }
   .bilgi-wrap .field{ margin-bottom:14px; }
+  .egitim-wrap{ padding:0 15px 18px; max-width:640px; margin:0 auto; }
+  .egitim-item{
+    background:#fff; border:1px solid var(--steel-200); border-radius:var(--radius);
+    padding:13px 14px; margin-bottom:10px;
+  }
+  .egitim-item h4{ margin:0 0 5px; font-size:14.5px; font-weight:800; color:var(--navy-900); }
+  .egitim-item p{ margin:0 0 8px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
+  .egitim-item a{ font-size:13px; font-weight:700; color:var(--navy-800); }
   .mega-placeholder{
     text-align:center; color:var(--ink-soft); font-weight:800; letter-spacing:.03em;
     padding:64px 20px; font-size:15px;
@@ -302,6 +335,52 @@
     padding:10px 11px; font-size:14.5px; color:var(--ink-soft); font-weight:600;
     letter-spacing:.02em;
   }
+
+  /* ---------- ŞEHİR KAYIT SAYACI ---------- */
+  .city-count-info{
+    font-size:12.5px; color:var(--ink-soft); margin:-8px 4px 14px; font-weight:600;
+  }
+  .city-count-info button{
+    background:none; border:none; color:var(--navy-800); font-weight:800;
+    text-decoration:underline; cursor:pointer; padding:0; font-size:12.5px;
+  }
+
+  /* ---------- GPS KONUM ---------- */
+  .gps-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .gps-row .btn{ flex:none; padding:10px 14px; font-size:13.5px; }
+  #gpsStatus{ font-size:12.5px; color:var(--ink-soft); font-weight:600; }
+  #gpsMapLink{
+    display:inline-block; margin-top:8px; font-size:13px; font-weight:800;
+    color:var(--navy-800); text-decoration:none;
+  }
+  #gpsMapLink:hover{ text-decoration:underline; }
+
+  /* ---------- FOTOĞRAF GALERİSİ ---------- */
+  .photo-gallery{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .photo-thumb{
+    position:relative; width:72px; height:72px; border-radius:8px; overflow:hidden;
+    border:1px solid var(--steel-200); flex:none;
+  }
+  .photo-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .photo-thumb button{
+    position:absolute; top:2px; right:2px; background:rgba(11,18,32,.75); color:#fff;
+    border:none; border-radius:5px; width:20px; height:20px; font-size:12px; line-height:1; cursor:pointer;
+  }
+  .photo-uploading{ font-size:12px; color:var(--ink-soft); font-weight:600; margin:6px 0 0; }
+  #photoInput{ font-size:13px; }
+
+  /* ---------- PDF BUTONU ---------- */
+  .btn-pdf{
+    display:block; width:100%; background:var(--navy-900); color:#fff; border:none;
+    border-radius:9px; padding:12px; font-size:14px; font-weight:700; margin:0 0 18px;
+  }
+  .btn-pdf:disabled{ opacity:.6; }
+  .ar-item-actions{ display:flex; gap:8px; }
+  .ar-item-actions button{
+    background:var(--navy-900); color:#fff; border:none; border-radius:6px;
+    padding:7px 12px; font-size:12.5px; font-weight:600;
+  }
+  .ar-item-actions button.pdf-btn{ background:var(--steel-100); color:var(--ink); }
 
   /* ---------- DAHA BELİRGİN ANA BAŞLIKLAR ---------- */
   .grp-eyebrow{
@@ -352,6 +431,14 @@
       <button class="btn-fetch" id="fetchBtn" type="button">Getir</button>
     </div>
 
+    <div class="stats-block">
+      <div class="recent-head">
+        <h2>📊 Özet İstatistikler</h2>
+        <button class="btn-export" id="statsRefreshBtn" type="button">⟳ Yenile</button>
+      </div>
+      <div id="statsContent"><p class="recent-empty">Yükleniyor…</p></div>
+    </div>
+
     <div class="recent">
       <h2>Son Kayıtlar</h2>
       <div id="recentList"><p class="recent-empty">Yükleniyor…</p></div>
@@ -399,9 +486,12 @@
     </div>
     <div class="field">
       <label>Formu Dolduran</label>
-      <input type="text" id="doldurmaKisi" placeholder="Ad Soyad">
+      <select id="doldurmaKisi"><option value="">Seçiniz</option></select>
+      <input type="text" id="doldurmaKisiDiger" placeholder="Ad Soyad yazın" style="display:none;margin-top:8px;">
     </div>
   </div>
+
+  <button class="btn-pdf" id="pdfBtn" type="button" style="display:none;">📄 Bu Kaydın PDF Raporunu Oluştur</button>
 
   <!-- BİNA HAKKINDA GENEL BİLGİLER -->
   <details class="card" open>
@@ -414,6 +504,17 @@
     </summary>
     <div class="card-body">
       <div class="field"><label>Bina Adı</label><input type="text" id="binaAdi"></div>
+
+      <div class="field">
+        <label>Süreç Durumu</label>
+        <select id="surecDurumu">
+          <option value="">Seçiniz</option>
+          <option>Değerlendirmede</option>
+          <option>Görüşme Aşamasında</option>
+          <option>Reddedildi</option>
+          <option>Anlaşma Sağlandı</option>
+        </select>
+      </div>
 
       <div class="field split">
         <div>
@@ -436,6 +537,7 @@
           </select>
         </div>
       </div>
+      <p class="city-count-info" id="cityCountInfo" style="display:none;"></p>
 
       <div class="field split">
         <div><label>Mahalle</label><input type="text" id="mahalle"></div>
@@ -446,11 +548,28 @@
         <div><label>Numara</label><input type="text" id="numara"></div>
       </div>
 
+      <div class="field">
+        <label>Konum (GPS)</label>
+        <div class="gps-row">
+          <button class="btn btn-secondary" id="gpsBtn" type="button">📍 Konumu Al</button>
+          <span id="gpsStatus">Henüz konum alınmadı</span>
+        </div>
+        <input type="hidden" id="gpsKonum">
+        <a id="gpsMapLink" href="#" target="_blank" rel="noopener" style="display:none;">🗺️ Haritada Aç</a>
+      </div>
+
+      <div class="field">
+        <label>Fotoğraflar</label>
+        <input type="file" id="photoInput" accept="image/*" multiple capture="environment">
+        <div class="photo-gallery" id="photoGallery"></div>
+        <input type="hidden" id="fotograflar">
+      </div>
+
       <div class="field split4">
-        <div><label>Bina Arazi Alanı (m²)</label><input type="number" id="binaAraziAlani"></div>
-        <div><label>Bina Kapalı Alanı (m²)</label><input type="number" id="binaKapaliAlani"></div>
-        <div><label>Bina Ofis Alanı (m²)</label><input type="number" id="binaOfisAlaniGenel"></div>
-        <div><label>Bina Yaşı (yıl)</label><input type="number" id="binaYasi" min="0"></div>
+        <div><label>Bina Arazi Alanı (m²)</label><input type="number" id="binaAraziAlani" min="0"></div>
+        <div><label>Bina Kapalı Alanı (m²)</label><input type="number" id="binaKapaliAlani" min="0"></div>
+        <div><label>Bina Ofis Alanı (m²)</label><input type="number" id="binaOfisAlaniGenel" min="0"></div>
+        <div><label>Bina Yaşı (yıl)</label><input type="number" id="binaYasi" min="0" max="150"></div>
       </div>
     </div>
   </details>
@@ -500,19 +619,19 @@
           <div><label>Forklift Giriş Kapısı Var mı</label>
             <select id="forkliftKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
-          <div><label>Var ise kaç adet</label><input type="number" id="forkliftKapisiAdet"></div>
+          <div><label>Var ise kaç adet</label><input type="number" id="forkliftKapisiAdet" min="0"></div>
         </div>
         <div class="field split">
           <div><label>Rampa Kapısı Var mı?</label>
             <select id="rampaKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
-          <div><label>Var ise kaç adet</label><input type="number" id="rampaKapisiAdet"></div>
+          <div><label>Var ise kaç adet</label><input type="number" id="rampaKapisiAdet" min="0"></div>
         </div>
         <div class="field split">
           <div><label>Acil Çıkış Kapısı Var mı</label>
             <select id="acilCikisKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
-          <div><label>Var ise kaç adet</label><input type="number" id="acilCikisKapisiAdet"></div>
+          <div><label>Var ise kaç adet</label><input type="number" id="acilCikisKapisiAdet" min="0"></div>
         </div>
       </div>
 
@@ -579,7 +698,7 @@
           <div><label>Yangın dolabı var mı?</label>
             <select id="yanginDolabiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
-          <div><label>Var ise kaç adet</label><input type="number" id="yanginDolabiAdet"></div>
+          <div><label>Var ise kaç adet</label><input type="number" id="yanginDolabiAdet" min="0"></div>
         </div>
         <div class="field"><label>Yangın Sprinkler Sistemi Var mı?</label>
           <select id="yanginSprinklerVarMi"><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option></select>
@@ -589,7 +708,7 @@
         </div>
         <div class="field" id="yanginSuDeposuKapasiteWrap" style="display:none;">
           <label>Su Deposu Kapasitesi (m³)</label>
-          <input type="number" id="yanginSuDeposuKapasite">
+          <input type="number" id="yanginSuDeposuKapasite" min="0">
         </div>
       </div>
 
@@ -599,15 +718,15 @@
           <div><label>Duman damperi var mı?</label>
             <select id="dumanDamperiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
-          <div><label>Var ise kaç adet</label><input type="number" id="dumanDamperiAdet"></div>
+          <div><label>Var ise kaç adet</label><input type="number" id="dumanDamperiAdet" min="0"></div>
         </div>
       </div>
 
       <div class="subgroup">
         <p class="subgroup-title">Diğer Alanlar</p>
         <div class="field split">
-          <div><label>Tuvalet kaç kişilik</label><input type="number" id="tuvaletKisilik"></div>
-          <div><label>Duş kaç kişilik</label><input type="number" id="dusKisilik"></div>
+          <div><label>Tuvalet kaç kişilik</label><input type="number" id="tuvaletKisilik" min="0"></div>
+          <div><label>Duş kaç kişilik</label><input type="number" id="dusKisilik" min="0"></div>
         </div>
       </div>
 
@@ -638,7 +757,7 @@
       </div>
       <div class="subgroup">
         <p class="subgroup-title">Yanaşma Mesafeleri Kontrolü</p>
-        <div class="field"><label>Araç yanaşma mesafesi (metre)</label><input type="number" id="yanasmaMesafesi"></div>
+        <div class="field"><label>Araç yanaşma mesafesi (metre)</label><input type="number" id="yanasmaMesafesi" min="0"></div>
       </div>
       <div class="subgroup">
         <p class="subgroup-title">Aydınlatma Kontrolü</p>
@@ -646,7 +765,7 @@
           <div><label>Dış aydınlatma var mı?</label>
             <select id="disAydinlatmaVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
-          <div><label>Var ise kaç adet</label><input type="number" id="disAydinlatmaAdet"></div>
+          <div><label>Var ise kaç adet</label><input type="number" id="disAydinlatmaAdet" min="0"></div>
         </div>
       </div>
       <div class="subgroup">
@@ -684,9 +803,9 @@
           <div><label>Binada aktif kamera sistemi var mı?</label>
             <select id="kameraVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
-          <div><label>Var ise kaç adet</label><input type="number" id="kameraAdet"></div>
+          <div><label>Var ise kaç adet</label><input type="number" id="kameraAdet" min="0"></div>
         </div>
-        <div class="field"><label>Ne kadar süreli geriye dönük kayıt tutmaktadır (gün)</label><input type="number" id="kayitSuresiGun"></div>
+        <div class="field"><label>Ne kadar süreli geriye dönük kayıt tutmaktadır (gün)</label><input type="number" id="kayitSuresiGun" min="0"></div>
         <div class="field"><label>Kameralar internet üzerinden izlenebilmekte mi?</label>
           <select id="kameraInternetIzleme"><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option></select>
         </div>
@@ -697,7 +816,7 @@
           <div><label>Binada aktif bir jeneratör var mı?</label>
             <select id="jeneratorVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
           </div>
-          <div><label>Var ise kaç kVA</label><input type="number" id="jeneratorKva"></div>
+          <div><label>Var ise kaç kVA</label><input type="number" id="jeneratorKva" min="0"></div>
         </div>
       </div>
     </div>
@@ -766,22 +885,22 @@
       </div>
 
       <div class="field split">
-        <div><label>Açık Alan (m²)</label><input type="number" id="bilgiAcikAlan"></div>
-        <div><label>Kapalı Alan (m²)</label><input type="number" id="bilgiKapaliAlan"></div>
+        <div><label>Açık Alan (m²)</label><input type="number" id="bilgiAcikAlan" min="0"></div>
+        <div><label>Kapalı Alan (m²)</label><input type="number" id="bilgiKapaliAlan" min="0"></div>
       </div>
 
       <div class="field split">
         <div><label>Forklift Giriş Kapısı Var mı</label>
           <select id="bilgiForkliftKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
         </div>
-        <div><label>Var ise sayısı</label><input type="number" id="bilgiForkliftKapisiAdet"></div>
+        <div><label>Var ise sayısı</label><input type="number" id="bilgiForkliftKapisiAdet" min="0"></div>
       </div>
 
       <div class="field split">
         <div><label>Rampa Kapısı Var mı</label>
           <select id="bilgiRampaKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
         </div>
-        <div><label>Var ise sayısı</label><input type="number" id="bilgiRampaKapisiAdet"></div>
+        <div><label>Var ise sayısı</label><input type="number" id="bilgiRampaKapisiAdet" min="0"></div>
       </div>
 
       <div class="field">
@@ -805,7 +924,7 @@
 
       <div class="field">
         <label>Rampa Yanaşma Mesafesi (metre)</label>
-        <input type="number" id="bilgiRampaYanasmaMesafesi">
+        <input type="number" id="bilgiRampaYanasmaMesafesi" min="0">
       </div>
 
       <div class="field">
@@ -838,14 +957,25 @@
     <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </summary>
   <div class="mega-body">
-    <p class="mega-placeholder">YAPIM AŞAMASINDA....</p>
+    <div class="egitim-wrap">
+      <div id="egitimListe"><p class="recent-empty">Yükleniyor…</p></div>
+
+      <button class="btn btn-secondary" id="egitimAddToggleBtn" type="button" style="width:100%;margin-top:14px;">+ Eğitim Ekle (Yönetici)</button>
+
+      <div id="egitimAddForm" style="display:none;margin-top:14px;">
+        <div class="field"><label>Başlık</label><input type="text" id="egitimBaslik"></div>
+        <div class="field"><label>Açıklama</label><textarea id="egitimAciklama"></textarea></div>
+        <div class="field"><label>Bağlantı (video/PDF linki)</label><input type="text" id="egitimLink" placeholder="https://..."></div>
+        <button class="btn btn-primary" id="egitimSaveBtn" type="button" style="width:100%;">Kaydet</button>
+      </div>
+    </div>
   </div>
 </details>
 
 <script>
 (function(){
   const FIELD_IDS = [
-    "binaAdi","mahalle","cadde","sokak","numara","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi",
+    "binaAdi","surecDurumu","mahalle","cadde","sokak","numara","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi",
     "zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
     "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet","acilCikisKapisiVarMi","acilCikisKapisiAdet",
     "korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
@@ -858,8 +988,29 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo"
+    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo","gpsKonum","fotograflar"
   ];
+
+  const NUMERIC_FIELD_IDS = [
+    "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi",
+    "forkliftKapisiAdet","rampaKapisiAdet","acilCikisKapisiAdet",
+    "yanginDolabiAdet","yanginSuDeposuKapasite","dumanDamperiAdet",
+    "tuvaletKisilik","dusKisilik","yanasmaMesafesi","disAydinlatmaAdet",
+    "kameraAdet","kayitSuresiGun","jeneratorKva"
+  ];
+
+  // "MVS0001" gibi tire eksik / küçük harf girilen kayıt numaralarını
+  // "MVS-0001" formatına otomatik çevirir.
+  function normalizeFormNo_(raw, prefix){
+    const cleaned = String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
+    if(!cleaned) return "";
+    const m = cleaned.match(/^([A-ZÇĞİÖŞÜ]+)-?(\d+)$/);
+    if(m){
+      const letters = prefix || m[1];
+      return letters + "-" + m[2].padStart(4, "0");
+    }
+    return cleaned;
+  }
 
   const REGION_CITIES = {
     "Marmara Bölgesi": ["Balıkesir","Bilecik","Bursa","Çanakkale","Edirne","İstanbul","Kırklareli","Kocaeli","Sakarya","Tekirdağ","Yalova"],
@@ -874,7 +1025,7 @@
   const FIELD_LABELS = {
     formNo: "Kayıt No", doldurmaKisi: "Formu Dolduran", bolge: "Bölge", sehir: "Şehir",
     createdAt: "Oluşturma Tarihi", updatedAt: "Güncelleme Tarihi",
-    binaAdi: "Bina Adı", mahalle: "Mahalle", cadde: "Cadde", sokak: "Sokak", numara: "Numara",
+    binaAdi: "Bina Adı", surecDurumu: "Süreç Durumu", mahalle: "Mahalle", cadde: "Cadde", sokak: "Sokak", numara: "Numara",
     binaAraziAlani: "Bina Arazi Alanı (m²)", binaKapaliAlani: "Bina Kapalı Alanı (m²)",
     binaOfisAlaniGenel: "Bina Ofis Alanı - Genel (m²)", binaYasi: "Bina Yaşı (yıl)",
     zeminDurumu: "Zemin Durumu (İç)", catiMalzemesi: "Çatı Malzemesi", catiMalzemesiDiger: "Çatı Malzemesi - Diğer",
@@ -903,9 +1054,9 @@
     kameraVarMi: "Kamera Sistemi Var mı", kameraAdet: "Kamera Adedi",
     kayitSuresiGun: "Kayıt Süresi (Gün)", kameraInternetIzleme: "Kameralar İnternetten İzlenebiliyor mu",
     jeneratorVarMi: "Jeneratör Var mı", jeneratorKva: "Jeneratör Gücü (kVA)",
-    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No"
+    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No", gpsKonum: "Konum (GPS)", fotograflar: "Fotoğraflar"
   };
-  const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","binaAdi","mahalle","cadde","sokak","numara",
+  const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","binaAdi","surecDurumu","mahalle","cadde","sokak","numara",
     "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi","zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
     "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet",
     "acilCikisKapisiVarMi","acilCikisKapisiAdet","korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
@@ -917,7 +1068,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","bilgilendirmeFormuNo"];
+    "genelNot","bilgilendirmeFormuNo","gpsKonum","fotograflar"];
 
   // ============================================================
   // GOOGLE SHEETS BAĞLANTISI
@@ -1003,7 +1154,152 @@
     yanginSuDeposuKapasiteWrap.style.display = (yanginSuDeposuSelect.value === "Var") ? "" : "none";
   }
 
+  // ---- GPS KONUM ----
+  const gpsBtn = $("gpsBtn");
+  const gpsStatus = $("gpsStatus");
+  const gpsMapLink = $("gpsMapLink");
+
+  function syncGpsDisplay(){
+    const val = $("gpsKonum").value;
+    if(val){
+      gpsStatus.textContent = "Konum kayıtlı: " + val;
+      gpsMapLink.href = "https://www.google.com/maps?q=" + val;
+      gpsMapLink.style.display = "inline-block";
+    } else {
+      gpsStatus.textContent = "Henüz konum alınmadı";
+      gpsMapLink.style.display = "none";
+    }
+  }
+
+  gpsBtn.addEventListener("click", () => {
+    if(!navigator.geolocation){
+      gpsStatus.textContent = "Bu tarayıcı konum özelliğini desteklemiyor.";
+      return;
+    }
+    gpsBtn.disabled = true;
+    gpsStatus.textContent = "Konum alınıyor…";
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude.toFixed(6);
+        const lng = pos.coords.longitude.toFixed(6);
+        $("gpsKonum").value = lat + "," + lng;
+        syncGpsDisplay();
+        gpsBtn.disabled = false;
+      },
+      () => {
+        gpsStatus.textContent = "Konum alınamadı (izin verilmedi ya da hata oluştu).";
+        gpsBtn.disabled = false;
+      },
+      { enableHighAccuracy:true, timeout:10000 }
+    );
+  });
+
+  // ---- FOTOĞRAF YÜKLEME (Google Drive'a) ----
+  const photoInput = $("photoInput");
+  const photoGallery = $("photoGallery");
+  let photoUrls = [];
+
+  function renderPhotoGallery(){
+    photoGallery.querySelectorAll(".photo-thumb").forEach(el => el.remove());
+    photoUrls.forEach((url, idx) => {
+      const thumb = document.createElement("div");
+      thumb.className = "photo-thumb";
+      thumb.innerHTML = '<img src="' + url + '" alt="Fotoğraf"><button type="button" title="Kaldır">✕</button>';
+      thumb.querySelector("button").addEventListener("click", () => {
+        photoUrls.splice(idx, 1);
+        $("fotograflar").value = photoUrls.join("\n");
+        renderPhotoGallery();
+      });
+      photoGallery.appendChild(thumb);
+    });
+  }
+
+  function fileToBase64_(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result).split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  photoInput.addEventListener("change", async () => {
+    const files = Array.from(photoInput.files || []);
+    if(!files.length) return;
+    const statusMsg = document.createElement("p");
+    statusMsg.className = "photo-uploading";
+    statusMsg.textContent = "Yükleniyor…";
+    photoGallery.appendChild(statusMsg);
+    for(const file of files){
+      try{
+        const base64 = await fileToBase64_(file);
+        const result = await apiPost({
+          action: "uploadPhoto",
+          data: { formNo: currentFormNo || "gecici", fileName: file.name, mimeType: file.type, base64Data: base64 }
+        });
+        if(result.ok && result.url){ photoUrls.push(result.url); }
+      }catch(e){ /* bu dosyayı atla, devam et */ }
+    }
+    statusMsg.remove();
+    $("fotograflar").value = photoUrls.join("\n");
+    renderPhotoGallery();
+    photoInput.value = "";
+  });
+
+  // ---- PDF RAPORU OLUŞTURMA ----
+  const pdfBtn = $("pdfBtn");
+
+  async function generatePdfForFormNo_(formNo, btn){
+    if(!formNo) return;
+    const originalLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "PDF hazırlanıyor…";
+    try{
+      const result = await apiPost({ action:"generatePdf", data:{ formNo } });
+      if(result.ok && result.url){
+        window.open(result.url, "_blank");
+      } else {
+        showBanner("err","PDF oluşturulamadı.");
+      }
+    }catch(e){
+      showBanner("err","PDF oluşturulurken bir hata oluştu. Bağlantıyı kontrol edin.");
+    }
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+  }
+
+  pdfBtn.addEventListener("click", () => generatePdfForFormNo_(currentFormNo, pdfBtn));
+
+  // ---- AYNI ŞEHİRDEKİ KAYIT SAYACI ----
+  const cityCountInfo = $("cityCountInfo");
+
+  async function updateCityCountInfo_(){
+    const city = sehirSelect.value;
+    if(!city){ cityCountInfo.style.display = "none"; return; }
+    try{
+      const result = await apiGet({action:"list"});
+      const records = (result.ok && result.records) ? result.records : [];
+      const matches = records.filter(r => r.sehir === city && r.formNo !== currentFormNo);
+      if(matches.length > 0){
+        cityCountInfo.innerHTML = "Bu şehirde daha önce <b>" + matches.length + "</b> kayıt oluşturulmuş. " +
+          '<button type="button" id="viewCityRecordsBtn">Görüntüle</button>';
+        cityCountInfo.style.display = "block";
+        $("viewCityRecordsBtn").addEventListener("click", () => {
+          showAllRecordsView();
+          arSearchInput.value = city;
+          renderAllRecords(city);
+        });
+      } else {
+        cityCountInfo.textContent = "Bu şehirde başka kayıt bulunmuyor.";
+        cityCountInfo.style.display = "block";
+      }
+    }catch(e){
+      cityCountInfo.style.display = "none";
+    }
+  }
+
   bolgeSelect.addEventListener("change", () => populateSehir(bolgeSelect.value, ""));
+  sehirSelect.addEventListener("change", updateCityCountInfo_);
   catiMalzemesiSelect.addEventListener("change", updateCatiDigerVisibility);
   yanginSuDeposuSelect.addEventListener("change", updateSuDeposuKapasiteVisibility);
 
@@ -1052,8 +1348,9 @@
   }
 
   depoBilgiFetchBtn.addEventListener("click", async () => {
-    const formNo = $("bilgilendirmeFormuNo").value.trim().toUpperCase();
+    const formNo = normalizeFormNo_($("bilgilendirmeFormuNo").value, "BLG");
     if(!formNo){ showBanner("err","Lütfen Bilgilendirme Formu kayıt numarasını girin."); return; }
+    $("bilgilendirmeFormuNo").value = formNo;
     depoBilgiFetchBtn.disabled = true;
     try{
       const result = await apiGet({action:"getBilgilendirme", formNo});
@@ -1176,20 +1473,52 @@
     settingsSaveBtn.textContent = originalLabel;
   });
 
+  const TEAM_MEMBERS = ["Ahmet Yılmaz","Ayşe Kaya","Mehmet Demir"]; // Bu listeyi kendi ekibinize göre düzenleyin
+  const doldurmaKisiSelect = $("doldurmaKisi");
+  const doldurmaKisiDigerInput = $("doldurmaKisiDiger");
+  doldurmaKisiSelect.innerHTML = '<option value="">Seçiniz</option>' +
+    TEAM_MEMBERS.map(n => `<option>${n}</option>`).join("") +
+    '<option value="__DIGER__">Diğer (listede yok)</option>';
+
+  doldurmaKisiSelect.addEventListener("change", () => {
+    doldurmaKisiDigerInput.style.display = (doldurmaKisiSelect.value === "__DIGER__") ? "" : "none";
+  });
+
+  function syncDoldurmaKisi_(value){
+    const v = value || "";
+    if(v && !TEAM_MEMBERS.includes(v)){
+      doldurmaKisiSelect.value = "__DIGER__";
+      doldurmaKisiDigerInput.value = v;
+      doldurmaKisiDigerInput.style.display = "";
+    } else {
+      doldurmaKisiSelect.value = v;
+      doldurmaKisiDigerInput.value = "";
+      doldurmaKisiDigerInput.style.display = "none";
+    }
+  }
+
   function collectFormData(){
     const data = {};
     FIELD_IDS.forEach(id => { data[id] = $(id).value; });
+    if(data.doldurmaKisi === "__DIGER__"){
+      data.doldurmaKisi = doldurmaKisiDigerInput.value.trim();
+    }
     return data;
   }
 
   function fillForm(data){
     FIELD_IDS.forEach(id => {
-      if(id === "sehir") return; // bolge'den sonra ayrıca dolduruluyor
+      if(id === "sehir" || id === "doldurmaKisi") return; // ayrıca özel dolduruluyor
       $(id).value = (data && data[id] != null) ? data[id] : "";
     });
+    syncDoldurmaKisi_(data && data.doldurmaKisi);
     populateSehir(data && data.bolge, data && data.sehir);
     updateCatiDigerVisibility();
     updateSuDeposuKapasiteVisibility();
+    syncGpsDisplay();
+    cityCountInfo.style.display = "none";
+    photoUrls = (data && data.fotograflar) ? String(data.fotograflar).split("\n").filter(Boolean) : [];
+    renderPhotoGallery();
   }
 
   function clearForm(){
@@ -1197,6 +1526,7 @@
     currentFormNo = null;
     displayFormNo.textContent = "Kayıt sonrası otomatik atanır";
     formNoInput.value = "";
+    pdfBtn.style.display = "none";
     document.querySelectorAll("section.card").forEach((el,i)=>{ el.open = (i===0); });
   }
 
@@ -1236,7 +1566,7 @@
   }
 
   async function loadByFormNo(rawNo){
-    const formNo = (rawNo || "").trim().toUpperCase();
+    const formNo = normalizeFormNo_(rawNo, "MVS");
     if(!formNo){ showBanner("err","Lütfen bir kayıt numarası girin."); return; }
     fetchBtn.disabled = true;
     try{
@@ -1250,6 +1580,7 @@
       currentFormNo = formNo;
       displayFormNo.textContent = formNo;
       formNoInput.value = formNo;
+      pdfBtn.style.display = "block";
       document.querySelectorAll("section.card").forEach(el => el.open = true);
       showBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
     }catch(e){
@@ -1261,6 +1592,11 @@
   async function saveForm(){
     const missing = [];
     requiredFieldsSet.forEach(id => {
+      if(id === "doldurmaKisi"){
+        const resolved = (doldurmaKisiSelect.value === "__DIGER__") ? doldurmaKisiDigerInput.value : doldurmaKisiSelect.value;
+        if(!String(resolved || "").trim()){ missing.push(FIELD_LABELS[id] || id); }
+        return;
+      }
       const el = $(id);
       if(el && !String(el.value || "").trim()){
         missing.push(FIELD_LABELS[id] || id);
@@ -1271,11 +1607,28 @@
       document.querySelectorAll("section.card").forEach(el => { el.open = true; });
       return;
     }
+
+    const negatives = NUMERIC_FIELD_IDS.filter(id => {
+      const el = $(id);
+      return el && el.value !== "" && Number(el.value) < 0;
+    }).map(id => FIELD_LABELS[id] || id);
+    if(negatives.length){
+      showBanner("err", "Şu alanlara negatif sayı girilemez: " + negatives.join(", "));
+      document.querySelectorAll("section.card").forEach(el => { el.open = true; });
+      return;
+    }
+
     saveBtn.disabled = true;
     saveBtn.textContent = "Kaydediliyor…";
     try{
       const data = collectFormData();
       if(currentFormNo){ data.formNo = currentFormNo; }
+
+      const emptyOptionalCount = FIELD_IDS.filter(id => {
+        if(requiredFieldsSet.has(id)) return false;
+        const el = $(id);
+        return el && !String(el.value || "").trim();
+      }).length;
 
       const result = await apiPost({ action:"save", data });
       if(!result.ok){ throw new Error(result.error || "Kayıt başarısız"); }
@@ -1283,7 +1636,9 @@
       currentFormNo = result.formNo;
       displayFormNo.textContent = result.formNo;
       formNoInput.value = result.formNo;
-      showBanner("ok", "Kaydedildi. Kayıt No: " + result.formNo);
+      pdfBtn.style.display = "block";
+      const note = emptyOptionalCount > 0 ? (" (" + emptyOptionalCount + " alan boş bırakıldı)") : "";
+      showBanner("ok", "Kaydedildi. Kayıt No: " + result.formNo + note);
       allRecordsCache = null;
       loadRecent();
     }catch(e){
@@ -1342,6 +1697,66 @@
     hideBanner();
     loadRecent();
     loadAllRecords();
+    loadStats_();
+  }
+
+  async function loadStats_(){
+    const statsContent = $("statsContent");
+    statsContent.innerHTML = '<p class="recent-empty">Yükleniyor…</p>';
+    try{
+      const result = await apiGet({action:"list"});
+      const records = (result.ok && result.records) ? result.records : [];
+      if(!records.length){
+        statsContent.innerHTML = '<p class="recent-empty">Henüz istatistik için yeterli kayıt yok.</p>';
+        return;
+      }
+
+      const total = records.length;
+
+      // Bölgelere göre dağılım
+      const byBolge = {};
+      records.forEach(r => { const b = r.bolge || "Belirtilmemiş"; byBolge[b] = (byBolge[b]||0) + 1; });
+
+      // Forklift kapısı oranı
+      const forkliftVar = records.filter(r => r.forkliftKapisiVarMi === "Var").length;
+
+      // Ortalama bina yaşı
+      const yaslar = records.map(r => Number(r.binaYasi)).filter(n => !isNaN(n) && n > 0);
+      const ortYas = yaslar.length ? (yaslar.reduce((a,b)=>a+b,0) / yaslar.length).toFixed(1) : "-";
+
+      // En çok kayıt girilen şehirler (ilk 3)
+      const byCity = {};
+      records.forEach(r => { if(r.sehir){ byCity[r.sehir] = (byCity[r.sehir]||0) + 1; } });
+      const topCities = Object.entries(byCity).sort((a,b) => b[1]-a[1]).slice(0,3);
+
+      // Süreç durumu dağılımı
+      const byStatus = {};
+      records.forEach(r => { const s = r.surecDurumu || "Belirtilmemiş"; byStatus[s] = (byStatus[s]||0) + 1; });
+
+      let html = '<div class="stats-grid">';
+      html += `<div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">TOPLAM KAYIT</div></div>`;
+      html += `<div class="stat-card"><div class="stat-num">${total ? Math.round(forkliftVar/total*100) : 0}%</div><div class="stat-label">FORKLİFT KAPISI VAR</div></div>`;
+      html += `<div class="stat-card"><div class="stat-num">${ortYas}</div><div class="stat-label">ORT. BİNA YAŞI (YIL)</div></div>`;
+      html += `<div class="stat-card"><div class="stat-num">${topCities.length ? topCities[0][0] : "-"}</div><div class="stat-label">EN ÇOK KAYITLI ŞEHİR</div></div>`;
+      html += '</div>';
+
+      function barsHtml(title, obj){
+        const max = Math.max(...Object.values(obj));
+        let h = `<div class="stat-bars"><h3>${title}</h3>`;
+        Object.entries(obj).sort((a,b)=>b[1]-a[1]).forEach(([label, count]) => {
+          const pct = max ? Math.round(count/max*100) : 0;
+          h += `<div class="stat-bar-row"><span class="stat-bar-label">${escapeHtml(label)}</span><span class="stat-bar-track"><span class="stat-bar-fill" style="width:${pct}%"></span></span><span class="stat-bar-val">${count}</span></div>`;
+        });
+        return h + '</div>';
+      }
+
+      html += barsHtml("Bölgelere Göre Dağılım", byBolge);
+      html += barsHtml("Süreç Durumuna Göre Dağılım", byStatus);
+
+      statsContent.innerHTML = html;
+    }catch(e){
+      statsContent.innerHTML = '<p class="recent-empty">İstatistikler yüklenemedi.</p>';
+    }
   }
 
   async function loadAllRecords(forceRefresh){
@@ -1379,6 +1794,8 @@
     arList.innerHTML = "";
     filtered.forEach(d => {
       const dateStr = (d.updatedAt || d.createdAt) ? new Date(d.updatedAt || d.createdAt).toLocaleString("tr-TR") : "";
+      const statusClass = { "Değerlendirmede":"st-eval", "Görüşme Aşamasında":"st-meet", "Reddedildi":"st-rejected", "Anlaşma Sağlandı":"st-won" }[d.surecDurumu] || "";
+      const statusHtml = d.surecDurumu ? `<span class="status-pill ${statusClass}">${escapeHtml(d.surecDurumu)}</span>` : "";
       const row = document.createElement("div");
       row.className = "ar-item";
       row.innerHTML = `
@@ -1386,6 +1803,7 @@
           <b>${escapeHtml(d.binaAdi || "İsimsiz kayıt")}</b>
           <span class="ar-badge">${escapeHtml(d.formNo || "")}</span>
         </div>
+        ${statusHtml}
         <div class="ar-sub">
           ${(d.sehir || d.mahalle) ? escapeHtml([d.mahalle, d.sehir].filter(Boolean).join(", ")) + "<br>" : ""}
           ${d.doldurmaKisi ? "Dolduran: " + escapeHtml(d.doldurmaKisi) + " · " : ""}${dateStr}
@@ -1398,7 +1816,16 @@
         showFormView();
         await loadByFormNo(d.formNo);
       });
-      row.appendChild(btn);
+      const pdfListBtn = document.createElement("button");
+      pdfListBtn.textContent = "📄 PDF";
+      pdfListBtn.type = "button";
+      pdfListBtn.className = "pdf-btn";
+      pdfListBtn.addEventListener("click", () => generatePdfForFormNo_(d.formNo, pdfListBtn));
+      const actionsWrap = document.createElement("div");
+      actionsWrap.className = "ar-item-actions";
+      actionsWrap.appendChild(btn);
+      actionsWrap.appendChild(pdfListBtn);
+      row.appendChild(actionsWrap);
       arList.appendChild(row);
     });
   }
@@ -1411,6 +1838,7 @@
   newBtn.addEventListener("click", () => { clearForm(); hideBanner(); });
   fetchBtn.addEventListener("click", () => loadByFormNo(formNoInput.value));
   exportBtn.addEventListener("click", exportAllToExcel);
+  $("statsRefreshBtn").addEventListener("click", loadStats_);
   formNoInput.addEventListener("keydown", (e) => { if(e.key === "Enter") loadByFormNo(formNoInput.value); });
 
   loadRequiredConfig();
@@ -1521,6 +1949,15 @@
       showBilgiBanner("err", "Şu alanlar zorunlu, lütfen doldurun: " + missing.join(", "));
       return;
     }
+    const bilgiNegativeIds = ["bilgiAcikAlan","bilgiKapaliAlan","bilgiForkliftKapisiAdet","bilgiRampaKapisiAdet","bilgiRampaYanasmaMesafesi"];
+    const negatives = bilgiNegativeIds.filter(id => {
+      const el = $(id);
+      return el && el.value !== "" && Number(el.value) < 0;
+    });
+    if(negatives.length){
+      showBilgiBanner("err", "Sayısal alanlara negatif değer girilemez.");
+      return;
+    }
     if(currentBilgiFormNo){ data.formNo = currentBilgiFormNo; }
     bilgiSaveBtn.disabled = true;
     const originalLabel = bilgiSaveBtn.textContent;
@@ -1540,7 +1977,7 @@
   }
 
   async function loadBilgiByFormNo(rawNo){
-    const formNo = (rawNo || "").trim().toUpperCase();
+    const formNo = normalizeFormNo_(rawNo, "BLG");
     if(!formNo){ showBilgiBanner("err","Lütfen bir kayıt numarası girin."); return; }
     bilgiSearchBtn.disabled = true;
     try{
@@ -1634,6 +2071,74 @@
 
   bilgiExportBtn.addEventListener("click", exportBilgiToExcel);
   loadBilgiRecent();
+
+  // ============================================================
+  // EĞİTİMLER (yönetici tarafından eklenebilir eğitim/kaynak listesi)
+  // ============================================================
+  const egitimListe = $("egitimListe");
+  const egitimAddToggleBtn = $("egitimAddToggleBtn");
+  const egitimAddForm = $("egitimAddForm");
+  const egitimSaveBtn = $("egitimSaveBtn");
+
+  async function loadEgitimListe(){
+    egitimListe.innerHTML = '<p class="recent-empty">Yükleniyor…</p>';
+    try{
+      const result = await apiGet({action:"listEgitim"});
+      const items = (result.ok && result.records) ? result.records : [];
+      if(!items.length){
+        egitimListe.innerHTML = '<p class="recent-empty">Henüz eğitim içeriği eklenmedi.</p>';
+        return;
+      }
+      egitimListe.innerHTML = "";
+      items.forEach(it => {
+        const card = document.createElement("div");
+        card.className = "egitim-item";
+        card.innerHTML = `<h4>${escapeHtml(it.baslik || "")}</h4>` +
+          (it.aciklama ? `<p>${escapeHtml(it.aciklama)}</p>` : "") +
+          (it.link ? `<a href="${escapeHtml(it.link)}" target="_blank" rel="noopener">🔗 Bağlantıyı Aç</a>` : "");
+        egitimListe.appendChild(card);
+      });
+    }catch(e){
+      egitimListe.innerHTML = '<p class="recent-empty">Eğitimler yüklenemedi.</p>';
+    }
+  }
+
+  egitimAddToggleBtn.addEventListener("click", () => {
+    const entered = prompt("Bu bölüm sadece yöneticiye açıktır.\nPIN kodunu girin:");
+    if(entered === null) return;
+    if(entered !== ADMIN_PIN){ alert("Hatalı PIN kodu."); return; }
+    egitimAddForm.style.display = (egitimAddForm.style.display === "none") ? "" : "none";
+  });
+
+  egitimSaveBtn.addEventListener("click", async () => {
+    const baslik = $("egitimBaslik").value.trim();
+    if(!baslik){ alert("Lütfen bir başlık girin."); return; }
+    egitimSaveBtn.disabled = true;
+    const orig = egitimSaveBtn.textContent;
+    egitimSaveBtn.textContent = "Kaydediliyor…";
+    try{
+      const result = await apiPost({ action:"saveEgitim", data:{
+        baslik: baslik,
+        aciklama: $("egitimAciklama").value.trim(),
+        link: $("egitimLink").value.trim()
+      }});
+      if(result.ok){
+        $("egitimBaslik").value = "";
+        $("egitimAciklama").value = "";
+        $("egitimLink").value = "";
+        egitimAddForm.style.display = "none";
+        loadEgitimListe();
+      } else {
+        alert("Kaydedilemedi.");
+      }
+    }catch(e){
+      alert("Kaydedilirken bir hata oluştu.");
+    }
+    egitimSaveBtn.disabled = false;
+    egitimSaveBtn.textContent = orig;
+  });
+
+  loadEgitimListe();
 })();
 </script>
 
