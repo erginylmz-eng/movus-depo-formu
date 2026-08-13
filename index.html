@@ -482,9 +482,19 @@
 </header>
 
 <div class="global-actions">
+  <button class="btn-gear" id="sorguToggleBtn" type="button">🔍 Sorgula</button>
   <button class="btn-gear" id="settingsBtn" type="button" title="Zorunlu Alanları Düzenle">⚙ Ayarlar</button>
   <button class="btn-gear btn-gear-export" id="bilgiExportBtn" type="button">⬇ Ön Bilgi Excel</button>
   <button class="btn-gear btn-gear-export" id="exportBtn" type="button">⬇ Detay Excel</button>
+</div>
+
+<div class="kayit-sorgula-box" id="sharedSorguBox" style="display:none;">
+  <p class="kayit-sorgula-title">🔍 Kayıt Görüntüle / Sorgula</p>
+  <input type="text" id="sharedSorguInput" placeholder="Kayıt No girin (ör. BLG-0001)" autocomplete="off">
+  <div class="kayit-sorgula-buttons">
+    <button class="btn-sorgu btn-sorgu-bilgi" id="sharedOpenOnBilgiBtn" type="button">📝 Ön Bilgi Formunu Görüntüle / Değiştir</button>
+    <button class="btn-sorgu btn-sorgu-detay" id="sharedOpenDetayBtn" type="button">📋 Detay Formunu Görüntüle / Değiştir</button>
+  </div>
 </div>
 
 <div class="settings-actions" id="settingsActions" style="display:none;">
@@ -499,15 +509,6 @@
   </summary>
   <div class="mega-body">
     <div class="bilgi-wrap">
-      <div class="kayit-sorgula-box">
-        <p class="kayit-sorgula-title">🔍 Kayıt Görüntüle / Sorgula</p>
-        <input type="text" id="topSorguInputOnBilgi" placeholder="Kayıt No girin (ör. BLG-0001)" autocomplete="off">
-        <div class="kayit-sorgula-buttons">
-          <button class="btn-sorgu btn-sorgu-bilgi" id="topOpenOnBilgiBtnFromOnBilgi" type="button">📝 Ön Bilgi Formunu Görüntüle / Değiştir</button>
-          <button class="btn-sorgu btn-sorgu-detay" id="topOpenDetayBtnFromOnBilgi" type="button">📋 Detay Formunu Görüntüle / Değiştir</button>
-        </div>
-      </div>
-
       <div class="status-banner" id="bilgiBanner"></div>
 
       <div class="field">
@@ -616,16 +617,6 @@
     <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </summary>
   <div class="mega-body">
-
-<div class="kayit-sorgula-box">
-  <p class="kayit-sorgula-title">🔍 Kayıt Görüntüle / Sorgula</p>
-  <input type="text" id="topSorguInputDetay" placeholder="Kayıt No girin (ör. BLG-0001)" autocomplete="off">
-  <div class="kayit-sorgula-buttons">
-    <button class="btn-sorgu btn-sorgu-bilgi" id="topOpenOnBilgiBtnFromDetay" type="button">📝 Ön Bilgi Formunu Görüntüle / Değiştir</button>
-    <button class="btn-sorgu btn-sorgu-detay" id="topOpenDetayBtnFromDetay" type="button">📋 Detay Formunu Görüntüle / Değiştir</button>
-  </div>
-  <button class="btn-export-shortcut" id="detayExcelShortcutBtn" type="button">⬇ Tüm Detay Kayıtlarını Excel'e Aktar</button>
-</div>
 
 <div class="top-actions" id="topActions">
   <button class="btn btn-secondary" id="newBtn" type="button" style="flex:1;">Yeni Form</button>
@@ -1444,6 +1435,7 @@
       $("bilgilendirmeFormuNo").value = formNo;
       $("megaDepoFormu").open = true;
       showFormView();
+      $("sharedSorguBox").style.display = "none";
       $("megaDepoFormu").scrollIntoView({ behavior:"smooth", block:"start" });
       showBanner("ok", formNo + " numaralı kayıt forma dolduruldu. Devam edebilirsiniz.");
     }catch(e){
@@ -1959,7 +1951,6 @@
   }
 
   tabFormBtn.addEventListener("click", showFormView);
-  $("detayExcelShortcutBtn").addEventListener("click", exportAllToExcel);
   arSearchInput.addEventListener("input", () => renderAllRecords(arSearchInput.value));
 
   saveBtn.addEventListener("click", saveForm);
@@ -2246,6 +2237,7 @@
       currentBilgiFormNo = formNo;
       bilgiDisplayFormNo.textContent = formNo;
       $("megaDepolamaBilgilendirme").open = true;
+      $("sharedSorguBox").style.display = "none";
       $("megaDepolamaBilgilendirme").scrollIntoView({ behavior:"smooth", block:"start" });
       showBilgiBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
     }catch(e){
@@ -2398,18 +2390,18 @@
 
   loadEgitimListe();
 
-  // ---- ÜSTTEKİ ORTAK "KAYIT GÖRÜNTÜLE / SORGULA" BUTONLARI (her iki formda) ----
-  $("topOpenOnBilgiBtnFromOnBilgi").addEventListener("click", () => {
-    loadBilgiByFormNo($("topSorguInputOnBilgi").value, $("topOpenOnBilgiBtnFromOnBilgi"));
+  // ---- GLOBAL BARDAKİ TEK "KAYIT GÖRÜNTÜLE / SORGULA" WIDGET'I ----
+  const sharedSorguBox = $("sharedSorguBox");
+  $("sorguToggleBtn").addEventListener("click", () => {
+    const isHidden = sharedSorguBox.style.display === "none";
+    sharedSorguBox.style.display = isHidden ? "block" : "none";
+    if(isHidden){ $("sharedSorguInput").focus(); }
   });
-  $("topOpenDetayBtnFromOnBilgi").addEventListener("click", () => {
-    openDetayForNumber_($("topSorguInputOnBilgi").value, $("topOpenDetayBtnFromOnBilgi"));
+  $("sharedOpenOnBilgiBtn").addEventListener("click", () => {
+    loadBilgiByFormNo($("sharedSorguInput").value, $("sharedOpenOnBilgiBtn"));
   });
-  $("topOpenOnBilgiBtnFromDetay").addEventListener("click", () => {
-    loadBilgiByFormNo($("topSorguInputDetay").value, $("topOpenOnBilgiBtnFromDetay"));
-  });
-  $("topOpenDetayBtnFromDetay").addEventListener("click", () => {
-    openDetayForNumber_($("topSorguInputDetay").value, $("topOpenDetayBtnFromDetay"));
+  $("sharedOpenDetayBtn").addEventListener("click", () => {
+    openDetayForNumber_($("sharedSorguInput").value, $("sharedOpenDetayBtn"));
   });
 })();
 </script>
