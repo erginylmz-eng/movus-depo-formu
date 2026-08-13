@@ -316,6 +316,28 @@
   .egitim-item h4{ margin:0 0 5px; font-size:14.5px; font-weight:800; color:var(--navy-900); }
   .egitim-item p{ margin:0 0 8px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
   .egitim-item a{ font-size:13px; font-weight:700; color:var(--navy-800); }
+
+  /* ---------- PIN MODALI ---------- */
+  .pin-modal-overlay{
+    position:fixed; inset:0; background:rgba(11,18,32,.55);
+    display:flex; align-items:center; justify-content:center; z-index:999; padding:20px;
+  }
+  .pin-modal{
+    background:#fff; border-radius:14px; padding:24px 22px; width:100%; max-width:320px;
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+  }
+  .pin-modal-title{ font-size:15px; font-weight:800; color:var(--navy-950); margin:0 0 14px; text-align:center; }
+  .pin-modal input{
+    width:100%; border:1px solid var(--steel-200); border-radius:8px; padding:12px;
+    font-size:18px; text-align:center; letter-spacing:.2em; margin-bottom:10px;
+  }
+  .pin-modal input:focus{ outline:none; border-color:var(--amber-500); }
+  .pin-modal-error{ color:var(--err-600); font-size:12.5px; font-weight:600; text-align:center; margin:0 0 10px; }
+  .pin-modal-actions{ display:flex; gap:10px; }
+  .pin-modal-actions .btn{ flex:1; }
+  .egitim-form-msg{ font-size:12.5px; font-weight:700; margin-top:8px; text-align:center; }
+  .egitim-form-msg.msg-err{ color:var(--err-600); }
+  .egitim-form-msg.msg-ok{ color:var(--ok-600); }
   .mega-placeholder{
     text-align:center; color:var(--ink-soft); font-weight:800; letter-spacing:.03em;
     padding:64px 20px; font-size:15px;
@@ -858,7 +880,8 @@
 
       <div class="field">
         <label>Formu Dolduran</label>
-        <input type="text" id="bilgiDoldurmaKisi" placeholder="Ad Soyad">
+        <select id="bilgiDoldurmaKisi"><option value="">Seçiniz</option></select>
+        <input type="text" id="bilgiDoldurmaKisiDiger" placeholder="Ad Soyad yazın" style="display:none;margin-top:8px;">
       </div>
 
       <div class="field">
@@ -967,6 +990,7 @@
         <div class="field"><label>Açıklama</label><textarea id="egitimAciklama"></textarea></div>
         <div class="field"><label>Bağlantı (video/PDF linki)</label><input type="text" id="egitimLink" placeholder="https://..."></div>
         <button class="btn btn-primary" id="egitimSaveBtn" type="button" style="width:100%;">Kaydet</button>
+        <p class="egitim-form-msg" id="egitimFormMsg" style="display:none;"></p>
       </div>
     </div>
   </div>
@@ -1434,18 +1458,51 @@
     settingsActions.style.display = "none";
   }
 
-  // Sadece yönetici bu PIN'i bilerek Zorunlu Alanlar moduna girebilir.
+  // Sadece yönetici bu PIN'i bilerek Zorunlu Alanlar / Eğitim Ekle moduna girebilir.
   // Değiştirmek isterseniz aşağıdaki satırdaki "2026" yerine kendi PIN'inizi yazın.
-  const ADMIN_PIN = "3891";
+  const ADMIN_PIN = "2026";
 
-  settingsBtn.addEventListener("click", () => {
-    const entered = prompt("Bu bölüm sadece yöneticiye açıktır.\nPIN kodunu girin:");
-    if(entered === null) return; // vazgeçildi
-    if(entered !== ADMIN_PIN){
-      showBanner("err","Hatalı PIN kodu.");
-      return;
-    }
-    enterSettingsMode();
+  // Tarayıcının yerleşik prompt() penceresi bazı ortamlarda (uygulama içi
+  // tarayıcılar, gömülü görünümler) çalışmayabildiği için kendi PIN
+  // penceremizi kullanıyoruz — böylece her yerde güvenilir şekilde çalışır.
+  function askAdminPin_(){
+    return new Promise((resolve) => {
+      const overlay = $("pinModalOverlay");
+      const input = $("pinModalInput");
+      const errorEl = $("pinModalError");
+      const confirmBtn = $("pinModalConfirm");
+      const cancelBtn = $("pinModalCancel");
+
+      input.value = "";
+      errorEl.style.display = "none";
+      overlay.style.display = "flex";
+      setTimeout(() => input.focus(), 50);
+
+      function cleanup(result){
+        overlay.style.display = "none";
+        confirmBtn.removeEventListener("click", onConfirm);
+        cancelBtn.removeEventListener("click", onCancel);
+        input.removeEventListener("keydown", onKeydown);
+        resolve(result);
+      }
+      function onConfirm(){
+        if(input.value === ADMIN_PIN){ cleanup(true); }
+        else{ errorEl.style.display = "block"; input.value = ""; input.focus(); }
+      }
+      function onCancel(){ cleanup(false); }
+      function onKeydown(e){
+        if(e.key === "Enter") onConfirm();
+        if(e.key === "Escape") onCancel();
+      }
+      confirmBtn.addEventListener("click", onConfirm);
+      cancelBtn.addEventListener("click", onCancel);
+      input.addEventListener("keydown", onKeydown);
+    });
+  }
+
+  settingsBtn.addEventListener("click", async () => {
+    const ok = await askAdminPin_();
+    if(ok){ enterSettingsMode(); }
   });
   settingsCancelBtn.addEventListener("click", () => {
     buildRequiredCheckboxes(); // kaydedilmemiş işaretleri sıfırla
@@ -1473,7 +1530,7 @@
     settingsSaveBtn.textContent = originalLabel;
   });
 
-  const TEAM_MEMBERS = ["Ergin Yılmaz","Ceyhun Bozkurt","Arda Atılgan","Selim Yağcı","Ahmet Erpay","Ömer Koçinalı";"İlker Koçak"]; // Bu listeyi kendi ekibinize göre düzenleyin
+  const TEAM_MEMBERS = ["Ahmet Yılmaz","Ayşe Kaya","Mehmet Demir"]; // Bu listeyi kendi ekibinize göre düzenleyin
   const doldurmaKisiSelect = $("doldurmaKisi");
   const doldurmaKisiDigerInput = $("doldurmaKisiDiger");
   doldurmaKisiSelect.innerHTML = '<option value="">Seçiniz</option>' +
@@ -1862,6 +1919,27 @@
   const ALL_CITIES = Object.values(REGION_CITIES).flat().sort((a,b) => a.localeCompare(b, "tr"));
   bilgiSehirSelect.innerHTML = '<option value="">Seçiniz</option>' + ALL_CITIES.map(c => `<option>${c}</option>`).join("");
 
+  const bilgiDoldurmaKisiSelect = $("bilgiDoldurmaKisi");
+  const bilgiDoldurmaKisiDigerInput = $("bilgiDoldurmaKisiDiger");
+  bilgiDoldurmaKisiSelect.innerHTML = '<option value="">Seçiniz</option>' +
+    TEAM_MEMBERS.map(n => `<option>${n}</option>`).join("") +
+    '<option value="__DIGER__">Diğer (listede yok)</option>';
+  bilgiDoldurmaKisiSelect.addEventListener("change", () => {
+    bilgiDoldurmaKisiDigerInput.style.display = (bilgiDoldurmaKisiSelect.value === "__DIGER__") ? "" : "none";
+  });
+  function syncBilgiDoldurmaKisi_(value){
+    const v = value || "";
+    if(v && !TEAM_MEMBERS.includes(v)){
+      bilgiDoldurmaKisiSelect.value = "__DIGER__";
+      bilgiDoldurmaKisiDigerInput.value = v;
+      bilgiDoldurmaKisiDigerInput.style.display = "";
+    } else {
+      bilgiDoldurmaKisiSelect.value = v;
+      bilgiDoldurmaKisiDigerInput.value = "";
+      bilgiDoldurmaKisiDigerInput.style.display = "none";
+    }
+  }
+
   const BILGI_KEY_MAP = {
     bilgiDoldurmaKisi: "doldurmaKisi",
     bilgiBinaAdi: "binaAdi",
@@ -1903,14 +1981,19 @@
   function collectBilgiData(){
     const data = {};
     Object.keys(BILGI_KEY_MAP).forEach(id => { data[BILGI_KEY_MAP[id]] = $(id).value; });
+    if(data.doldurmaKisi === "__DIGER__"){
+      data.doldurmaKisi = bilgiDoldurmaKisiDigerInput.value.trim();
+    }
     return data;
   }
 
   function fillBilgiForm(data){
     Object.keys(BILGI_KEY_MAP).forEach(id => {
+      if(id === "bilgiDoldurmaKisi") return; // ayrıca özel dolduruluyor
       const key = BILGI_KEY_MAP[id];
       $(id).value = (data && data[key] != null) ? data[key] : "";
     });
+    syncBilgiDoldurmaKisi_(data && data.doldurmaKisi);
     const hasLink = !!(data && data.depoFormuNo);
     bilgiDepoFormuVarMiSelect.value = hasLink ? "Evet" : "";
     bilgiDepoFormuNoWrap.style.display = hasLink ? "" : "none";
@@ -2103,16 +2186,23 @@
     }
   }
 
-  egitimAddToggleBtn.addEventListener("click", () => {
-    const entered = prompt("Bu bölüm sadece yöneticiye açıktır.\nPIN kodunu girin:");
-    if(entered === null) return;
-    if(entered !== ADMIN_PIN){ alert("Hatalı PIN kodu."); return; }
-    egitimAddForm.style.display = (egitimAddForm.style.display === "none") ? "" : "none";
+  egitimAddToggleBtn.addEventListener("click", async () => {
+    const ok = await askAdminPin_();
+    if(ok){
+      egitimAddForm.style.display = (egitimAddForm.style.display === "none") ? "" : "none";
+    }
   });
 
   egitimSaveBtn.addEventListener("click", async () => {
+    const msgEl = $("egitimFormMsg");
     const baslik = $("egitimBaslik").value.trim();
-    if(!baslik){ alert("Lütfen bir başlık girin."); return; }
+    if(!baslik){
+      msgEl.className = "egitim-form-msg msg-err";
+      msgEl.textContent = "Lütfen bir başlık girin.";
+      msgEl.style.display = "block";
+      return;
+    }
+    msgEl.style.display = "none";
     egitimSaveBtn.disabled = true;
     const orig = egitimSaveBtn.textContent;
     egitimSaveBtn.textContent = "Kaydediliyor…";
@@ -2129,10 +2219,14 @@
         egitimAddForm.style.display = "none";
         loadEgitimListe();
       } else {
-        alert("Kaydedilemedi.");
+        msgEl.className = "egitim-form-msg msg-err";
+        msgEl.textContent = "Kaydedilemedi.";
+        msgEl.style.display = "block";
       }
     }catch(e){
-      alert("Kaydedilirken bir hata oluştu.");
+      msgEl.className = "egitim-form-msg msg-err";
+      msgEl.textContent = "Kaydedilirken bir hata oluştu. Bağlantıyı kontrol edin.";
+      msgEl.style.display = "block";
     }
     egitimSaveBtn.disabled = false;
     egitimSaveBtn.textContent = orig;
@@ -2141,6 +2235,18 @@
   loadEgitimListe();
 })();
 </script>
+
+<div id="pinModalOverlay" class="pin-modal-overlay" style="display:none;">
+  <div class="pin-modal">
+    <p class="pin-modal-title">Bu bölüm sadece yöneticiye açıktır</p>
+    <input type="password" id="pinModalInput" placeholder="PIN kodu" inputmode="numeric" autocomplete="off">
+    <p class="pin-modal-error" id="pinModalError" style="display:none;">Hatalı PIN kodu, tekrar deneyin.</p>
+    <div class="pin-modal-actions">
+      <button type="button" id="pinModalCancel" class="btn btn-secondary">Vazgeç</button>
+      <button type="button" id="pinModalConfirm" class="btn btn-primary">Onayla</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
