@@ -500,7 +500,13 @@
 
       <div class="field">
         <label>Yağmur İnişleri Sistemi</label>
-        <input type="text" id="bilgiYagmurInisiSistemi" placeholder="Durumu hakkında kısa bilgi">
+        <select id="bilgiYagmurInisiSistemi">
+          <option value="">Seçiniz</option>
+          <option>Sifonik Sistem</option>
+          <option>PVC Yağmur İniş Boruları</option>
+          <option>Diğer</option>
+        </select>
+        <input type="text" id="bilgiYagmurInisiSistemiDiger" placeholder="Lütfen belirtin" style="display:none;margin-top:8px;">
       </div>
 
       <div class="field">
@@ -1858,6 +1864,27 @@
     }
   }
 
+  const bilgiYagmurInisiSelect = $("bilgiYagmurInisiSistemi");
+  const bilgiYagmurInisiDigerInput = $("bilgiYagmurInisiSistemiDiger");
+  const YAGMUR_INISI_FIXED = ["Sifonik Sistem","PVC Yağmur İniş Boruları"];
+
+  bilgiYagmurInisiSelect.addEventListener("change", () => {
+    bilgiYagmurInisiDigerInput.style.display = (bilgiYagmurInisiSelect.value === "Diğer") ? "" : "none";
+  });
+
+  function syncBilgiYagmurInisi_(value){
+    const v = value || "";
+    if(v && !YAGMUR_INISI_FIXED.includes(v)){
+      bilgiYagmurInisiSelect.value = "Diğer";
+      bilgiYagmurInisiDigerInput.value = v;
+      bilgiYagmurInisiDigerInput.style.display = "";
+    } else {
+      bilgiYagmurInisiSelect.value = v;
+      bilgiYagmurInisiDigerInput.value = "";
+      bilgiYagmurInisiDigerInput.style.display = "none";
+    }
+  }
+
   // ---- GPS KONUM (Depolama Alanı Ön Bilgi formunda) ----
   const bilgiGpsBtn = $("bilgiGpsBtn");
   const bilgiGpsStatus = $("bilgiGpsStatus");
@@ -1985,16 +2012,20 @@
     if(data.doldurmaKisi === "__DIGER__"){
       data.doldurmaKisi = bilgiDoldurmaKisiDigerInput.value.trim();
     }
+    if(data.yagmurInisiSistemi === "Diğer"){
+      data.yagmurInisiSistemi = bilgiYagmurInisiDigerInput.value.trim();
+    }
     return data;
   }
 
   function fillBilgiForm(data){
     Object.keys(BILGI_KEY_MAP).forEach(id => {
-      if(id === "bilgiDoldurmaKisi") return; // ayrıca özel dolduruluyor
+      if(id === "bilgiDoldurmaKisi" || id === "bilgiYagmurInisiSistemi") return; // ayrıca özel dolduruluyor
       const key = BILGI_KEY_MAP[id];
       $(id).value = (data && data[key] != null) ? data[key] : "";
     });
     syncBilgiDoldurmaKisi_(data && data.doldurmaKisi);
+    syncBilgiYagmurInisi_(data && data.yagmurInisiSistemi);
     syncBilgiGpsDisplay();
     bilgiPhotoUrls = (data && data.fotograflar) ? String(data.fotograflar).split("\n").filter(Boolean) : [];
     renderBilgiPhotoGallery();
