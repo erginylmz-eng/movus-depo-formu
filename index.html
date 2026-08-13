@@ -264,12 +264,13 @@
 
   /* ---------- BAĞIMSIZ AYARLAR BARI (formların dışında, en üstte) ---------- */
   .global-actions{
-    display:flex; justify-content:flex-end; padding:10px 14px; max-width:640px; margin:0 auto;
+    display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; padding:10px 14px; max-width:640px; margin:0 auto;
   }
   .global-actions .btn-gear{
-    width:auto; padding:9px 16px; font-size:13.5px; font-weight:700;
+    width:auto; padding:9px 14px; font-size:12.5px; font-weight:700;
     display:flex; align-items:center; gap:6px;
   }
+  .btn-gear-export{ background:var(--navy-800); }
 
   /* ---------- ZORUNLU ALAN AYARLARI MODU ---------- */
   .settings-actions{
@@ -482,6 +483,8 @@
 
 <div class="global-actions">
   <button class="btn-gear" id="settingsBtn" type="button" title="Zorunlu Alanları Düzenle">⚙ Ayarlar</button>
+  <button class="btn-gear btn-gear-export" id="bilgiExportBtn" type="button">⬇ Ön Bilgi Excel</button>
+  <button class="btn-gear btn-gear-export" id="exportBtn" type="button">⬇ Detay Excel</button>
 </div>
 
 <div class="settings-actions" id="settingsActions" style="display:none;">
@@ -600,7 +603,6 @@
       <div class="recent" style="margin-top:18px;">
         <div class="recent-head">
           <h2>Depolama Alanı Ön Bilgi Kayıtları</h2>
-          <button class="btn-export" id="bilgiExportBtn" type="button">⬇ Excel'e Aktar</button>
         </div>
         <div id="bilgiRecentList"><p class="recent-empty">Yükleniyor…</p></div>
       </div>
@@ -655,7 +657,6 @@
     <div class="all-records-block">
       <div class="recent-head">
         <h2>Tüm Kayıtlar</h2>
-        <button class="btn-export" id="exportBtn" type="button">⬇ Excel'e Aktar</button>
       </div>
       <div class="all-records-search">
         <input type="text" id="arSearchInput" placeholder="Bina adı, kayıt no veya dolduran kişi ile ara…">
