@@ -483,6 +483,7 @@
 
 <div class="global-actions">
   <button class="btn-gear" id="sorguToggleBtn" type="button">🔍 Sorgula</button>
+  <button class="btn-gear" id="statsToggleBtn" type="button">📊 Kayıtlar &amp; İstatistik</button>
   <button class="btn-gear" id="settingsBtn" type="button" title="Zorunlu Alanları Düzenle">⚙ Ayarlar</button>
   <button class="btn-gear btn-gear-export" id="bilgiExportBtn" type="button">⬇ Ön Bilgi Excel</button>
   <button class="btn-gear btn-gear-export" id="exportBtn" type="button">⬇ Detay Excel</button>
@@ -2402,6 +2403,12 @@
   });
   $("sharedOpenDetayBtn").addEventListener("click", () => {
     openDetayForNumber_($("sharedSorguInput").value, $("sharedOpenDetayBtn"));
+  });
+
+  $("statsToggleBtn").addEventListener("click", () => {
+    $("megaDepoFormu").open = true;
+    showAllRecordsView();
+    $("megaDepoFormu").scrollIntoView({ behavior:"smooth", block:"start" });
   });
 })();
 </script>
