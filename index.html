@@ -370,12 +370,12 @@
   /* ---------- GPS KONUM ---------- */
   .gps-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
   .gps-row .btn{ flex:none; padding:10px 14px; font-size:13.5px; }
-  #gpsStatus{ font-size:12.5px; color:var(--ink-soft); font-weight:600; }
-  #gpsMapLink{
+  #gpsStatus, #bilgiGpsStatus{ font-size:12.5px; color:var(--ink-soft); font-weight:600; }
+  #gpsMapLink, #bilgiGpsMapLink{
     display:inline-block; margin-top:8px; font-size:13px; font-weight:800;
     color:var(--navy-800); text-decoration:none;
   }
-  #gpsMapLink:hover{ text-decoration:underline; }
+  #gpsMapLink:hover, #bilgiGpsMapLink:hover{ text-decoration:underline; }
 
   /* ---------- FOTOĞRAF GALERİSİ ---------- */
   .photo-gallery{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
@@ -426,9 +426,129 @@
   </div>
 </header>
 
-<details class="mega-card" open id="megaDepoFormu">
+<details class="mega-card" open id="megaDepolamaBilgilendirme">
   <summary class="mega-summary">
-    <span>DEPO FORMU</span>
+    <span>DEPOLAMA ALANI ÖN BİLGİ</span>
+    <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </summary>
+  <div class="mega-body">
+    <div class="bilgi-wrap">
+      <div class="status-banner" id="bilgiBanner"></div>
+
+      <div class="field">
+        <label>Kayıt No</label>
+        <div class="formno-badge" id="bilgiDisplayFormNo">Kayıt sonrası otomatik atanır</div>
+      </div>
+
+      <div class="field">
+        <label>Formu Dolduran</label>
+        <select id="bilgiDoldurmaKisi"><option value="">Seçiniz</option></select>
+        <input type="text" id="bilgiDoldurmaKisiDiger" placeholder="Ad Soyad yazın" style="display:none;margin-top:8px;">
+      </div>
+
+      <div class="field">
+        <label>Bina Adı</label>
+        <input type="text" id="bilgiBinaAdi" placeholder="Tanımlayıcı bina adı">
+      </div>
+
+      <div class="field">
+        <label>Bu bina için daha önce doldurulmuş bir <b>Depo Formu</b> var mı?</label>
+        <select id="bilgiDepoFormuVarMi">
+          <option value="">Seçiniz</option>
+          <option>Evet</option>
+          <option>Hayır</option>
+        </select>
+      </div>
+      <div class="field" id="bilgiDepoFormuNoWrap" style="display:none;">
+        <label>Depo Formu Kayıt No</label>
+        <input type="text" id="bilgiDepoFormuNo" placeholder="ör. MVS-0001">
+      </div>
+
+      <div class="field">
+        <label>Şehir</label>
+        <select id="bilgiSehir"><option value="">Seçiniz</option></select>
+      </div>
+
+      <div class="field">
+        <label>Konum (GPS)</label>
+        <div class="gps-row">
+          <button class="btn btn-secondary" id="bilgiGpsBtn" type="button">📍 Konumu Al</button>
+          <span id="bilgiGpsStatus">Henüz konum alınmadı</span>
+        </div>
+        <input type="hidden" id="bilgiGpsKonum">
+        <a id="bilgiGpsMapLink" href="#" target="_blank" rel="noopener" style="display:none;">🗺️ Haritada Aç</a>
+      </div>
+
+      <div class="field split">
+        <div><label>Açık Alan (m²)</label><input type="number" id="bilgiAcikAlan" min="0"></div>
+        <div><label>Kapalı Alan (m²)</label><input type="number" id="bilgiKapaliAlan" min="0"></div>
+      </div>
+
+      <div class="field split">
+        <div><label>Forklift Giriş Kapısı Var mı</label>
+          <select id="bilgiForkliftKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div><label>Var ise sayısı</label><input type="number" id="bilgiForkliftKapisiAdet" min="0"></div>
+      </div>
+
+      <div class="field split">
+        <div><label>Rampa Kapısı Var mı</label>
+          <select id="bilgiRampaKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div><label>Var ise sayısı</label><input type="number" id="bilgiRampaKapisiAdet" min="0"></div>
+      </div>
+
+      <div class="field">
+        <label>Yağmur İnişleri Sistemi</label>
+        <input type="text" id="bilgiYagmurInisiSistemi" placeholder="Durumu hakkında kısa bilgi">
+      </div>
+
+      <div class="field">
+        <label>Depo İçerisinde Logar Var mı?</label>
+        <select id="bilgiLogarVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+      </div>
+
+      <div class="field split">
+        <div><label>Yangın Sprinkler Sistemi Var mı?</label>
+          <select id="bilgiYanginSprinklerVarMi"><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option></select>
+        </div>
+        <div><label>Yangın Dolabı Var mı?</label>
+          <select id="bilgiYanginDolabiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Rampa Yanaşma Mesafesi (metre)</label>
+        <input type="number" id="bilgiRampaYanasmaMesafesi" min="0">
+      </div>
+
+      <div class="field">
+        <label>Güvenlik Klübesi Var mı?</label>
+        <select id="bilgiGuvenlikKlubesiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+      </div>
+
+      <button class="btn btn-primary" id="bilgiSaveBtn" type="button" style="width:100%;margin-top:6px;">Kaydet</button>
+      <button class="btn btn-secondary" id="bilgiNewBtn" type="button" style="width:100%;margin-top:8px;">Yeni Kayıt</button>
+
+      <div class="formno-bar" style="margin-top:22px;">
+        <input type="text" id="bilgiSearchInput" placeholder="Kayıt No ile ara (ör. BLG-0001)" autocomplete="off">
+        <button class="btn-fetch" id="bilgiSearchBtn" type="button">Getir</button>
+      </div>
+
+      <div class="recent" style="margin-top:18px;">
+        <div class="recent-head">
+          <h2>Son Bilgilendirme Kayıtları</h2>
+          <button class="btn-export" id="bilgiExportBtn" type="button">⬇ Excel'e Aktar</button>
+        </div>
+        <div id="bilgiRecentList"><p class="recent-empty">Yükleniyor…</p></div>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="mega-card" id="megaDepoFormu">
+  <summary class="mega-summary">
+    <span>DEPOLAMA ALANI DETAY</span>
     <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </summary>
   <div class="mega-body">
@@ -568,16 +688,6 @@
       <div class="field split">
         <div><label>Sokak</label><input type="text" id="sokak"></div>
         <div><label>Numara</label><input type="text" id="numara"></div>
-      </div>
-
-      <div class="field">
-        <label>Konum (GPS)</label>
-        <div class="gps-row">
-          <button class="btn btn-secondary" id="gpsBtn" type="button">📍 Konumu Al</button>
-          <span id="gpsStatus">Henüz konum alınmadı</span>
-        </div>
-        <input type="hidden" id="gpsKonum">
-        <a id="gpsMapLink" href="#" target="_blank" rel="noopener" style="display:none;">🗺️ Haritada Aç</a>
       </div>
 
       <div class="field">
@@ -864,116 +974,6 @@
   </div>
 </details>
 
-<details class="mega-card" id="megaDepolamaBilgilendirme">
-  <summary class="mega-summary">
-    <span>DEPOLAMA ALANI BİLGİLENDİRME</span>
-    <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </summary>
-  <div class="mega-body">
-    <div class="bilgi-wrap">
-      <div class="status-banner" id="bilgiBanner"></div>
-
-      <div class="field">
-        <label>Kayıt No</label>
-        <div class="formno-badge" id="bilgiDisplayFormNo">Kayıt sonrası otomatik atanır</div>
-      </div>
-
-      <div class="field">
-        <label>Formu Dolduran</label>
-        <select id="bilgiDoldurmaKisi"><option value="">Seçiniz</option></select>
-        <input type="text" id="bilgiDoldurmaKisiDiger" placeholder="Ad Soyad yazın" style="display:none;margin-top:8px;">
-      </div>
-
-      <div class="field">
-        <label>Bina Adı</label>
-        <input type="text" id="bilgiBinaAdi" placeholder="Tanımlayıcı bina adı">
-      </div>
-
-      <div class="field">
-        <label>Bu bina için daha önce doldurulmuş bir <b>Depo Formu</b> var mı?</label>
-        <select id="bilgiDepoFormuVarMi">
-          <option value="">Seçiniz</option>
-          <option>Evet</option>
-          <option>Hayır</option>
-        </select>
-      </div>
-      <div class="field" id="bilgiDepoFormuNoWrap" style="display:none;">
-        <label>Depo Formu Kayıt No</label>
-        <input type="text" id="bilgiDepoFormuNo" placeholder="ör. MVS-0001">
-      </div>
-
-      <div class="field">
-        <label>Şehir</label>
-        <select id="bilgiSehir"><option value="">Seçiniz</option></select>
-      </div>
-
-      <div class="field split">
-        <div><label>Açık Alan (m²)</label><input type="number" id="bilgiAcikAlan" min="0"></div>
-        <div><label>Kapalı Alan (m²)</label><input type="number" id="bilgiKapaliAlan" min="0"></div>
-      </div>
-
-      <div class="field split">
-        <div><label>Forklift Giriş Kapısı Var mı</label>
-          <select id="bilgiForkliftKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
-        </div>
-        <div><label>Var ise sayısı</label><input type="number" id="bilgiForkliftKapisiAdet" min="0"></div>
-      </div>
-
-      <div class="field split">
-        <div><label>Rampa Kapısı Var mı</label>
-          <select id="bilgiRampaKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
-        </div>
-        <div><label>Var ise sayısı</label><input type="number" id="bilgiRampaKapisiAdet" min="0"></div>
-      </div>
-
-      <div class="field">
-        <label>Yağmur İnişleri Sistemi</label>
-        <input type="text" id="bilgiYagmurInisiSistemi" placeholder="Durumu hakkında kısa bilgi">
-      </div>
-
-      <div class="field">
-        <label>Depo İçerisinde Logar Var mı?</label>
-        <select id="bilgiLogarVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
-      </div>
-
-      <div class="field split">
-        <div><label>Yangın Sprinkler Sistemi Var mı?</label>
-          <select id="bilgiYanginSprinklerVarMi"><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option></select>
-        </div>
-        <div><label>Yangın Dolabı Var mı?</label>
-          <select id="bilgiYanginDolabiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Rampa Yanaşma Mesafesi (metre)</label>
-        <input type="number" id="bilgiRampaYanasmaMesafesi" min="0">
-      </div>
-
-      <div class="field">
-        <label>Güvenlik Klübesi Var mı?</label>
-        <select id="bilgiGuvenlikKlubesiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
-      </div>
-
-      <button class="btn btn-primary" id="bilgiSaveBtn" type="button" style="width:100%;margin-top:6px;">Kaydet</button>
-      <button class="btn btn-secondary" id="bilgiNewBtn" type="button" style="width:100%;margin-top:8px;">Yeni Kayıt</button>
-
-      <div class="formno-bar" style="margin-top:22px;">
-        <input type="text" id="bilgiSearchInput" placeholder="Kayıt No ile ara (ör. BLG-0001)" autocomplete="off">
-        <button class="btn-fetch" id="bilgiSearchBtn" type="button">Getir</button>
-      </div>
-
-      <div class="recent" style="margin-top:18px;">
-        <div class="recent-head">
-          <h2>Son Bilgilendirme Kayıtları</h2>
-          <button class="btn-export" id="bilgiExportBtn" type="button">⬇ Excel'e Aktar</button>
-        </div>
-        <div id="bilgiRecentList"><p class="recent-empty">Yükleniyor…</p></div>
-      </div>
-    </div>
-  </div>
-</details>
-
 <details class="mega-card" id="megaEgitimler">
   <summary class="mega-summary">
     <span>EĞİTİMLER</span>
@@ -1012,7 +1012,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo","gpsKonum","fotograflar"
+    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo","fotograflar"
   ];
 
   const NUMERIC_FIELD_IDS = [
@@ -1078,7 +1078,7 @@
     kameraVarMi: "Kamera Sistemi Var mı", kameraAdet: "Kamera Adedi",
     kayitSuresiGun: "Kayıt Süresi (Gün)", kameraInternetIzleme: "Kameralar İnternetten İzlenebiliyor mu",
     jeneratorVarMi: "Jeneratör Var mı", jeneratorKva: "Jeneratör Gücü (kVA)",
-    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No", gpsKonum: "Konum (GPS)", fotograflar: "Fotoğraflar"
+    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No", fotograflar: "Fotoğraflar"
   };
   const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","binaAdi","surecDurumu","mahalle","cadde","sokak","numara",
     "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi","zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
@@ -1092,7 +1092,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","bilgilendirmeFormuNo","gpsKonum","fotograflar"];
+    "genelNot","bilgilendirmeFormuNo","fotograflar"];
 
   // ============================================================
   // GOOGLE SHEETS BAĞLANTISI
@@ -1177,46 +1177,6 @@
   function updateSuDeposuKapasiteVisibility(){
     yanginSuDeposuKapasiteWrap.style.display = (yanginSuDeposuSelect.value === "Var") ? "" : "none";
   }
-
-  // ---- GPS KONUM ----
-  const gpsBtn = $("gpsBtn");
-  const gpsStatus = $("gpsStatus");
-  const gpsMapLink = $("gpsMapLink");
-
-  function syncGpsDisplay(){
-    const val = $("gpsKonum").value;
-    if(val){
-      gpsStatus.textContent = "Konum kayıtlı: " + val;
-      gpsMapLink.href = "https://www.google.com/maps?q=" + val;
-      gpsMapLink.style.display = "inline-block";
-    } else {
-      gpsStatus.textContent = "Henüz konum alınmadı";
-      gpsMapLink.style.display = "none";
-    }
-  }
-
-  gpsBtn.addEventListener("click", () => {
-    if(!navigator.geolocation){
-      gpsStatus.textContent = "Bu tarayıcı konum özelliğini desteklemiyor.";
-      return;
-    }
-    gpsBtn.disabled = true;
-    gpsStatus.textContent = "Konum alınıyor…";
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude.toFixed(6);
-        const lng = pos.coords.longitude.toFixed(6);
-        $("gpsKonum").value = lat + "," + lng;
-        syncGpsDisplay();
-        gpsBtn.disabled = false;
-      },
-      () => {
-        gpsStatus.textContent = "Konum alınamadı (izin verilmedi ya da hata oluştu).";
-        gpsBtn.disabled = false;
-      },
-      { enableHighAccuracy:true, timeout:10000 }
-    );
-  });
 
   // ---- FOTOĞRAF YÜKLEME (Google Drive'a) ----
   const photoInput = $("photoInput");
@@ -1572,7 +1532,6 @@
     populateSehir(data && data.bolge, data && data.sehir);
     updateCatiDigerVisibility();
     updateSuDeposuKapasiteVisibility();
-    syncGpsDisplay();
     cityCountInfo.style.display = "none";
     photoUrls = (data && data.fotograflar) ? String(data.fotograflar).split("\n").filter(Boolean) : [];
     renderPhotoGallery();
@@ -1940,11 +1899,52 @@
     }
   }
 
+  // ---- GPS KONUM (Depolama Alanı Ön Bilgi formunda) ----
+  const bilgiGpsBtn = $("bilgiGpsBtn");
+  const bilgiGpsStatus = $("bilgiGpsStatus");
+  const bilgiGpsMapLink = $("bilgiGpsMapLink");
+
+  function syncBilgiGpsDisplay(){
+    const val = $("bilgiGpsKonum").value;
+    if(val){
+      bilgiGpsStatus.textContent = "Konum kayıtlı: " + val;
+      bilgiGpsMapLink.href = "https://www.google.com/maps?q=" + val;
+      bilgiGpsMapLink.style.display = "inline-block";
+    } else {
+      bilgiGpsStatus.textContent = "Henüz konum alınmadı";
+      bilgiGpsMapLink.style.display = "none";
+    }
+  }
+
+  bilgiGpsBtn.addEventListener("click", () => {
+    if(!navigator.geolocation){
+      bilgiGpsStatus.textContent = "Bu tarayıcı konum özelliğini desteklemiyor.";
+      return;
+    }
+    bilgiGpsBtn.disabled = true;
+    bilgiGpsStatus.textContent = "Konum alınıyor…";
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude.toFixed(6);
+        const lng = pos.coords.longitude.toFixed(6);
+        $("bilgiGpsKonum").value = lat + "," + lng;
+        syncBilgiGpsDisplay();
+        bilgiGpsBtn.disabled = false;
+      },
+      () => {
+        bilgiGpsStatus.textContent = "Konum alınamadı (izin verilmedi ya da hata oluştu).";
+        bilgiGpsBtn.disabled = false;
+      },
+      { enableHighAccuracy:true, timeout:10000 }
+    );
+  });
+
   const BILGI_KEY_MAP = {
     bilgiDoldurmaKisi: "doldurmaKisi",
     bilgiBinaAdi: "binaAdi",
     bilgiDepoFormuNo: "depoFormuNo",
     bilgiSehir: "sehir",
+    bilgiGpsKonum: "gpsKonum",
     bilgiAcikAlan: "acikAlan",
     bilgiKapaliAlan: "kapaliAlan",
     bilgiForkliftKapisiVarMi: "forkliftKapisiVarMi",
@@ -1960,7 +1960,7 @@
   };
   const BILGI_LABELS = {
     doldurmaKisi: "Formu Dolduran", binaAdi: "Bina Adı",
-    sehir: "Şehir", acikAlan: "Açık Alan", kapaliAlan: "Kapalı Alan",
+    sehir: "Şehir", gpsKonum: "Konum (GPS)", acikAlan: "Açık Alan", kapaliAlan: "Kapalı Alan",
     forkliftKapisiVarMi: "Forklift Giriş Kapısı Var mı", forkliftKapisiAdet: "Forklift Kapısı Sayısı",
     rampaKapisiVarMi: "Rampa Kapısı Var mı", rampaKapisiAdet: "Rampa Kapısı Sayısı",
     yagmurInisiSistemi: "Yağmur İnişleri Sistemi", logarVarMi: "Depo İçerisinde Logar Var mı",
@@ -1994,6 +1994,7 @@
       $(id).value = (data && data[key] != null) ? data[key] : "";
     });
     syncBilgiDoldurmaKisi_(data && data.doldurmaKisi);
+    syncBilgiGpsDisplay();
     const hasLink = !!(data && data.depoFormuNo);
     bilgiDepoFormuVarMiSelect.value = hasLink ? "Evet" : "";
     bilgiDepoFormuNoWrap.style.display = hasLink ? "" : "none";
