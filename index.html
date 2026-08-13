@@ -178,6 +178,9 @@
   .field.split{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
   .field.split3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;}
   .field.split3 label{font-size:11.5px;}
+  .field.split4{display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:6px;}
+  .field.split4 label{font-size:10.5px;}
+  .field.split4 input{padding:9px 7px; font-size:13.5px;}
   .field.split .sub{margin:0;}
 
   input[type=text], input[type=number], select, textarea{
@@ -278,6 +281,8 @@
   .mega-chev{ flex:none; width:22px; height:22px; color:var(--amber-500); transition:transform .18s ease; }
   .mega-card[open] > summary .mega-chev{ transform:rotate(180deg); }
   .mega-body{ padding-top:14px; }
+  .bilgi-wrap{ padding:0 15px 18px; max-width:640px; margin:0 auto; }
+  .bilgi-wrap .field{ margin-bottom:14px; }
   .mega-placeholder{
     text-align:center; color:var(--ink-soft); font-weight:800; letter-spacing:.03em;
     padding:64px 20px; font-size:15px;
@@ -369,6 +374,24 @@
   <div class="settings-info" id="settingsInfo">⚙ Zorunlu olmasını istediğiniz alanların yanındaki kutucukları işaretleyin, sonra üstteki "Zorunlu Alanları Kaydet" butonuna basın.</div>
   <div class="status-banner" id="statusBanner"></div>
 
+  <div class="field link-gate">
+    <label>Bu bina için daha önce doldurulmuş bir <b>Depolama Alanı Bilgilendirme Formu</b> var mı?</label>
+    <select id="depoBilgiVarMi">
+      <option value="">Seçiniz</option>
+      <option>Evet</option>
+      <option>Hayır</option>
+    </select>
+  </div>
+  <div class="field split" id="depoBilgiNoWrap" style="display:none;">
+    <div>
+      <label>Bilgilendirme Formu Kayıt No</label>
+      <input type="text" id="bilgilendirmeFormuNo" placeholder="ör. BLG-0001">
+    </div>
+    <div style="display:flex; align-items:flex-end;">
+      <button class="btn btn-secondary" id="depoBilgiFetchBtn" type="button" style="width:100%;">Getir ve Doldur</button>
+    </div>
+  </div>
+
   <div class="meta-row" style="grid-template-columns:1fr;">
     <div class="field" style="display:none;">
       <label>Kayıt No</label>
@@ -423,10 +446,11 @@
         <div><label>Numara</label><input type="text" id="numara"></div>
       </div>
 
-      <div class="field split3">
+      <div class="field split4">
         <div><label>Bina Arazi Alanı (m²)</label><input type="number" id="binaAraziAlani"></div>
         <div><label>Bina Kapalı Alanı (m²)</label><input type="number" id="binaKapaliAlani"></div>
         <div><label>Bina Ofis Alanı (m²)</label><input type="number" id="binaOfisAlaniGenel"></div>
+        <div><label>Bina Yaşı (yıl)</label><input type="number" id="binaYasi" min="0"></div>
       </div>
     </div>
   </details>
@@ -705,7 +729,106 @@
     <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </summary>
   <div class="mega-body">
-    <p class="mega-placeholder">YAPIM AŞAMASINDA....</p>
+    <div class="bilgi-wrap">
+      <div class="status-banner" id="bilgiBanner"></div>
+
+      <div class="field">
+        <label>Kayıt No</label>
+        <div class="formno-badge" id="bilgiDisplayFormNo">Kayıt sonrası otomatik atanır</div>
+      </div>
+
+      <div class="field">
+        <label>Formu Dolduran</label>
+        <input type="text" id="bilgiDoldurmaKisi" placeholder="Ad Soyad">
+      </div>
+
+      <div class="field">
+        <label>Bina Adı</label>
+        <input type="text" id="bilgiBinaAdi" placeholder="Tanımlayıcı bina adı">
+      </div>
+
+      <div class="field">
+        <label>Bu bina için daha önce doldurulmuş bir <b>Depo Formu</b> var mı?</label>
+        <select id="bilgiDepoFormuVarMi">
+          <option value="">Seçiniz</option>
+          <option>Evet</option>
+          <option>Hayır</option>
+        </select>
+      </div>
+      <div class="field" id="bilgiDepoFormuNoWrap" style="display:none;">
+        <label>Depo Formu Kayıt No</label>
+        <input type="text" id="bilgiDepoFormuNo" placeholder="ör. MVS-0001">
+      </div>
+
+      <div class="field">
+        <label>Şehir</label>
+        <select id="bilgiSehir"><option value="">Seçiniz</option></select>
+      </div>
+
+      <div class="field split">
+        <div><label>Açık Alan (m²)</label><input type="number" id="bilgiAcikAlan"></div>
+        <div><label>Kapalı Alan (m²)</label><input type="number" id="bilgiKapaliAlan"></div>
+      </div>
+
+      <div class="field split">
+        <div><label>Forklift Giriş Kapısı Var mı</label>
+          <select id="bilgiForkliftKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div><label>Var ise sayısı</label><input type="number" id="bilgiForkliftKapisiAdet"></div>
+      </div>
+
+      <div class="field split">
+        <div><label>Rampa Kapısı Var mı</label>
+          <select id="bilgiRampaKapisiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+        <div><label>Var ise sayısı</label><input type="number" id="bilgiRampaKapisiAdet"></div>
+      </div>
+
+      <div class="field">
+        <label>Yağmur İnişleri Sistemi</label>
+        <input type="text" id="bilgiYagmurInisiSistemi" placeholder="Durumu hakkında kısa bilgi">
+      </div>
+
+      <div class="field">
+        <label>Depo İçerisinde Logar Var mı?</label>
+        <select id="bilgiLogarVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+      </div>
+
+      <div class="field split">
+        <div><label>Yangın Sprinkler Sistemi Var mı?</label>
+          <select id="bilgiYanginSprinklerVarMi"><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option></select>
+        </div>
+        <div><label>Yangın Dolabı Var mı?</label>
+          <select id="bilgiYanginDolabiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Rampa Yanaşma Mesafesi (metre)</label>
+        <input type="number" id="bilgiRampaYanasmaMesafesi">
+      </div>
+
+      <div class="field">
+        <label>Güvenlik Klübesi Var mı?</label>
+        <select id="bilgiGuvenlikKlubesiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+      </div>
+
+      <button class="btn btn-primary" id="bilgiSaveBtn" type="button" style="width:100%;margin-top:6px;">Kaydet</button>
+      <button class="btn btn-secondary" id="bilgiNewBtn" type="button" style="width:100%;margin-top:8px;">Yeni Kayıt</button>
+
+      <div class="formno-bar" style="margin-top:22px;">
+        <input type="text" id="bilgiSearchInput" placeholder="Kayıt No ile ara (ör. BLG-0001)" autocomplete="off">
+        <button class="btn-fetch" id="bilgiSearchBtn" type="button">Getir</button>
+      </div>
+
+      <div class="recent" style="margin-top:18px;">
+        <div class="recent-head">
+          <h2>Son Bilgilendirme Kayıtları</h2>
+          <button class="btn-export" id="bilgiExportBtn" type="button">⬇ Excel'e Aktar</button>
+        </div>
+        <div id="bilgiRecentList"><p class="recent-empty">Yükleniyor…</p></div>
+      </div>
+    </div>
   </div>
 </details>
 
@@ -722,7 +845,7 @@
 <script>
 (function(){
   const FIELD_IDS = [
-    "binaAdi","mahalle","cadde","sokak","numara","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel",
+    "binaAdi","mahalle","cadde","sokak","numara","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi",
     "zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
     "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet","acilCikisKapisiVarMi","acilCikisKapisiAdet",
     "korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
@@ -735,7 +858,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","doldurmaKisi","bolge","sehir"
+    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo"
   ];
 
   const REGION_CITIES = {
@@ -753,7 +876,7 @@
     createdAt: "Oluşturma Tarihi", updatedAt: "Güncelleme Tarihi",
     binaAdi: "Bina Adı", mahalle: "Mahalle", cadde: "Cadde", sokak: "Sokak", numara: "Numara",
     binaAraziAlani: "Bina Arazi Alanı (m²)", binaKapaliAlani: "Bina Kapalı Alanı (m²)",
-    binaOfisAlaniGenel: "Bina Ofis Alanı - Genel (m²)",
+    binaOfisAlaniGenel: "Bina Ofis Alanı - Genel (m²)", binaYasi: "Bina Yaşı (yıl)",
     zeminDurumu: "Zemin Durumu (İç)", catiMalzemesi: "Çatı Malzemesi", catiMalzemesiDiger: "Çatı Malzemesi - Diğer",
     forkliftKapisiVarMi: "Forklift Giriş Kapısı Var mı", forkliftKapisiAdet: "Forklift Kapısı Adedi",
     rampaKapisiVarMi: "Rampa Kapısı Var mı", rampaKapisiAdet: "Rampa Kapısı Adedi",
@@ -780,10 +903,10 @@
     kameraVarMi: "Kamera Sistemi Var mı", kameraAdet: "Kamera Adedi",
     kayitSuresiGun: "Kayıt Süresi (Gün)", kameraInternetIzleme: "Kameralar İnternetten İzlenebiliyor mu",
     jeneratorVarMi: "Jeneratör Var mı", jeneratorKva: "Jeneratör Gücü (kVA)",
-    genelNot: "Genel Not"
+    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No"
   };
   const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","binaAdi","mahalle","cadde","sokak","numara",
-    "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
+    "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi","zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
     "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet",
     "acilCikisKapisiVarMi","acilCikisKapisiAdet","korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
     "yagmurIniciKonum","yagmurIniciDurumu","logarVarMi","logarDurumu","elektrikTrafoKonumu",
@@ -794,7 +917,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot"];
+    "genelNot","bilgilendirmeFormuNo"];
 
   // ============================================================
   // GOOGLE SHEETS BAĞLANTISI
@@ -883,6 +1006,69 @@
   bolgeSelect.addEventListener("change", () => populateSehir(bolgeSelect.value, ""));
   catiMalzemesiSelect.addEventListener("change", updateCatiDigerVisibility);
   yanginSuDeposuSelect.addEventListener("change", updateSuDeposuKapasiteVisibility);
+
+  // ---- DEPOLAMA ALANI BİLGİLENDİRME FORMU İLE BAĞLANTI ----
+  const depoBilgiVarMiSelect = $("depoBilgiVarMi");
+  const depoBilgiNoWrap = $("depoBilgiNoWrap");
+  const depoBilgiFetchBtn = $("depoBilgiFetchBtn");
+
+  depoBilgiVarMiSelect.addEventListener("change", () => {
+    depoBilgiNoWrap.style.display = (depoBilgiVarMiSelect.value === "Evet") ? "" : "none";
+  });
+
+  function findBolgeForCity_(city){
+    for(const bolgeAdi in REGION_CITIES){
+      if(REGION_CITIES[bolgeAdi].includes(city)) return bolgeAdi;
+    }
+    return "";
+  }
+
+  function applyBilgiToDepoForm_(b){
+    if(b.sehir){
+      const bolgeAdi = findBolgeForCity_(b.sehir);
+      if(bolgeAdi){
+        bolgeSelect.value = bolgeAdi;
+        populateSehir(bolgeAdi, b.sehir);
+      }
+    }
+    if(b.acikAlan != null && b.acikAlan !== "") $("binaAraziAlani").value = b.acikAlan;
+    if(b.kapaliAlan != null && b.kapaliAlan !== "") $("binaKapaliAlani").value = b.kapaliAlan;
+    if(b.forkliftKapisiVarMi) $("forkliftKapisiVarMi").value = b.forkliftKapisiVarMi;
+    if(b.forkliftKapisiAdet != null && b.forkliftKapisiAdet !== "") $("forkliftKapisiAdet").value = b.forkliftKapisiAdet;
+    if(b.rampaKapisiVarMi) $("rampaKapisiVarMi").value = b.rampaKapisiVarMi;
+    if(b.rampaKapisiAdet != null && b.rampaKapisiAdet !== "") $("rampaKapisiAdet").value = b.rampaKapisiAdet;
+    if(b.yagmurInisiSistemi) $("yagmurIniciDurumu").value = b.yagmurInisiSistemi;
+    if(b.logarVarMi) $("logarVarMi").value = b.logarVarMi;
+    if(b.yanginSprinklerVarMi) $("yanginSprinklerVarMi").value = b.yanginSprinklerVarMi;
+    if(b.yanginDolabiVarMi) $("yanginDolabiVarMi").value = b.yanginDolabiVarMi;
+    if(b.rampaYanasmaMesafesi != null && b.rampaYanasmaMesafesi !== "") $("yanasmaMesafesi").value = b.rampaYanasmaMesafesi;
+    if(b.guvenlikKlubesiVarMi && !$("guvenlikFizikiDurum").value.trim()){
+      $("guvenlikFizikiDurum").value = "Güvenlik Klübesi: " + b.guvenlikKlubesiVarMi;
+    }
+    if(b.formNo) $("bilgilendirmeFormuNo").value = b.formNo;
+    updateCatiDigerVisibility();
+    updateSuDeposuKapasiteVisibility();
+    document.querySelectorAll("section.card").forEach(el => { el.open = true; });
+  }
+
+  depoBilgiFetchBtn.addEventListener("click", async () => {
+    const formNo = $("bilgilendirmeFormuNo").value.trim().toUpperCase();
+    if(!formNo){ showBanner("err","Lütfen Bilgilendirme Formu kayıt numarasını girin."); return; }
+    depoBilgiFetchBtn.disabled = true;
+    try{
+      const result = await apiGet({action:"getBilgilendirme", formNo});
+      if(!result.ok || !result.record){
+        showBanner("err", formNo + " numaralı bilgilendirme kaydı bulunamadı.");
+        depoBilgiFetchBtn.disabled = false;
+        return;
+      }
+      applyBilgiToDepoForm_(result.record);
+      showBanner("ok", formNo + " numaralı bilgilendirme kaydındaki veriler forma dolduruldu.");
+    }catch(e){
+      showBanner("err","Veri getirilirken bir hata oluştu. Bağlantıyı kontrol edin.");
+    }
+    depoBilgiFetchBtn.disabled = false;
+  });
 
   // ---- ZORUNLU ALAN AYARLARI ----
   function fieldLabelWrap_(id){
@@ -1228,6 +1414,226 @@
   formNoInput.addEventListener("keydown", (e) => { if(e.key === "Enter") loadByFormNo(formNoInput.value); });
 
   loadRequiredConfig();
+
+  // ============================================================
+  // DEPOLAMA ALANI BİLGİLENDİRME FORMU (ön bilgi toplama formu)
+  // ============================================================
+  const bilgiBanner = $("bilgiBanner");
+  const bilgiDisplayFormNo = $("bilgiDisplayFormNo");
+  const bilgiDepoFormuVarMiSelect = $("bilgiDepoFormuVarMi");
+  const bilgiDepoFormuNoWrap = $("bilgiDepoFormuNoWrap");
+  const bilgiSehirSelect = $("bilgiSehir");
+  const bilgiSaveBtn = $("bilgiSaveBtn");
+  const bilgiNewBtn = $("bilgiNewBtn");
+  const bilgiSearchInput = $("bilgiSearchInput");
+  const bilgiSearchBtn = $("bilgiSearchBtn");
+  const bilgiRecentList = $("bilgiRecentList");
+  const bilgiExportBtn = $("bilgiExportBtn");
+  let currentBilgiFormNo = null;
+
+  const ALL_CITIES = Object.values(REGION_CITIES).flat().sort((a,b) => a.localeCompare(b, "tr"));
+  bilgiSehirSelect.innerHTML = '<option value="">Seçiniz</option>' + ALL_CITIES.map(c => `<option>${c}</option>`).join("");
+
+  const BILGI_KEY_MAP = {
+    bilgiDoldurmaKisi: "doldurmaKisi",
+    bilgiBinaAdi: "binaAdi",
+    bilgiDepoFormuNo: "depoFormuNo",
+    bilgiSehir: "sehir",
+    bilgiAcikAlan: "acikAlan",
+    bilgiKapaliAlan: "kapaliAlan",
+    bilgiForkliftKapisiVarMi: "forkliftKapisiVarMi",
+    bilgiForkliftKapisiAdet: "forkliftKapisiAdet",
+    bilgiRampaKapisiVarMi: "rampaKapisiVarMi",
+    bilgiRampaKapisiAdet: "rampaKapisiAdet",
+    bilgiYagmurInisiSistemi: "yagmurInisiSistemi",
+    bilgiLogarVarMi: "logarVarMi",
+    bilgiYanginSprinklerVarMi: "yanginSprinklerVarMi",
+    bilgiYanginDolabiVarMi: "yanginDolabiVarMi",
+    bilgiRampaYanasmaMesafesi: "rampaYanasmaMesafesi",
+    bilgiGuvenlikKlubesiVarMi: "guvenlikKlubesiVarMi"
+  };
+  const BILGI_LABELS = {
+    doldurmaKisi: "Formu Dolduran", binaAdi: "Bina Adı",
+    sehir: "Şehir", acikAlan: "Açık Alan", kapaliAlan: "Kapalı Alan",
+    forkliftKapisiVarMi: "Forklift Giriş Kapısı Var mı", forkliftKapisiAdet: "Forklift Kapısı Sayısı",
+    rampaKapisiVarMi: "Rampa Kapısı Var mı", rampaKapisiAdet: "Rampa Kapısı Sayısı",
+    yagmurInisiSistemi: "Yağmur İnişleri Sistemi", logarVarMi: "Depo İçerisinde Logar Var mı",
+    yanginSprinklerVarMi: "Yangın Sprinkler Sistemi Var mı", yanginDolabiVarMi: "Yangın Dolabı Var mı",
+    rampaYanasmaMesafesi: "Rampa Yanaşma Mesafesi", guvenlikKlubesiVarMi: "Güvenlik Klübesi Var mı",
+    depoFormuNo: "Depo Formu Kayıt No"
+  };
+
+
+  function showBilgiBanner(kind, msg){
+    bilgiBanner.className = "status-banner show " + kind;
+    bilgiBanner.textContent = msg;
+  }
+  function hideBilgiBanner(){
+    bilgiBanner.className = "status-banner";
+  }
+
+  function collectBilgiData(){
+    const data = {};
+    Object.keys(BILGI_KEY_MAP).forEach(id => { data[BILGI_KEY_MAP[id]] = $(id).value; });
+    return data;
+  }
+
+  function fillBilgiForm(data){
+    Object.keys(BILGI_KEY_MAP).forEach(id => {
+      const key = BILGI_KEY_MAP[id];
+      $(id).value = (data && data[key] != null) ? data[key] : "";
+    });
+    const hasLink = !!(data && data.depoFormuNo);
+    bilgiDepoFormuVarMiSelect.value = hasLink ? "Evet" : "";
+    bilgiDepoFormuNoWrap.style.display = hasLink ? "" : "none";
+  }
+
+  function clearBilgiForm(){
+    fillBilgiForm({});
+    currentBilgiFormNo = null;
+    bilgiDisplayFormNo.textContent = "Kayıt sonrası otomatik atanır";
+    bilgiSearchInput.value = "";
+  }
+
+  function validateBilgiForm_(data){
+    const missing = [];
+    ["doldurmaKisi","binaAdi","sehir","acikAlan","kapaliAlan","forkliftKapisiVarMi","rampaKapisiVarMi",
+     "yagmurInisiSistemi","logarVarMi","yanginSprinklerVarMi","yanginDolabiVarMi",
+     "rampaYanasmaMesafesi","guvenlikKlubesiVarMi"].forEach(key => {
+      if(!String(data[key] || "").trim()) missing.push(BILGI_LABELS[key]);
+    });
+    if(data.forkliftKapisiVarMi === "Var" && !String(data.forkliftKapisiAdet || "").trim()){
+      missing.push(BILGI_LABELS.forkliftKapisiAdet);
+    }
+    if(data.rampaKapisiVarMi === "Var" && !String(data.rampaKapisiAdet || "").trim()){
+      missing.push(BILGI_LABELS.rampaKapisiAdet);
+    }
+    if(bilgiDepoFormuVarMiSelect.value === "Evet" && !String(data.depoFormuNo || "").trim()){
+      missing.push(BILGI_LABELS.depoFormuNo);
+    }
+    return missing;
+  }
+
+  async function saveBilgiForm(){
+    const data = collectBilgiData();
+    const missing = validateBilgiForm_(data);
+    if(missing.length){
+      showBilgiBanner("err", "Şu alanlar zorunlu, lütfen doldurun: " + missing.join(", "));
+      return;
+    }
+    if(currentBilgiFormNo){ data.formNo = currentBilgiFormNo; }
+    bilgiSaveBtn.disabled = true;
+    const originalLabel = bilgiSaveBtn.textContent;
+    bilgiSaveBtn.textContent = "Kaydediliyor…";
+    try{
+      const result = await apiPost({ action:"saveBilgilendirme", data });
+      if(!result.ok){ throw new Error(result.error || "Kayıt başarısız"); }
+      currentBilgiFormNo = result.formNo;
+      bilgiDisplayFormNo.textContent = result.formNo;
+      showBilgiBanner("ok", "Kaydedildi. Kayıt No: " + result.formNo);
+      loadBilgiRecent();
+    }catch(e){
+      showBilgiBanner("err", "Kaydedilemedi. Bağlantıyı kontrol edip tekrar deneyin.");
+    }
+    bilgiSaveBtn.disabled = false;
+    bilgiSaveBtn.textContent = originalLabel;
+  }
+
+  async function loadBilgiByFormNo(rawNo){
+    const formNo = (rawNo || "").trim().toUpperCase();
+    if(!formNo){ showBilgiBanner("err","Lütfen bir kayıt numarası girin."); return; }
+    bilgiSearchBtn.disabled = true;
+    try{
+      const result = await apiGet({action:"getBilgilendirme", formNo});
+      if(!result.ok || !result.record){
+        showBilgiBanner("err", formNo + " numaralı kayıt bulunamadı.");
+        bilgiSearchBtn.disabled = false;
+        return;
+      }
+      fillBilgiForm(result.record);
+      currentBilgiFormNo = formNo;
+      bilgiDisplayFormNo.textContent = formNo;
+      showBilgiBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
+    }catch(e){
+      showBilgiBanner("err","Kayıt getirilirken bir hata oluştu. Bağlantıyı kontrol edin.");
+    }
+    bilgiSearchBtn.disabled = false;
+  }
+
+  bilgiDepoFormuVarMiSelect.addEventListener("change", () => {
+    bilgiDepoFormuNoWrap.style.display = (bilgiDepoFormuVarMiSelect.value === "Evet") ? "" : "none";
+  });
+  bilgiSaveBtn.addEventListener("click", saveBilgiForm);
+  bilgiNewBtn.addEventListener("click", () => { clearBilgiForm(); hideBilgiBanner(); });
+  bilgiSearchBtn.addEventListener("click", () => loadBilgiByFormNo(bilgiSearchInput.value));
+  bilgiSearchInput.addEventListener("keydown", (e) => { if(e.key === "Enter") loadBilgiByFormNo(bilgiSearchInput.value); });
+
+  async function loadBilgiRecent(){
+    bilgiRecentList.innerHTML = '<p class="recent-empty">Yükleniyor…</p>';
+    try{
+      const result = await apiGet({action:"listBilgilendirme"});
+      const list = (result.ok && result.records) ? result.records : [];
+      if(!list.length){
+        bilgiRecentList.innerHTML = '<p class="recent-empty">Henüz kayıt bulunmuyor.</p>';
+        return;
+      }
+      const sorted = list.slice().sort((a,b) => (b.updatedAt||b.createdAt||"").localeCompare(a.updatedAt||a.createdAt||""));
+      const top = sorted.slice(0, 8);
+      bilgiRecentList.innerHTML = "";
+      top.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "recent-item";
+        const dateStr = (item.updatedAt||item.createdAt) ? new Date(item.updatedAt||item.createdAt).toLocaleString("tr-TR") : "";
+        row.innerHTML = `<div><b>${item.formNo}</b> — ${escapeHtml(item.binaAdi || item.sehir || "İsimsiz kayıt")}<span class="meta">${dateStr}</span></div>`;
+        const btn = document.createElement("button");
+        btn.textContent = "Aç";
+        btn.type = "button";
+        btn.addEventListener("click", () => loadBilgiByFormNo(item.formNo));
+        row.appendChild(btn);
+        bilgiRecentList.appendChild(row);
+      });
+    }catch(e){
+      bilgiRecentList.innerHTML = '<p class="recent-empty">Kayıtlar yüklenemedi. Bağlantıyı kontrol edin.</p>';
+    }
+  }
+
+  async function exportBilgiToExcel(){
+    bilgiExportBtn.disabled = true;
+    const originalLabel = bilgiExportBtn.textContent;
+    bilgiExportBtn.textContent = "Hazırlanıyor…";
+    try{
+      const result = await apiGet({action:"listBilgilendirme"});
+      const list = (result.ok && result.records) ? result.records : [];
+      if(!list.length){
+        showBilgiBanner("err","Dışa aktarılacak kayıt bulunamadı.");
+        bilgiExportBtn.disabled = false;
+        bilgiExportBtn.textContent = originalLabel;
+        return;
+      }
+      const valid = list.slice().sort((a,b) => (a.formNo || "").localeCompare(b.formNo || ""));
+      const order = ["formNo","doldurmaKisi","binaAdi","sehir","acikAlan","kapaliAlan",
+        "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet",
+        "yagmurInisiSistemi","logarVarMi","yanginSprinklerVarMi","yanginDolabiVarMi",
+        "rampaYanasmaMesafesi","guvenlikKlubesiVarMi","depoFormuNo","createdAt","updatedAt"];
+      const labels = Object.assign({formNo:"Kayıt No", createdAt:"Oluşturma Tarihi", updatedAt:"Güncelleme Tarihi"}, BILGI_LABELS);
+      const headerRow = order.map(id => labels[id] || id);
+      const rows = valid.map(d => order.map(id => (d[id] != null ? d[id] : "")));
+      const ws = XLSX.utils.aoa_to_sheet([headerRow, ...rows]);
+      ws["!cols"] = order.map(id => ({ wch: Math.min(Math.max((labels[id] || id).length, 12), 32) }));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Depolama Bilgilendirme");
+      const stamp = new Date().toISOString().slice(0,10);
+      XLSX.writeFile(wb, "Depolama_Bilgilendirme_" + stamp + ".xlsx");
+      showBilgiBanner("ok", valid.length + " kayıt Excel dosyası olarak indirildi.");
+    }catch(e){
+      showBilgiBanner("err","Excel oluşturulurken bir hata oluştu. Bağlantıyı kontrol edin.");
+    }
+    bilgiExportBtn.disabled = false;
+    bilgiExportBtn.textContent = originalLabel;
+  }
+
+  bilgiExportBtn.addEventListener("click", exportBilgiToExcel);
+  loadBilgiRecent();
 })();
 </script>
 
