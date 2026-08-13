@@ -262,6 +262,15 @@
     border-radius:9px; font-size:18px; cursor:pointer;
   }
 
+  /* ---------- BAĞIMSIZ AYARLAR BARI (formların dışında, en üstte) ---------- */
+  .global-actions{
+    display:flex; justify-content:flex-end; padding:10px 14px; max-width:640px; margin:0 auto;
+  }
+  .global-actions .btn-gear{
+    width:auto; padding:9px 16px; font-size:13.5px; font-weight:700;
+    display:flex; align-items:center; gap:6px;
+  }
+
   /* ---------- ZORUNLU ALAN AYARLARI MODU ---------- */
   .settings-actions{
     display:flex; gap:10px; padding:12px 14px; max-width:640px; margin:0 auto;
@@ -284,6 +293,12 @@
     line-height:1.55; margin:0 0 14px;
   }
   .detay-gate .field{ margin-bottom:12px; }
+
+  /* ---------- ÖN BİLGİ'DEN OTOMATİK GELEN, KİLİTLİ ALANLAR ---------- */
+  .auto-locked-input{
+    background:var(--steel-200) !important; color:var(--ink-soft) !important; cursor:not-allowed;
+  }
+  .auto-locked-badge{ font-size:11px; margin-left:4px; }
   .required-toggle{
     display:none; margin-right:7px; width:16px; height:16px; vertical-align:middle;
     accent-color:var(--amber-500); cursor:pointer;
@@ -437,6 +452,15 @@
   </div>
 </header>
 
+<div class="global-actions">
+  <button class="btn-gear" id="settingsBtn" type="button" title="Zorunlu Alanları Düzenle">⚙ Ayarlar</button>
+</div>
+
+<div class="settings-actions" id="settingsActions" style="display:none;">
+  <button class="btn btn-secondary" id="settingsCancelBtn" type="button">✕ Vazgeç</button>
+  <button class="btn btn-primary" id="settingsSaveBtn" type="button">💾 Zorunlu Alanları Kaydet</button>
+</div>
+
 <details class="mega-card" open id="megaDepolamaBilgilendirme">
   <summary class="mega-summary">
     <span>DEPOLAMA ALANI ÖN BİLGİ FORMU</span>
@@ -543,7 +567,7 @@
 
       <div class="recent" style="margin-top:18px;">
         <div class="recent-head">
-          <h2>Son Bilgilendirme Kayıtları</h2>
+          <h2>Depolama Alanı Ön Bilgi Kayıtları</h2>
           <button class="btn-export" id="bilgiExportBtn" type="button">⬇ Excel'e Aktar</button>
         </div>
         <div id="bilgiRecentList"><p class="recent-empty">Yükleniyor…</p></div>
@@ -562,13 +586,8 @@
 <div class="top-actions" id="topActions">
   <button class="btn btn-secondary" id="newBtn" type="button">Yeni Form</button>
   <button class="btn btn-primary" id="saveBtn" type="button">Kaydet</button>
-  <button class="btn-gear" id="settingsBtn" type="button" title="Zorunlu Alanları Düzenle">⚙</button>
 </div>
 
-<div class="settings-actions" id="settingsActions" style="display:none;">
-  <button class="btn btn-secondary" id="settingsCancelBtn" type="button">✕ Vazgeç</button>
-  <button class="btn btn-primary" id="settingsSaveBtn" type="button">💾 Zorunlu Alanları Kaydet</button>
-</div>
 
 <main>
   <section id="allRecordsView" style="display:none;">
@@ -609,6 +628,8 @@
   <div class="settings-info" id="settingsInfo">⚙ Zorunlu olmasını istediğiniz alanların yanındaki kutucukları işaretleyin, sonra üstteki "Zorunlu Alanları Kaydet" butonuna basın.</div>
   <div class="status-banner" id="statusBanner"></div>
 
+  <button class="view-tab-bottom" id="tabAllBtn" type="button">📋 Kayıtları Görüntüle / Kayıt Sorgula</button>
+
   <div class="detay-gate" id="detayGate">
     <p class="detay-gate-info">Bu forma devam edebilmek için önce ilgili binanın <b>Depolama Alanı Ön Bilgi Formu</b> kaydını girmelisiniz. Ön Bilgi Formu doldurulmadan Detay formu doldurulamaz.</p>
     <div class="field">
@@ -644,8 +665,6 @@
       </span>
     </summary>
     <div class="card-body">
-      <div class="field"><label>Bina Adı</label><input type="text" id="binaAdi"></div>
-
       <div class="field">
         <label>Süreç Durumu</label>
         <select id="surecDurumu">
@@ -764,7 +783,17 @@
         <div class="field"><label>Körük Var mı?</label>
           <select id="korukVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
         </div>
-        <div class="field"><label>Var ise durumu?</label><input type="text" id="korukDurumu"></div>
+        <div class="field"><label>Var ise durumu?</label>
+          <select id="korukDurumu">
+            <option value="">Seçiniz</option>
+            <option value="1">1 - Çok Kötü</option>
+            <option value="2">2 - Kötü</option>
+            <option value="3">3 - Orta</option>
+            <option value="4">4 - İyi</option>
+            <option value="5">5 - Çok İyi</option>
+          </select>
+        </div>
+        <div class="field"><label>Yorum (isteğe bağlı)</label><textarea id="korukYorum"></textarea></div>
       </div>
 
       <div class="subgroup">
@@ -772,7 +801,17 @@
         <div class="field"><label>Rampa Var mı?</label>
           <select id="rampaVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
         </div>
-        <div class="field"><label>Var ise durumu?</label><input type="text" id="rampaDurumu"></div>
+        <div class="field"><label>Var ise durumu?</label>
+          <select id="rampaDurumu">
+            <option value="">Seçiniz</option>
+            <option value="1">1 - Çok Kötü</option>
+            <option value="2">2 - Kötü</option>
+            <option value="3">3 - Orta</option>
+            <option value="4">4 - İyi</option>
+            <option value="5">5 - Çok İyi</option>
+          </select>
+        </div>
+        <div class="field"><label>Yorum (isteğe bağlı)</label><textarea id="rampaYorum"></textarea></div>
       </div>
 
       <div class="subgroup">
@@ -900,6 +939,9 @@
       </div>
       <div class="subgroup">
         <p class="subgroup-title">Güvenlik Binası</p>
+        <div class="field"><label>Güvenlik Kulübesi Var mı?</label>
+          <select id="guvenlikKlubesiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
+        </div>
         <div class="field"><label>Genel fiziki durumu hakkında bilgi</label><textarea id="guvenlikFizikiDurum"></textarea></div>
         <div class="field"><label>Güvenlik binası içerisinde kullanılabilir bir elektrik sistemi var mı?</label>
           <select id="guvenlikElektrikVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
@@ -961,7 +1003,6 @@
 
   </div>
 
-  <button class="view-tab-bottom" id="tabAllBtn" type="button">📋 Kayıtları Görüntüle / Kayıt Sorgula</button>
   </section>
 </main>
 
@@ -993,10 +1034,10 @@
 <script>
 (function(){
   const FIELD_IDS = [
-    "binaAdi","surecDurumu","mahalle","cadde","sokak","numara","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi",
+    "surecDurumu","mahalle","cadde","sokak","numara","binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi",
     "zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
     "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet","acilCikisKapisiVarMi","acilCikisKapisiAdet",
-    "korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
+    "korukVarMi","korukDurumu","korukYorum","rampaVarMi","rampaDurumu","rampaYorum",
     "yagmurIniciKonum","yagmurIniciDurumu","logarVarMi","logarDurumu",
     "elektrikTrafoKonumu","elektrikPanoVarMi","aydinlatmaMalzemesi",
     "yanginAlgilamaVarMi","dedektorTuru","yanginDolabiVarMi","yanginDolabiAdet",
@@ -1004,7 +1045,7 @@
     "dumanDamperiVarMi","dumanDamperiAdet",
     "tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
-    "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
+    "guvenlikKlubesiVarMi","guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
     "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo"
   ];
@@ -1043,15 +1084,15 @@
   const FIELD_LABELS = {
     formNo: "Kayıt No", doldurmaKisi: "Formu Dolduran", bolge: "Bölge", sehir: "Şehir",
     createdAt: "Oluşturma Tarihi", updatedAt: "Güncelleme Tarihi",
-    binaAdi: "Bina Adı", surecDurumu: "Süreç Durumu", mahalle: "Mahalle", cadde: "Cadde", sokak: "Sokak", numara: "Numara",
+    surecDurumu: "Süreç Durumu", mahalle: "Mahalle", cadde: "Cadde", sokak: "Sokak", numara: "Numara",
     binaAraziAlani: "Bina Arazi Alanı (m²)", binaKapaliAlani: "Bina Kapalı Alanı (m²)",
     binaOfisAlaniGenel: "Bina Ofis Alanı - Genel (m²)", binaYasi: "Bina Yaşı (yıl)",
     zeminDurumu: "Zemin Durumu (İç)", catiMalzemesi: "Çatı Malzemesi", catiMalzemesiDiger: "Çatı Malzemesi - Diğer",
     forkliftKapisiVarMi: "Forklift Giriş Kapısı Var mı", forkliftKapisiAdet: "Forklift Kapısı Adedi",
     rampaKapisiVarMi: "Rampa Kapısı Var mı", rampaKapisiAdet: "Rampa Kapısı Adedi",
     acilCikisKapisiVarMi: "Acil Çıkış Kapısı Var mı", acilCikisKapisiAdet: "Acil Çıkış Kapısı Adedi",
-    korukVarMi: "Körük Var mı", korukDurumu: "Körük Durumu",
-    rampaVarMi: "Rampa Var mı", rampaDurumu: "Rampa Durumu",
+    korukVarMi: "Körük Var mı", korukDurumu: "Körük Durumu", korukYorum: "Körük Yorumu",
+    rampaVarMi: "Rampa Var mı", rampaDurumu: "Rampa Durumu", rampaYorum: "Rampa Yorumu",
     yagmurIniciKonum: "Yağmur İniş Borusu Konumu", yagmurIniciDurumu: "Yağmur İniş Borusu Durumu",
     logarVarMi: "Logar Var mı", logarDurumu: "Logar Durumu",
     elektrikTrafoKonumu: "Elektrik Trafo Konumu", elektrikPanoVarMi: "Elektrik Panosu Durumu",
@@ -1067,6 +1108,7 @@
     disAydinlatmaVarMi: "Dış Aydınlatma Var mı", disAydinlatmaAdet: "Dış Aydınlatma Adedi",
     paratonerVarMi: "Paratoner Var mı",
     guvenlikFizikiDurum: "Güvenlik Binası Fiziki Durumu",
+    guvenlikKlubesiVarMi: "Güvenlik Kulübesi Var mı",
     guvenlikElektrikVarMi: "Güvenlik Binası Elektrik Sistemi Var mı",
     guvenlikInternetVarMi: "Güvenlik Binası İnternet Var mı",
     kameraVarMi: "Kamera Sistemi Var mı", kameraAdet: "Kamera Adedi",
@@ -1074,17 +1116,17 @@
     jeneratorVarMi: "Jeneratör Var mı", jeneratorKva: "Jeneratör Gücü (kVA)",
     genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No"
   };
-  const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","binaAdi","surecDurumu","mahalle","cadde","sokak","numara",
+  const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","surecDurumu","mahalle","cadde","sokak","numara",
     "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi","zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
     "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet",
-    "acilCikisKapisiVarMi","acilCikisKapisiAdet","korukVarMi","korukDurumu","rampaVarMi","rampaDurumu",
+    "acilCikisKapisiVarMi","acilCikisKapisiAdet","korukVarMi","korukDurumu","korukYorum","rampaVarMi","rampaDurumu","rampaYorum",
     "yagmurIniciKonum","yagmurIniciDurumu","logarVarMi","logarDurumu","elektrikTrafoKonumu",
     "elektrikPanoVarMi","aydinlatmaMalzemesi","yanginAlgilamaVarMi","dedektorTuru",
     "yanginDolabiVarMi","yanginDolabiAdet","yanginSprinklerVarMi","yanginSuDeposuVarMi","yanginSuDeposuKapasite",
     "dumanDamperiVarMi","dumanDamperiAdet",
     "tuvaletKisilik","dusKisilik","sarjIstasyonuAlaniVarMi",
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
-    "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
+    "guvenlikKlubesiVarMi","guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
     "genelNot","bilgilendirmeFormuNo"];
 
@@ -1264,6 +1306,43 @@
     return "";
   }
 
+  // Ön Bilgi Formu'ndan otomatik gelen alanlar — Detay tarafında değiştirilemez.
+  const AUTO_FILLED_FIELD_IDS = [
+    "bolge","sehir","binaAraziAlani","binaKapaliAlani",
+    "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet",
+    "yagmurIniciDurumu","logarVarMi","yanginSprinklerVarMi","yanginDolabiVarMi",
+    "yanasmaMesafesi","guvenlikKlubesiVarMi"
+  ];
+
+  function lockAutoFilledFields_(){
+    AUTO_FILLED_FIELD_IDS.forEach(id => {
+      const el = $(id);
+      if(!el) return;
+      el.disabled = true;
+      el.classList.add("auto-locked-input");
+      const label = el.parentElement ? el.parentElement.querySelector("label") : null;
+      if(label && !label.querySelector(".auto-locked-badge")){
+        const badge = document.createElement("span");
+        badge.className = "auto-locked-badge";
+        badge.title = "Ön Bilgi Formu'ndan geldi, burada değiştirilemez";
+        badge.textContent = "🔒";
+        label.appendChild(badge);
+      }
+    });
+  }
+
+  function unlockAutoFilledFields_(){
+    AUTO_FILLED_FIELD_IDS.forEach(id => {
+      const el = $(id);
+      if(!el) return;
+      el.disabled = false;
+      el.classList.remove("auto-locked-input");
+      const label = el.parentElement ? el.parentElement.querySelector("label") : null;
+      const badge = label ? label.querySelector(".auto-locked-badge") : null;
+      if(badge) badge.remove();
+    });
+  }
+
   function applyBilgiToDepoForm_(b){
     if(b.sehir){
       const bolgeAdi = findBolgeForCity_(b.sehir);
@@ -1283,12 +1362,16 @@
     if(b.yanginSprinklerVarMi) $("yanginSprinklerVarMi").value = b.yanginSprinklerVarMi;
     if(b.yanginDolabiVarMi) $("yanginDolabiVarMi").value = b.yanginDolabiVarMi;
     if(b.rampaYanasmaMesafesi != null && b.rampaYanasmaMesafesi !== "") $("yanasmaMesafesi").value = b.rampaYanasmaMesafesi;
-    if(b.guvenlikKlubesiVarMi && !$("guvenlikFizikiDurum").value.trim()){
-      $("guvenlikFizikiDurum").value = "Güvenlik Klübesi: " + b.guvenlikKlubesiVarMi;
+    if(b.guvenlikKlubesiVarMi) $("guvenlikKlubesiVarMi").value = b.guvenlikKlubesiVarMi;
+    if(b.formNo){
+      $("bilgilendirmeFormuNo").value = b.formNo;
+      // Üst formun (Ön Bilgi) Kayıt No'sunu alt formun (Detay) da kendi Kayıt No'su yapıyoruz.
+      currentFormNo = b.formNo;
+      displayFormNo.textContent = b.formNo;
     }
-    if(b.formNo) $("bilgilendirmeFormuNo").value = b.formNo;
     updateCatiDigerVisibility();
     updateSuDeposuKapasiteVisibility();
+    lockAutoFilledFields_();
     document.querySelectorAll("section.card").forEach(el => { el.open = true; });
   }
 
@@ -1298,14 +1381,27 @@
     $("bilgilendirmeFormuNo").value = formNo;
     depoBilgiFetchBtn.disabled = true;
     try{
+      // Bu Ön Bilgi numarasına bağlı, daha önce başlanmış bir Detay kaydı var mı diye önce onu bulmaya çalışıyoruz.
+      let existingDetay = null;
+      try{
+        const existingResult = await apiGet({action:"get", formNo});
+        if(existingResult.ok && existingResult.record){ existingDetay = existingResult.record; }
+      }catch(e){ /* yoksay, yeni kayıt gibi devam et */ }
+
       const result = await apiGet({action:"getBilgilendirme", formNo});
       if(!result.ok || !result.record){
         showBanner("err", formNo + " numaralı Ön Bilgi Formu kaydı bulunamadı. Lütfen önce Ön Bilgi Formu'nu doldurun.");
         depoBilgiFetchBtn.disabled = false;
         return;
       }
+
+      if(existingDetay){
+        // Bu bina için Detay tarafında zaten girilmiş veriler varsa onları koru, üzerine sadece Ön Bilgi'den gelenleri uygula.
+        fillForm(existingDetay);
+      }
       applyBilgiToDepoForm_(result.record);
       unlockDetayForm_();
+      pdfBtn.style.display = "block";
       showBanner("ok", formNo + " numaralı Ön Bilgi kaydındaki veriler forma dolduruldu. Devam edebilirsiniz.");
     }catch(e){
       showBanner("err","Veri getirilirken bir hata oluştu. Bağlantıyı kontrol edin.");
@@ -1367,6 +1463,10 @@
   }
 
   function enterSettingsMode(){
+    $("megaDepoFormu").open = true;
+    showFormView();
+    detayFormBody.style.display = "";
+    detayGate.style.display = "none";
     buildRequiredCheckboxes();
     document.body.classList.add("settings-mode");
     document.querySelectorAll("section.card").forEach(el => { el.open = true; });
@@ -1378,6 +1478,10 @@
     document.body.classList.remove("settings-mode");
     topActions.style.display = "flex";
     settingsActions.style.display = "none";
+    if(!detayUnlocked){
+      detayFormBody.style.display = "none";
+      detayGate.style.display = "";
+    }
   }
 
   // Sadece yönetici bu PIN'i bilerek Zorunlu Alanlar / Eğitim Ekle moduna girebilir.
@@ -1503,6 +1607,7 @@
     displayFormNo.textContent = "Kayıt sonrası otomatik atanır";
     formNoInput.value = "";
     pdfBtn.style.display = "none";
+    unlockAutoFilledFields_();
     lockDetayForm_();
     document.querySelectorAll("section.card").forEach((el,i)=>{ el.open = (i===0); });
   }
@@ -1525,7 +1630,7 @@
         const row = document.createElement("div");
         row.className = "recent-item";
         const dateStr = (item.updatedAt||item.createdAt) ? new Date(item.updatedAt||item.createdAt).toLocaleString("tr-TR") : "";
-        row.innerHTML = `<div><b>${item.formNo}</b> — ${escapeHtml(item.binaAdi || "İsimsiz kayıt")}<span class="meta">${dateStr}</span></div>`;
+        row.innerHTML = `<div><b>${item.formNo}</b> — ${escapeHtml(item.sehir || item.bolge || "Kayıt")}<span class="meta">${dateStr}</span></div>`;
         const btn = document.createElement("button");
         btn.textContent = "Aç";
         btn.type = "button";
@@ -1543,7 +1648,7 @@
   }
 
   async function loadByFormNo(rawNo){
-    const formNo = normalizeFormNo_(rawNo, "MVS");
+    const formNo = normalizeFormNo_(rawNo, "BLG");
     if(!formNo){ showBanner("err","Lütfen bir kayıt numarası girin."); return; }
     fetchBtn.disabled = true;
     try{
@@ -1557,8 +1662,10 @@
       currentFormNo = formNo;
       displayFormNo.textContent = formNo;
       formNoInput.value = formNo;
+      $("bilgilendirmeFormuNo").value = result.record.bilgilendirmeFormuNo || formNo;
       pdfBtn.style.display = "block";
       unlockDetayForm_();
+      lockAutoFilledFields_();
       document.querySelectorAll("section.card").forEach(el => el.open = true);
       showBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
     }catch(e){
@@ -1765,7 +1872,7 @@
     if(!allRecordsCache){ return; }
     const q = (filterText || "").trim().toLocaleLowerCase("tr");
     const filtered = !q ? allRecordsCache : allRecordsCache.filter(d => {
-      const haystack = [d.formNo, d.binaAdi, d.sehir, d.mahalle, d.cadde, d.doldurmaKisi].join(" ").toLocaleLowerCase("tr");
+      const haystack = [d.formNo, d.sehir, d.mahalle, d.cadde, d.doldurmaKisi].join(" ").toLocaleLowerCase("tr");
       return haystack.includes(q);
     });
     arCount.textContent = filtered.length + " kayıt bulundu (toplam " + allRecordsCache.length + " kayıt)";
@@ -1782,7 +1889,7 @@
       row.className = "ar-item";
       row.innerHTML = `
         <div class="ar-item-top">
-          <b>${escapeHtml(d.binaAdi || "İsimsiz kayıt")}</b>
+          <b>${escapeHtml(d.sehir || d.mahalle || "Kayıt")}</b>
           <span class="ar-badge">${escapeHtml(d.formNo || "")}</span>
         </div>
         ${statusHtml}
@@ -2130,7 +2237,7 @@
         const row = document.createElement("div");
         row.className = "recent-item";
         const dateStr = (item.updatedAt||item.createdAt) ? new Date(item.updatedAt||item.createdAt).toLocaleString("tr-TR") : "";
-        row.innerHTML = `<div><b>${item.formNo}</b> — ${escapeHtml(item.binaAdi || item.sehir || "İsimsiz kayıt")}<span class="meta">${dateStr}</span></div>`;
+        row.innerHTML = `<div><b>${item.formNo}</b> — ${escapeHtml(item.sehir || "Kayıt")}<span class="meta">${dateStr}</span></div>`;
         const btn = document.createElement("button");
         btn.textContent = "Aç";
         btn.type = "button";
@@ -2157,10 +2264,10 @@
         return;
       }
       const valid = list.slice().sort((a,b) => (a.formNo || "").localeCompare(b.formNo || ""));
-      const order = ["formNo","doldurmaKisi","binaAdi","sehir","acikAlan","kapaliAlan",
+      const order = ["formNo","doldurmaKisi","sehir","gpsKonum","acikAlan","kapaliAlan",
         "forkliftKapisiVarMi","forkliftKapisiAdet","rampaKapisiVarMi","rampaKapisiAdet",
         "yagmurInisiSistemi","logarVarMi","yanginSprinklerVarMi","yanginDolabiVarMi",
-        "rampaYanasmaMesafesi","guvenlikKlubesiVarMi","depoFormuNo","createdAt","updatedAt"];
+        "rampaYanasmaMesafesi","guvenlikKlubesiVarMi","fotograflar","createdAt","updatedAt"];
       const labels = Object.assign({formNo:"Kayıt No", createdAt:"Oluşturma Tarihi", updatedAt:"Güncelleme Tarihi"}, BILGI_LABELS);
       const headerRow = order.map(id => labels[id] || id);
       const rows = valid.map(d => order.map(id => (d[id] != null ? d[id] : "")));
