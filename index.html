@@ -9,23 +9,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy-950:#0B1220;
-    --navy-900:#111C2E;
-    --navy-800:#182740;
-    --navy-700:#22344F;
-    --steel-200:#D7DEE8;
-    --steel-100:#EEF1F6;
-    --paper:#F6F7FA;
-    --amber-500:#D9A441;
-    --amber-600:#BF8A2D;
-    --terracotta-400:#D08D6C;
-    --terracotta-500:#C1785A;
-    --terracotta-600:#A85F45;
-    --terracotta-900:#4A2A1E;
-    --ok-600:#1E8E5A;
-    --err-600:#C4453B;
-    --ink:#141B2A;
-    --ink-soft:#5A6478;
+    --navy-950:#46586D;
+    --navy-900:#53667B;
+    --navy-800:#5C7086;
+    --navy-700:#7688A0;
+    --steel-200:#E1E7EF;
+    --steel-100:#F2F5F9;
+    --paper:#FAF7F5;
+    --amber-500:#E8C08A;
+    --amber-600:#D4A468;
+    --terracotta-400:#E8C4B8;
+    --terracotta-500:#DCAE9C;
+    --terracotta-600:#C99783;
+    --terracotta-900:#7A5A4D;
+    --ok-600:#7FB89C;
+    --err-600:#D98F8F;
+    --ink:#3A4552;
+    --ink-soft:#7A8492;
     --radius:10px;
     font-size:16px;
   }
@@ -42,7 +42,7 @@
   /* ---------- HEADER ---------- */
   header.top{
     background:
-      radial-gradient(circle at 88% -10%, rgba(193,120,90,.55), transparent 55%),
+      radial-gradient(circle at 88% -10%, rgba(220,174,156,.5), transparent 55%),
       linear-gradient(150deg,var(--navy-950) 0%,var(--navy-900) 60%,var(--terracotta-900) 165%);
     color:#fff;
     padding:26px 20px 24px;
@@ -123,16 +123,16 @@
   .ar-item-top b{ font-size:14.5px; }
   .ar-badge{
     flex:none; font-size:11px; font-weight:700; color:var(--amber-600);
-    background:#FDF1DD; border-radius:5px; padding:3px 7px;
+    background:#F5E9DC; border-radius:5px; padding:3px 7px;
   }
   .status-pill{
     display:inline-block; font-size:11px; font-weight:700; border-radius:5px;
     padding:3px 8px; margin-bottom:6px;
   }
-  .status-pill.st-eval{ background:#EAF1FB; color:#2456A6; }
-  .status-pill.st-meet{ background:#FDF1DD; color:#A85F45; }
-  .status-pill.st-rejected{ background:#FBEAE8; color:#C4453B; }
-  .status-pill.st-won{ background:#E4F5EC; color:#1E8E5A; }
+  .status-pill.st-eval{ background:#E4EBF5; color:#5B7299; }
+  .status-pill.st-meet{ background:#F5E9DC; color:#B8916A; }
+  .status-pill.st-rejected{ background:#F5E3E3; color:#C08585; }
+  .status-pill.st-won{ background:#E3F0E8; color:#6FA085; }
   .ar-item .ar-sub{ font-size:12.5px; color:var(--ink-soft); margin-bottom:8px; line-height:1.5;}
   .ar-item button{
     background:var(--navy-900); color:#fff; border:none; border-radius:6px;
@@ -146,9 +146,9 @@
     font-size:13.5px; font-weight:600; align-items:center; gap:8px;
   }
   .status-banner.show{display:flex;}
-  .status-banner.ok{background:#E4F5EC; color:var(--ok-600); border:1px solid #BEE7D2;}
-  .status-banner.err{background:#FBEAE8; color:var(--err-600); border:1px solid #F1C7C2;}
-  .status-banner.info{background:#EAF1FB; color:#2456A6; border:1px solid #CBDCF3;}
+  .status-banner.ok{background:#E7F2EB; color:var(--ok-600); border:1px solid #CFE5D9;}
+  .status-banner.err{background:#F7E9E9; color:var(--err-600); border:1px solid #E8C9C9;}
+  .status-banner.info{background:#E6EDF5; color:#5B7299; border:1px solid #D2DEE9;}
 
   .meta-row{
     display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 4px 16px;
@@ -269,10 +269,21 @@
     border-bottom:1px solid var(--amber-500);
   }
   .settings-info{
-    display:none; background:#FDF1DD; border:1px solid var(--amber-500); color:var(--navy-950);
+    display:none; background:#F5E9DC; border:1px solid var(--amber-500); color:var(--navy-950);
     font-size:13px; font-weight:600; padding:11px 13px; margin:0 4px 14px; border-radius:8px;
   }
   body.settings-mode .settings-info{ display:block; }
+
+  /* ---------- DETAY FORMU KİLİT EKRANI ---------- */
+  .detay-gate{
+    max-width:640px; margin:0 auto 20px; padding:0 15px;
+  }
+  .detay-gate-info{
+    background:var(--steel-100); border:1px solid var(--steel-200); border-radius:10px;
+    padding:13px 15px; font-size:13.5px; color:var(--ink-soft); font-weight:600;
+    line-height:1.55; margin:0 0 14px;
+  }
+  .detay-gate .field{ margin-bottom:12px; }
   .required-toggle{
     display:none; margin-right:7px; width:16px; height:16px; vertical-align:middle;
     accent-color:var(--amber-500); cursor:pointer;
@@ -428,7 +439,7 @@
 
 <details class="mega-card" open id="megaDepolamaBilgilendirme">
   <summary class="mega-summary">
-    <span>DEPOLAMA ALANI ÖN BİLGİ</span>
+    <span>DEPOLAMA ALANI ÖN BİLGİ FORMU</span>
     <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </summary>
   <div class="mega-body">
@@ -447,24 +458,6 @@
       </div>
 
       <div class="field">
-        <label>Bina Adı</label>
-        <input type="text" id="bilgiBinaAdi" placeholder="Tanımlayıcı bina adı">
-      </div>
-
-      <div class="field">
-        <label>Bu bina için daha önce doldurulmuş bir <b>Depo Formu</b> var mı?</label>
-        <select id="bilgiDepoFormuVarMi">
-          <option value="">Seçiniz</option>
-          <option>Evet</option>
-          <option>Hayır</option>
-        </select>
-      </div>
-      <div class="field" id="bilgiDepoFormuNoWrap" style="display:none;">
-        <label>Depo Formu Kayıt No</label>
-        <input type="text" id="bilgiDepoFormuNo" placeholder="ör. MVS-0001">
-      </div>
-
-      <div class="field">
         <label>Şehir</label>
         <select id="bilgiSehir"><option value="">Seçiniz</option></select>
       </div>
@@ -477,6 +470,13 @@
         </div>
         <input type="hidden" id="bilgiGpsKonum">
         <a id="bilgiGpsMapLink" href="#" target="_blank" rel="noopener" style="display:none;">🗺️ Haritada Aç</a>
+      </div>
+
+      <div class="field">
+        <label>Fotoğraf / Belge</label>
+        <input type="file" id="bilgiPhotoInput" accept="image/*,.pdf" multiple capture="environment">
+        <div class="photo-gallery" id="bilgiPhotoGallery"></div>
+        <input type="hidden" id="bilgiFotograflar">
       </div>
 
       <div class="field split">
@@ -548,7 +548,7 @@
 
 <details class="mega-card" id="megaDepoFormu">
   <summary class="mega-summary">
-    <span>DEPOLAMA ALANI DETAY</span>
+    <span>DEPOLAMA ALANI DETAY BİLGİ PAYLAŞIM FORMU</span>
     <svg class="mega-chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </summary>
   <div class="mega-body">
@@ -603,23 +603,16 @@
   <div class="settings-info" id="settingsInfo">⚙ Zorunlu olmasını istediğiniz alanların yanındaki kutucukları işaretleyin, sonra üstteki "Zorunlu Alanları Kaydet" butonuna basın.</div>
   <div class="status-banner" id="statusBanner"></div>
 
-  <div class="field link-gate">
-    <label>Bu bina için daha önce doldurulmuş bir <b>Depolama Alanı Bilgilendirme Formu</b> var mı?</label>
-    <select id="depoBilgiVarMi">
-      <option value="">Seçiniz</option>
-      <option>Evet</option>
-      <option>Hayır</option>
-    </select>
-  </div>
-  <div class="field split" id="depoBilgiNoWrap" style="display:none;">
-    <div>
-      <label>Bilgilendirme Formu Kayıt No</label>
+  <div class="detay-gate" id="detayGate">
+    <p class="detay-gate-info">Bu forma devam edebilmek için önce ilgili binanın <b>Depolama Alanı Ön Bilgi Formu</b> kaydını girmelisiniz. Ön Bilgi Formu doldurulmadan Detay formu doldurulamaz.</p>
+    <div class="field">
+      <label>Ön Bilgi Formu Kayıt No</label>
       <input type="text" id="bilgilendirmeFormuNo" placeholder="ör. BLG-0001">
     </div>
-    <div style="display:flex; align-items:flex-end;">
-      <button class="btn btn-secondary" id="depoBilgiFetchBtn" type="button" style="width:100%;">Getir ve Doldur</button>
-    </div>
+    <button class="btn btn-primary" id="depoBilgiFetchBtn" type="button" style="width:100%;">Getir ve Devam Et</button>
   </div>
+
+  <div id="detayFormBody" style="display:none;">
 
   <div class="meta-row" style="grid-template-columns:1fr;">
     <div class="field" style="display:none;">
@@ -688,13 +681,6 @@
       <div class="field split">
         <div><label>Sokak</label><input type="text" id="sokak"></div>
         <div><label>Numara</label><input type="text" id="numara"></div>
-      </div>
-
-      <div class="field">
-        <label>Fotoğraflar</label>
-        <input type="file" id="photoInput" accept="image/*" multiple capture="environment">
-        <div class="photo-gallery" id="photoGallery"></div>
-        <input type="hidden" id="fotograflar">
       </div>
 
       <div class="field split4">
@@ -967,6 +953,8 @@
     </div>
   </details>
 
+  </div>
+
   <button class="view-tab-bottom" id="tabAllBtn" type="button">📋 Kayıtları Görüntüle / Kayıt Sorgula</button>
   </section>
 </main>
@@ -1012,7 +1000,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo","fotograflar"
+    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo"
   ];
 
   const NUMERIC_FIELD_IDS = [
@@ -1078,7 +1066,7 @@
     kameraVarMi: "Kamera Sistemi Var mı", kameraAdet: "Kamera Adedi",
     kayitSuresiGun: "Kayıt Süresi (Gün)", kameraInternetIzleme: "Kameralar İnternetten İzlenebiliyor mu",
     jeneratorVarMi: "Jeneratör Var mı", jeneratorKva: "Jeneratör Gücü (kVA)",
-    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No", fotograflar: "Fotoğraflar"
+    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No"
   };
   const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","binaAdi","surecDurumu","mahalle","cadde","sokak","numara",
     "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi","zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
@@ -1092,7 +1080,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","bilgilendirmeFormuNo","fotograflar"];
+    "genelNot","bilgilendirmeFormuNo"];
 
   // ============================================================
   // GOOGLE SHEETS BAĞLANTISI
@@ -1178,26 +1166,7 @@
     yanginSuDeposuKapasiteWrap.style.display = (yanginSuDeposuSelect.value === "Var") ? "" : "none";
   }
 
-  // ---- FOTOĞRAF YÜKLEME (Google Drive'a) ----
-  const photoInput = $("photoInput");
-  const photoGallery = $("photoGallery");
-  let photoUrls = [];
-
-  function renderPhotoGallery(){
-    photoGallery.querySelectorAll(".photo-thumb").forEach(el => el.remove());
-    photoUrls.forEach((url, idx) => {
-      const thumb = document.createElement("div");
-      thumb.className = "photo-thumb";
-      thumb.innerHTML = '<img src="' + url + '" alt="Fotoğraf"><button type="button" title="Kaldır">✕</button>';
-      thumb.querySelector("button").addEventListener("click", () => {
-        photoUrls.splice(idx, 1);
-        $("fotograflar").value = photoUrls.join("\n");
-        renderPhotoGallery();
-      });
-      photoGallery.appendChild(thumb);
-    });
-  }
-
+  // Dosyayı base64'e çevirir (Bilgilendirme Formu fotoğraf yüklemesinde kullanılıyor)
   function fileToBase64_(file){
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -1206,29 +1175,6 @@
       reader.readAsDataURL(file);
     });
   }
-
-  photoInput.addEventListener("change", async () => {
-    const files = Array.from(photoInput.files || []);
-    if(!files.length) return;
-    const statusMsg = document.createElement("p");
-    statusMsg.className = "photo-uploading";
-    statusMsg.textContent = "Yükleniyor…";
-    photoGallery.appendChild(statusMsg);
-    for(const file of files){
-      try{
-        const base64 = await fileToBase64_(file);
-        const result = await apiPost({
-          action: "uploadPhoto",
-          data: { formNo: currentFormNo || "gecici", fileName: file.name, mimeType: file.type, base64Data: base64 }
-        });
-        if(result.ok && result.url){ photoUrls.push(result.url); }
-      }catch(e){ /* bu dosyayı atla, devam et */ }
-    }
-    statusMsg.remove();
-    $("fotograflar").value = photoUrls.join("\n");
-    renderPhotoGallery();
-    photoInput.value = "";
-  });
 
   // ---- PDF RAPORU OLUŞTURMA ----
   const pdfBtn = $("pdfBtn");
@@ -1287,14 +1233,23 @@
   catiMalzemesiSelect.addEventListener("change", updateCatiDigerVisibility);
   yanginSuDeposuSelect.addEventListener("change", updateSuDeposuKapasiteVisibility);
 
-  // ---- DEPOLAMA ALANI BİLGİLENDİRME FORMU İLE BAĞLANTI ----
-  const depoBilgiVarMiSelect = $("depoBilgiVarMi");
-  const depoBilgiNoWrap = $("depoBilgiNoWrap");
+  // ---- DEPOLAMA ALANI ÖN BİLGİ FORMU İLE ZORUNLU BAĞLANTI ----
+  const detayGate = $("detayGate");
+  const detayFormBody = $("detayFormBody");
   const depoBilgiFetchBtn = $("depoBilgiFetchBtn");
+  let detayUnlocked = false;
 
-  depoBilgiVarMiSelect.addEventListener("change", () => {
-    depoBilgiNoWrap.style.display = (depoBilgiVarMiSelect.value === "Evet") ? "" : "none";
-  });
+  function lockDetayForm_(){
+    detayUnlocked = false;
+    detayGate.style.display = "";
+    detayFormBody.style.display = "none";
+  }
+
+  function unlockDetayForm_(){
+    detayUnlocked = true;
+    detayGate.style.display = "none";
+    detayFormBody.style.display = "";
+  }
 
   function findBolgeForCity_(city){
     for(const bolgeAdi in REGION_CITIES){
@@ -1333,18 +1288,19 @@
 
   depoBilgiFetchBtn.addEventListener("click", async () => {
     const formNo = normalizeFormNo_($("bilgilendirmeFormuNo").value, "BLG");
-    if(!formNo){ showBanner("err","Lütfen Bilgilendirme Formu kayıt numarasını girin."); return; }
+    if(!formNo){ showBanner("err","Lütfen Ön Bilgi Formu kayıt numarasını girin."); return; }
     $("bilgilendirmeFormuNo").value = formNo;
     depoBilgiFetchBtn.disabled = true;
     try{
       const result = await apiGet({action:"getBilgilendirme", formNo});
       if(!result.ok || !result.record){
-        showBanner("err", formNo + " numaralı bilgilendirme kaydı bulunamadı.");
+        showBanner("err", formNo + " numaralı Ön Bilgi Formu kaydı bulunamadı. Lütfen önce Ön Bilgi Formu'nu doldurun.");
         depoBilgiFetchBtn.disabled = false;
         return;
       }
       applyBilgiToDepoForm_(result.record);
-      showBanner("ok", formNo + " numaralı bilgilendirme kaydındaki veriler forma dolduruldu.");
+      unlockDetayForm_();
+      showBanner("ok", formNo + " numaralı Ön Bilgi kaydındaki veriler forma dolduruldu. Devam edebilirsiniz.");
     }catch(e){
       showBanner("err","Veri getirilirken bir hata oluştu. Bağlantıyı kontrol edin.");
     }
@@ -1533,8 +1489,6 @@
     updateCatiDigerVisibility();
     updateSuDeposuKapasiteVisibility();
     cityCountInfo.style.display = "none";
-    photoUrls = (data && data.fotograflar) ? String(data.fotograflar).split("\n").filter(Boolean) : [];
-    renderPhotoGallery();
   }
 
   function clearForm(){
@@ -1543,6 +1497,7 @@
     displayFormNo.textContent = "Kayıt sonrası otomatik atanır";
     formNoInput.value = "";
     pdfBtn.style.display = "none";
+    lockDetayForm_();
     document.querySelectorAll("section.card").forEach((el,i)=>{ el.open = (i===0); });
   }
 
@@ -1597,6 +1552,7 @@
       displayFormNo.textContent = formNo;
       formNoInput.value = formNo;
       pdfBtn.style.display = "block";
+      unlockDetayForm_();
       document.querySelectorAll("section.card").forEach(el => el.open = true);
       showBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
     }catch(e){
@@ -1606,6 +1562,10 @@
   }
 
   async function saveForm(){
+    if(!detayUnlocked){
+      showBanner("err","Önce yukarıdan bir Ön Bilgi Formu Kayıt No girip \"Getir ve Devam Et\" demelisiniz.");
+      return;
+    }
     const missing = [];
     requiredFieldsSet.forEach(id => {
       if(id === "doldurmaKisi"){
@@ -1858,14 +1818,13 @@
   formNoInput.addEventListener("keydown", (e) => { if(e.key === "Enter") loadByFormNo(formNoInput.value); });
 
   loadRequiredConfig();
+  lockDetayForm_();
 
   // ============================================================
   // DEPOLAMA ALANI BİLGİLENDİRME FORMU (ön bilgi toplama formu)
   // ============================================================
   const bilgiBanner = $("bilgiBanner");
   const bilgiDisplayFormNo = $("bilgiDisplayFormNo");
-  const bilgiDepoFormuVarMiSelect = $("bilgiDepoFormuVarMi");
-  const bilgiDepoFormuNoWrap = $("bilgiDepoFormuNoWrap");
   const bilgiSehirSelect = $("bilgiSehir");
   const bilgiSaveBtn = $("bilgiSaveBtn");
   const bilgiNewBtn = $("bilgiNewBtn");
@@ -1939,12 +1898,54 @@
     );
   });
 
+  // ---- FOTOĞRAF / BELGE YÜKLEME (Depolama Alanı Ön Bilgi Formu) ----
+  const bilgiPhotoInput = $("bilgiPhotoInput");
+  const bilgiPhotoGallery = $("bilgiPhotoGallery");
+  let bilgiPhotoUrls = [];
+
+  function renderBilgiPhotoGallery(){
+    bilgiPhotoGallery.querySelectorAll(".photo-thumb").forEach(el => el.remove());
+    bilgiPhotoUrls.forEach((url, idx) => {
+      const thumb = document.createElement("div");
+      thumb.className = "photo-thumb";
+      thumb.innerHTML = '<img src="' + url + '" alt="Fotoğraf/Belge"><button type="button" title="Kaldır">✕</button>';
+      thumb.querySelector("button").addEventListener("click", () => {
+        bilgiPhotoUrls.splice(idx, 1);
+        $("bilgiFotograflar").value = bilgiPhotoUrls.join("\n");
+        renderBilgiPhotoGallery();
+      });
+      bilgiPhotoGallery.appendChild(thumb);
+    });
+  }
+
+  bilgiPhotoInput.addEventListener("change", async () => {
+    const files = Array.from(bilgiPhotoInput.files || []);
+    if(!files.length) return;
+    const statusMsg = document.createElement("p");
+    statusMsg.className = "photo-uploading";
+    statusMsg.textContent = "Yükleniyor…";
+    bilgiPhotoGallery.appendChild(statusMsg);
+    for(const file of files){
+      try{
+        const base64 = await fileToBase64_(file);
+        const result = await apiPost({
+          action: "uploadPhoto",
+          data: { formNo: currentBilgiFormNo || "gecici", fileName: file.name, mimeType: file.type, base64Data: base64 }
+        });
+        if(result.ok && result.url){ bilgiPhotoUrls.push(result.url); }
+      }catch(e){ /* bu dosyayı atla, devam et */ }
+    }
+    statusMsg.remove();
+    $("bilgiFotograflar").value = bilgiPhotoUrls.join("\n");
+    renderBilgiPhotoGallery();
+    bilgiPhotoInput.value = "";
+  });
+
   const BILGI_KEY_MAP = {
     bilgiDoldurmaKisi: "doldurmaKisi",
-    bilgiBinaAdi: "binaAdi",
-    bilgiDepoFormuNo: "depoFormuNo",
     bilgiSehir: "sehir",
     bilgiGpsKonum: "gpsKonum",
+    bilgiFotograflar: "fotograflar",
     bilgiAcikAlan: "acikAlan",
     bilgiKapaliAlan: "kapaliAlan",
     bilgiForkliftKapisiVarMi: "forkliftKapisiVarMi",
@@ -1959,14 +1960,14 @@
     bilgiGuvenlikKlubesiVarMi: "guvenlikKlubesiVarMi"
   };
   const BILGI_LABELS = {
-    doldurmaKisi: "Formu Dolduran", binaAdi: "Bina Adı",
-    sehir: "Şehir", gpsKonum: "Konum (GPS)", acikAlan: "Açık Alan", kapaliAlan: "Kapalı Alan",
+    doldurmaKisi: "Formu Dolduran",
+    sehir: "Şehir", gpsKonum: "Konum (GPS)", fotograflar: "Fotoğraf/Belge",
+    acikAlan: "Açık Alan", kapaliAlan: "Kapalı Alan",
     forkliftKapisiVarMi: "Forklift Giriş Kapısı Var mı", forkliftKapisiAdet: "Forklift Kapısı Sayısı",
     rampaKapisiVarMi: "Rampa Kapısı Var mı", rampaKapisiAdet: "Rampa Kapısı Sayısı",
     yagmurInisiSistemi: "Yağmur İnişleri Sistemi", logarVarMi: "Depo İçerisinde Logar Var mı",
     yanginSprinklerVarMi: "Yangın Sprinkler Sistemi Var mı", yanginDolabiVarMi: "Yangın Dolabı Var mı",
-    rampaYanasmaMesafesi: "Rampa Yanaşma Mesafesi", guvenlikKlubesiVarMi: "Güvenlik Klübesi Var mı",
-    depoFormuNo: "Depo Formu Kayıt No"
+    rampaYanasmaMesafesi: "Rampa Yanaşma Mesafesi", guvenlikKlubesiVarMi: "Güvenlik Klübesi Var mı"
   };
 
 
@@ -1995,9 +1996,8 @@
     });
     syncBilgiDoldurmaKisi_(data && data.doldurmaKisi);
     syncBilgiGpsDisplay();
-    const hasLink = !!(data && data.depoFormuNo);
-    bilgiDepoFormuVarMiSelect.value = hasLink ? "Evet" : "";
-    bilgiDepoFormuNoWrap.style.display = hasLink ? "" : "none";
+    bilgiPhotoUrls = (data && data.fotograflar) ? String(data.fotograflar).split("\n").filter(Boolean) : [];
+    renderBilgiPhotoGallery();
   }
 
   function clearBilgiForm(){
@@ -2009,7 +2009,7 @@
 
   function validateBilgiForm_(data){
     const missing = [];
-    ["doldurmaKisi","binaAdi","sehir","acikAlan","kapaliAlan","forkliftKapisiVarMi","rampaKapisiVarMi",
+    ["doldurmaKisi","sehir","acikAlan","kapaliAlan","forkliftKapisiVarMi","rampaKapisiVarMi",
      "yagmurInisiSistemi","logarVarMi","yanginSprinklerVarMi","yanginDolabiVarMi",
      "rampaYanasmaMesafesi","guvenlikKlubesiVarMi"].forEach(key => {
       if(!String(data[key] || "").trim()) missing.push(BILGI_LABELS[key]);
@@ -2019,9 +2019,6 @@
     }
     if(data.rampaKapisiVarMi === "Var" && !String(data.rampaKapisiAdet || "").trim()){
       missing.push(BILGI_LABELS.rampaKapisiAdet);
-    }
-    if(bilgiDepoFormuVarMiSelect.value === "Evet" && !String(data.depoFormuNo || "").trim()){
-      missing.push(BILGI_LABELS.depoFormuNo);
     }
     return missing;
   }
@@ -2081,9 +2078,6 @@
     bilgiSearchBtn.disabled = false;
   }
 
-  bilgiDepoFormuVarMiSelect.addEventListener("change", () => {
-    bilgiDepoFormuNoWrap.style.display = (bilgiDepoFormuVarMiSelect.value === "Evet") ? "" : "none";
-  });
   bilgiSaveBtn.addEventListener("click", saveBilgiForm);
   bilgiNewBtn.addEventListener("click", () => { clearBilgiForm(); hideBilgiBanner(); });
   bilgiSearchBtn.addEventListener("click", () => loadBilgiByFormNo(bilgiSearchInput.value));
