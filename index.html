@@ -1547,14 +1547,14 @@
     if(!formNo){ showBanner("err","Lütfen bir Kayıt No girin."); return; }
     if(btnEl) btnEl.disabled = true;
     try{
-      // Bu numaraya bağlı, daha önce başlanmış bir Detay kaydı var mı diye önce onu bulmaya çalışıyoruz.
-      let existingDetay = null;
-      try{
-        const existingResult = await apiGet({action:"get", formNo});
-        if(existingResult.ok && existingResult.record){ existingDetay = existingResult.record; }
-      }catch(e){ /* yoksay, yeni kayıt gibi devam et */ }
+      // Bu numaraya bağlı Detay kaydını ve Ön Bilgi kaydını AYNI ANDA (paralel) çekiyoruz —
+      // sırayla beklemek yerine, ikisini birden isteyip ikisinin de dönmesini bekliyoruz.
+      const [existingResult, result] = await Promise.all([
+        apiGet({action:"get", formNo}).catch(() => ({ ok:false })),
+        apiGet({action:"getBilgilendirme", formNo})
+      ]);
+      const existingDetay = (existingResult.ok && existingResult.record) ? existingResult.record : null;
 
-      const result = await apiGet({action:"getBilgilendirme", formNo});
       if(!result.ok || !result.record){
         showBanner("err", formNo + " numaralı Ön Bilgi Formu kaydı bulunamadı. Lütfen önce Ön Bilgi Formu'nu doldurun.");
         if(btnEl) btnEl.disabled = false;
@@ -1567,7 +1567,6 @@
       }
       applyBilgiToDepoForm_(result.record);
       unlockDetayForm_();
-      // PDF sadece daha önce kaydedilmiş gerçek bir Detay kaydı varsa oluşturulabilir.
       $("bilgilendirmeFormuNo").value = formNo;
       $("megaDepoFormu").open = true;
       showFormView();
