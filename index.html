@@ -297,7 +297,7 @@
 
   /* ---------- YENİ: KAYIT GÖRÜNTÜLE / SORGULA KUTUSU (her iki formun en üstünde) ---------- */
   .kayit-sorgula-box{
-    max-width:640px; margin:0 auto 4px; padding:14px 15px; margin-left:15px; margin-right:15px;
+    max-width:610px; width:calc(100% - 30px); margin:0 auto 4px; padding:14px 15px;
     background:var(--navy-950); border-radius:12px;
   }
   .kayit-sorgula-title{
@@ -322,6 +322,22 @@
     border:1px solid var(--navy-700); color:var(--steel-200); border-radius:8px;
     padding:9px; font-size:12.5px; font-weight:600; cursor:pointer;
   }
+  .sorgu-numbers-title{
+    color:#9BAAC0; font-size:11.5px; font-weight:700; margin:14px 0 8px; letter-spacing:.02em;
+  }
+  .sorgu-numbers-list{ display:flex; flex-wrap:wrap; gap:6px; max-height:150px; overflow-y:auto; }
+  .sorgu-number-chip{
+    background:var(--navy-800); color:#fff; border:1px solid var(--navy-700);
+    border-radius:6px; padding:6px 10px; font-size:12.5px; font-weight:600; cursor:pointer;
+  }
+  .sorgu-number-chip:active{ background:var(--amber-500); color:var(--navy-950); }
+
+  /* ---------- TAM SAYFA KAYITLAR & İSTATİSTİK KATMANI ---------- */
+  .fullpage-overlay{
+    position:fixed; inset:0; background:var(--paper); z-index:400;
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
+  .fullpage-inner{ max-width:640px; margin:0 auto; padding:16px 14px 40px; }
 
   /* ---------- ÖN BİLGİ'DEN OTOMATİK GELEN, KİLİTLİ ALANLAR ---------- */
   .auto-locked-input{
@@ -496,12 +512,49 @@
     <button class="btn-sorgu btn-sorgu-bilgi" id="sharedOpenOnBilgiBtn" type="button">📝 Ön Bilgi Formunu Görüntüle / Değiştir</button>
     <button class="btn-sorgu btn-sorgu-detay" id="sharedOpenDetayBtn" type="button">📋 Detay Formunu Görüntüle / Değiştir</button>
   </div>
+  <p class="sorgu-numbers-title">Mevcut kayıt numaraları (tıklayınca yukarı yazılır):</p>
+  <div class="sorgu-numbers-list" id="sorguNumbersList"><span class="sorgu-numbers-title">Yükleniyor…</span></div>
 </div>
 
 <div class="settings-actions" id="settingsActions" style="display:none;">
   <button class="btn btn-secondary" id="settingsCancelBtn" type="button">✕ Vazgeç</button>
   <button class="btn btn-primary" id="settingsSaveBtn" type="button">💾 Zorunlu Alanları Kaydet</button>
 </div>
+
+<section id="allRecordsView" class="fullpage-overlay" style="display:none;">
+  <div class="fullpage-inner">
+    <button class="btn-back" id="tabFormBtn" type="button">← Geri Dön</button>
+
+    <div class="formno-bar">
+      <input type="text" id="formNoInput" placeholder="Kayıt No ile ara (ör. MVS-0001)" autocomplete="off">
+      <button class="btn-fetch" id="fetchBtn" type="button">Getir</button>
+    </div>
+
+    <div class="stats-block">
+      <div class="recent-head">
+        <h2>📊 Özet İstatistikler</h2>
+        <button class="btn-export" id="statsRefreshBtn" type="button">⟳ Yenile</button>
+      </div>
+      <div id="statsContent"><p class="recent-empty">Yükleniyor…</p></div>
+    </div>
+
+    <div class="recent">
+      <h2>Son Kayıtlar</h2>
+      <div id="recentList"><p class="recent-empty">Yükleniyor…</p></div>
+    </div>
+
+    <div class="all-records-block">
+      <div class="recent-head">
+        <h2>Tüm Kayıtlar</h2>
+      </div>
+      <div class="all-records-search">
+        <input type="text" id="arSearchInput" placeholder="Bina adı, kayıt no veya dolduran kişi ile ara…">
+      </div>
+      <p class="ar-count" id="arCount"></p>
+      <div id="arList"><p class="recent-empty">Yükleniyor…</p></div>
+    </div>
+  </div>
+</section>
 
 <details class="mega-card" open id="megaDepolamaBilgilendirme">
   <summary class="mega-summary">
@@ -625,38 +678,6 @@
 
 
 <main>
-  <section id="allRecordsView" style="display:none;">
-    <button class="btn-back" id="tabFormBtn" type="button">← Forma Dön</button>
-
-    <div class="formno-bar">
-      <input type="text" id="formNoInput" placeholder="Kayıt No ile ara (ör. MVS-0001)" autocomplete="off">
-      <button class="btn-fetch" id="fetchBtn" type="button">Getir</button>
-    </div>
-
-    <div class="stats-block">
-      <div class="recent-head">
-        <h2>📊 Özet İstatistikler</h2>
-        <button class="btn-export" id="statsRefreshBtn" type="button">⟳ Yenile</button>
-      </div>
-      <div id="statsContent"><p class="recent-empty">Yükleniyor…</p></div>
-    </div>
-
-    <div class="recent">
-      <h2>Son Kayıtlar</h2>
-      <div id="recentList"><p class="recent-empty">Yükleniyor…</p></div>
-    </div>
-
-    <div class="all-records-block">
-      <div class="recent-head">
-        <h2>Tüm Kayıtlar</h2>
-      </div>
-      <div class="all-records-search">
-        <input type="text" id="arSearchInput" placeholder="Bina adı, kayıt no veya dolduran kişi ile ara…">
-      </div>
-      <p class="ar-count" id="arCount"></p>
-      <div id="arList"><p class="recent-empty">Yükleniyor…</p></div>
-    </div>
-  </section>
 
   <section id="formView">
   <div class="settings-info" id="settingsInfo">⚙ Zorunlu olmasını istediğiniz alanların yanındaki kutucukları işaretleyin, sonra üstteki "Zorunlu Alanları Kaydet" butonuna basın.</div>
@@ -1269,7 +1290,7 @@
       if(result.ok && result.url){
         window.open(result.url, "_blank");
       } else {
-        showBanner("err","PDF oluşturulamadı.");
+        showBanner("err","PDF oluşturulamadı: " + (result.error || "önce formu kaydetmeniz gerekebilir."));
       }
     }catch(e){
       showBanner("err","PDF oluşturulurken bir hata oluştu. Bağlantıyı kontrol edin.");
@@ -1432,7 +1453,8 @@
       }
       applyBilgiToDepoForm_(result.record);
       unlockDetayForm_();
-      pdfBtn.style.display = "block";
+      // PDF sadece daha önce kaydedilmiş gerçek bir Detay kaydı varsa oluşturulabilir.
+      pdfBtn.style.display = existingDetay ? "block" : "none";
       $("bilgilendirmeFormuNo").value = formNo;
       $("megaDepoFormu").open = true;
       showFormView();
@@ -1807,14 +1829,12 @@
 
   function showFormView(){
     allRecordsView.style.display = "none";
-    formView.style.display = "";
-    topActions.style.display = "flex";
+    document.body.style.overflow = "";
   }
 
   function showAllRecordsView(){
-    formView.style.display = "none";
-    allRecordsView.style.display = "";
-    topActions.style.display = "none";
+    allRecordsView.style.display = "block";
+    document.body.style.overflow = "hidden";
     hideBanner();
     loadRecent();
     loadAllRecords();
@@ -2393,10 +2413,40 @@
 
   // ---- GLOBAL BARDAKİ TEK "KAYIT GÖRÜNTÜLE / SORGULA" WIDGET'I ----
   const sharedSorguBox = $("sharedSorguBox");
+
+  async function loadSorguNumbers_(){
+    const listEl = $("sorguNumbersList");
+    listEl.innerHTML = '<span class="sorgu-numbers-title">Yükleniyor…</span>';
+    try{
+      const result = await apiGet({action:"listBilgilendirme"});
+      const records = (result.ok && result.records) ? result.records : [];
+      if(!records.length){
+        listEl.innerHTML = '<span class="sorgu-numbers-title">Henüz kayıt yok.</span>';
+        return;
+      }
+      const sorted = records.slice().sort((a,b) => String(b.formNo||"").localeCompare(String(a.formNo||"")));
+      listEl.innerHTML = "";
+      sorted.forEach(r => {
+        if(!r.formNo) return;
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "sorgu-number-chip";
+        chip.textContent = r.formNo;
+        chip.addEventListener("click", () => { $("sharedSorguInput").value = r.formNo; });
+        listEl.appendChild(chip);
+      });
+    }catch(e){
+      listEl.innerHTML = '<span class="sorgu-numbers-title">Kayıt numaraları yüklenemedi.</span>';
+    }
+  }
+
   $("sorguToggleBtn").addEventListener("click", () => {
     const isHidden = sharedSorguBox.style.display === "none";
     sharedSorguBox.style.display = isHidden ? "block" : "none";
-    if(isHidden){ $("sharedSorguInput").focus(); }
+    if(isHidden){
+      $("sharedSorguInput").focus();
+      loadSorguNumbers_();
+    }
   });
   $("sharedOpenOnBilgiBtn").addEventListener("click", () => {
     loadBilgiByFormNo($("sharedSorguInput").value, $("sharedOpenOnBilgiBtn"));
@@ -2406,9 +2456,7 @@
   });
 
   $("statsToggleBtn").addEventListener("click", () => {
-    $("megaDepoFormu").open = true;
     showAllRecordsView();
-    $("megaDepoFormu").scrollIntoView({ behavior:"smooth", block:"start" });
   });
 })();
 </script>
