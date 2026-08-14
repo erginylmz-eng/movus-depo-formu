@@ -331,6 +331,27 @@
     border-radius:6px; padding:6px 10px; font-size:12.5px; font-weight:600; cursor:pointer;
   }
   .sorgu-number-chip:active{ background:var(--amber-500); color:var(--navy-950); }
+  .detay-gate .sorgu-numbers-title{ color:var(--ink-soft); }
+
+  /* ---------- İLETİŞİM KURULAN KİŞİLER ---------- */
+  .contact-card{
+    background:var(--steel-100); border:1px solid var(--steel-200); border-radius:8px;
+    padding:10px 12px; margin-bottom:8px; display:flex; justify-content:space-between;
+    align-items:flex-start; gap:10px;
+  }
+  .contact-card b{ font-size:13.5px; }
+  .contact-card .contact-details{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; margin-top:2px; }
+  .contact-remove-btn{
+    flex:none; background:none; border:none; color:var(--err-600); font-size:16px;
+    font-weight:800; cursor:pointer; padding:0 2px;
+  }
+  .contact-add-form{
+    background:var(--steel-100); border:1px solid var(--steel-200); border-radius:10px;
+    padding:12px; margin-top:8px;
+  }
+  .contact-add-form .field{ margin-bottom:10px; }
+  .contact-form-msg{ font-size:12.5px; font-weight:700; margin:6px 0 0; text-align:center; }
+  .contact-form-msg.msg-err{ color:var(--err-600); }
 
   /* ---------- TAM SAYFA KAYITLAR & İSTATİSTİK KATMANI ---------- */
   .fullpage-overlay{
@@ -652,6 +673,22 @@
         <select id="bilgiGuvenlikKlubesiVarMi"><option value="">Seçiniz</option><option>Var</option><option>Yok</option></select>
       </div>
 
+      <div class="field">
+        <label>İletişim Kurulan Kişiler (en fazla 5)</label>
+        <div class="contact-list" id="bilgiContactList"></div>
+        <button type="button" class="btn btn-secondary" id="bilgiAddContactBtn" style="width:100%;margin-top:6px;">+ Kişi Ekle</button>
+        <div class="contact-add-form" id="bilgiContactAddForm" style="display:none;">
+          <div class="field"><label>Ad Soyad <span class="req-mark">*</span></label><input type="text" id="bilgiContactAdSoyad"></div>
+          <div class="field"><label>Cep Telefonu <span class="req-mark">*</span></label><input type="text" id="bilgiContactTelefon"></div>
+          <div class="field"><label>Mail Adresi</label><input type="text" id="bilgiContactMail"></div>
+          <div class="field"><label>Firma</label><input type="text" id="bilgiContactFirma"></div>
+          <div class="field"><label>Görev</label><input type="text" id="bilgiContactGorev"></div>
+          <button type="button" class="btn btn-primary" id="bilgiContactSaveBtn" style="width:100%;">Kişiyi Ekle</button>
+          <p class="contact-form-msg" id="bilgiContactMsg" style="display:none;"></p>
+        </div>
+        <input type="hidden" id="bilgiIletisimKisileri">
+      </div>
+
       <button class="btn btn-primary" id="bilgiSaveBtn" type="button" style="width:100%;margin-top:6px;">Kaydet</button>
       <button class="btn btn-secondary" id="bilgiNewBtn" type="button" style="width:100%;margin-top:8px;">Yeni Kayıt</button>
 
@@ -689,7 +726,9 @@
       <label>Ön Bilgi Formu Kayıt No</label>
       <input type="text" id="bilgilendirmeFormuNo" placeholder="ör. BLG-0001">
     </div>
-    <button class="btn btn-primary" id="depoBilgiFetchBtn" type="button" style="width:100%;">Getir ve Devam Et</button>
+    <p class="sorgu-numbers-title">Önceden kaydedilmiş Ön Bilgi Formu numaraları (tıklayınca yukarı yazılır):</p>
+    <div class="sorgu-numbers-list" id="gateNumbersList"><span class="sorgu-numbers-title">Yükleniyor…</span></div>
+    <button class="btn btn-primary" id="depoBilgiFetchBtn" type="button" style="width:100%;margin-top:10px;">Getir ve Devam Et</button>
   </div>
 
   <div id="detayFormBody" style="display:none;">
@@ -1052,8 +1091,23 @@
     </div>
   </details>
 
+  <div class="field">
+    <label>İletişim Kurulan Kişiler (en fazla 5)</label>
+    <div class="contact-list" id="detayContactList"></div>
+    <button type="button" class="btn btn-secondary" id="detayAddContactBtn" style="width:100%;margin-top:6px;">+ Kişi Ekle</button>
+    <div class="contact-add-form" id="detayContactAddForm" style="display:none;">
+      <div class="field"><label>Ad Soyad <span class="req-mark">*</span></label><input type="text" id="detayContactAdSoyad"></div>
+      <div class="field"><label>Cep Telefonu <span class="req-mark">*</span></label><input type="text" id="detayContactTelefon"></div>
+      <div class="field"><label>Mail Adresi</label><input type="text" id="detayContactMail"></div>
+      <div class="field"><label>Firma</label><input type="text" id="detayContactFirma"></div>
+      <div class="field"><label>Görev</label><input type="text" id="detayContactGorev"></div>
+      <button type="button" class="btn btn-primary" id="detayContactSaveBtn" style="width:100%;">Kişiyi Ekle</button>
+      <p class="contact-form-msg" id="detayContactMsg" style="display:none;"></p>
+    </div>
+    <input type="hidden" id="iletisimKisileri">
+  </div>
+
   <button class="btn btn-primary" id="saveBtn" type="button" style="width:100%;margin-top:8px;">Kaydet</button>
-  <button class="btn-pdf" id="pdfBtn" type="button" style="display:none;margin-top:10px;">📄 Bu Kaydın PDF Raporunu Oluştur</button>
 
   </div>
 
@@ -1101,7 +1155,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikKlubesiVarMi","guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo"
+    "genelNot","doldurmaKisi","bolge","sehir","bilgilendirmeFormuNo","iletisimKisileri"
   ];
 
   const NUMERIC_FIELD_IDS = [
@@ -1124,6 +1178,88 @@
     }
     return cleaned;
   }
+
+  // ---- İLETİŞİM KURULAN KİŞİLER (her iki formda da kullanılan ortak bileşen) ----
+  function setupContactManager_(prefix, hiddenInputId){
+    const listEl = $(prefix + "ContactList");
+    const addBtn = $(prefix + "AddContactBtn");
+    const addForm = $(prefix + "ContactAddForm");
+    const hiddenInput = $(hiddenInputId);
+    const msgEl = $(prefix + "ContactMsg");
+    let contacts = [];
+
+    function render(){
+      listEl.innerHTML = "";
+      contacts.forEach((c, idx) => {
+        const card = document.createElement("div");
+        card.className = "contact-card";
+        const detailBits = [];
+        if(c.mail) detailBits.push(c.mail);
+        if(c.firma) detailBits.push(c.firma);
+        if(c.gorev) detailBits.push(c.gorev);
+        card.innerHTML =
+          '<div><b>' + escapeHtml(c.adSoyad) + '</b> — ' + escapeHtml(c.telefon) +
+          (detailBits.length ? '<div class="contact-details">' + escapeHtml(detailBits.join(" · ")) + '</div>' : '') +
+          '</div>';
+        const rmBtn = document.createElement("button");
+        rmBtn.type = "button";
+        rmBtn.className = "contact-remove-btn";
+        rmBtn.textContent = "✕";
+        rmBtn.addEventListener("click", () => { contacts.splice(idx, 1); sync(); });
+        card.appendChild(rmBtn);
+        listEl.appendChild(card);
+      });
+      addBtn.style.display = contacts.length >= 5 ? "none" : "block";
+    }
+
+    function sync(){
+      hiddenInput.value = contacts.length ? JSON.stringify(contacts) : "";
+      render();
+    }
+
+    function setContacts(arr){
+      contacts = Array.isArray(arr) ? arr.slice(0, 5) : [];
+      sync();
+    }
+
+    addBtn.addEventListener("click", () => {
+      addForm.style.display = (addForm.style.display === "none") ? "block" : "none";
+      msgEl.style.display = "none";
+    });
+
+    $(prefix + "ContactSaveBtn").addEventListener("click", () => {
+      const adSoyad = $(prefix + "ContactAdSoyad").value.trim();
+      const telefon = $(prefix + "ContactTelefon").value.trim();
+      if(!adSoyad || !telefon){
+        msgEl.className = "contact-form-msg msg-err";
+        msgEl.textContent = "Ad Soyad ve Cep Telefonu zorunludur.";
+        msgEl.style.display = "block";
+        return;
+      }
+      if(contacts.length >= 5) return;
+      contacts.push({
+        adSoyad: adSoyad,
+        telefon: telefon,
+        mail: $(prefix + "ContactMail").value.trim(),
+        firma: $(prefix + "ContactFirma").value.trim(),
+        gorev: $(prefix + "ContactGorev").value.trim()
+      });
+      $(prefix + "ContactAdSoyad").value = "";
+      $(prefix + "ContactTelefon").value = "";
+      $(prefix + "ContactMail").value = "";
+      $(prefix + "ContactFirma").value = "";
+      $(prefix + "ContactGorev").value = "";
+      msgEl.style.display = "none";
+      addForm.style.display = "none";
+      sync();
+    });
+
+    render();
+    return { setContacts: setContacts, getRaw: () => hiddenInput.value };
+  }
+
+  const detayContactMgr = setupContactManager_("detay", "iletisimKisileri");
+  const bilgiContactMgr = setupContactManager_("bilgi", "bilgiIletisimKisileri");
 
   const REGION_CITIES = {
     "Marmara Bölgesi": ["Balıkesir","Bilecik","Bursa","Çanakkale","Edirne","İstanbul","Kırklareli","Kocaeli","Sakarya","Tekirdağ","Yalova"],
@@ -1168,7 +1304,7 @@
     kameraVarMi: "Kamera Sistemi Var mı", kameraAdet: "Kamera Adedi",
     kayitSuresiGun: "Kayıt Süresi (Gün)", kameraInternetIzleme: "Kameralar İnternetten İzlenebiliyor mu",
     jeneratorVarMi: "Jeneratör Var mı", jeneratorKva: "Jeneratör Gücü (kVA)",
-    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No"
+    genelNot: "Genel Not", bilgilendirmeFormuNo: "Bilgilendirme Formu Kayıt No", iletisimKisileri: "İletişim Kurulan Kişiler"
   };
   const EXPORT_ORDER = ["formNo","doldurmaKisi","bolge","sehir","createdAt","updatedAt","surecDurumu","mahalle","cadde","sokak","numara",
     "binaAraziAlani","binaKapaliAlani","binaOfisAlaniGenel","binaYasi","zeminDurumu","catiMalzemesi","catiMalzemesiDiger",
@@ -1182,7 +1318,7 @@
     "disZeminDurumu","yanasmaMesafesi","disAydinlatmaVarMi","disAydinlatmaAdet","paratonerVarMi",
     "guvenlikKlubesiVarMi","guvenlikFizikiDurum","guvenlikElektrikVarMi","guvenlikInternetVarMi",
     "kameraVarMi","kameraAdet","kayitSuresiGun","kameraInternetIzleme","jeneratorVarMi","jeneratorKva",
-    "genelNot","bilgilendirmeFormuNo"];
+    "genelNot","bilgilendirmeFormuNo","iletisimKisileri"];
 
   // ============================================================
   // GOOGLE SHEETS BAĞLANTISI
@@ -1277,29 +1413,6 @@
     });
   }
 
-  // ---- PDF RAPORU OLUŞTURMA ----
-  const pdfBtn = $("pdfBtn");
-
-  async function generatePdfForFormNo_(formNo, btn){
-    if(!formNo) return;
-    const originalLabel = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = "PDF hazırlanıyor…";
-    try{
-      const result = await apiPost({ action:"generatePdf", data:{ formNo } });
-      if(result.ok && result.url){
-        window.open(result.url, "_blank");
-      } else {
-        showBanner("err","PDF oluşturulamadı: " + (result.error || "önce formu kaydetmeniz gerekebilir."));
-      }
-    }catch(e){
-      showBanner("err","PDF oluşturulurken bir hata oluştu. Bağlantıyı kontrol edin.");
-    }
-    btn.disabled = false;
-    btn.textContent = originalLabel;
-  }
-
-  pdfBtn.addEventListener("click", () => generatePdfForFormNo_(currentFormNo, pdfBtn));
 
   // ---- AYNI ŞEHİRDEKİ KAYIT SAYACI ----
   const cityCountInfo = $("cityCountInfo");
@@ -1454,7 +1567,6 @@
       applyBilgiToDepoForm_(result.record);
       unlockDetayForm_();
       // PDF sadece daha önce kaydedilmiş gerçek bir Detay kaydı varsa oluşturulabilir.
-      pdfBtn.style.display = existingDetay ? "block" : "none";
       $("bilgilendirmeFormuNo").value = formNo;
       $("megaDepoFormu").open = true;
       showFormView();
@@ -1652,7 +1764,7 @@
 
   function fillForm(data){
     FIELD_IDS.forEach(id => {
-      if(id === "sehir" || id === "doldurmaKisi") return; // ayrıca özel dolduruluyor
+      if(id === "sehir" || id === "doldurmaKisi" || id === "iletisimKisileri") return; // ayrıca özel dolduruluyor
       $(id).value = (data && data[id] != null) ? data[id] : "";
     });
     syncDoldurmaKisi_(data && data.doldurmaKisi);
@@ -1660,6 +1772,11 @@
     updateCatiDigerVisibility();
     updateSuDeposuKapasiteVisibility();
     cityCountInfo.style.display = "none";
+    try{
+      detayContactMgr.setContacts(data && data.iletisimKisileri ? JSON.parse(data.iletisimKisileri) : []);
+    }catch(e){
+      detayContactMgr.setContacts([]);
+    }
   }
 
   function clearForm(){
@@ -1667,7 +1784,6 @@
     currentFormNo = null;
     displayFormNo.textContent = "Kayıt sonrası otomatik atanır";
     formNoInput.value = "";
-    pdfBtn.style.display = "none";
     unlockAutoFilledFields_();
     lockDetayForm_();
     document.querySelectorAll("section.card").forEach((el,i)=>{ el.open = (i===0); });
@@ -1719,7 +1835,6 @@
       displayFormNo.textContent = formNo;
       formNoInput.value = formNo;
       $("bilgilendirmeFormuNo").value = result.record.bilgilendirmeFormuNo || formNo;
-      pdfBtn.style.display = "block";
       unlockDetayForm_();
       lockAutoFilledFields_();
       document.querySelectorAll("section.card").forEach(el => el.open = true);
@@ -1781,7 +1896,6 @@
       currentFormNo = result.formNo;
       displayFormNo.textContent = result.formNo;
       formNoInput.value = result.formNo;
-      pdfBtn.style.display = "block";
       const note = emptyOptionalCount > 0 ? (" (" + emptyOptionalCount + " alan boş bırakıldı)") : "";
       showBanner("ok", "Kaydedildi. Kayıt No: " + result.formNo + note);
       allRecordsCache = null;
@@ -1957,15 +2071,9 @@
         showFormView();
         await loadByFormNo(d.formNo);
       });
-      const pdfListBtn = document.createElement("button");
-      pdfListBtn.textContent = "📄 PDF";
-      pdfListBtn.type = "button";
-      pdfListBtn.className = "pdf-btn";
-      pdfListBtn.addEventListener("click", () => generatePdfForFormNo_(d.formNo, pdfListBtn));
       const actionsWrap = document.createElement("div");
       actionsWrap.className = "ar-item-actions";
       actionsWrap.appendChild(btn);
-      actionsWrap.appendChild(pdfListBtn);
       row.appendChild(actionsWrap);
       arList.appendChild(row);
     });
@@ -2140,7 +2248,8 @@
     bilgiYanginSprinklerVarMi: "yanginSprinklerVarMi",
     bilgiYanginDolabiVarMi: "yanginDolabiVarMi",
     bilgiRampaYanasmaMesafesi: "rampaYanasmaMesafesi",
-    bilgiGuvenlikKlubesiVarMi: "guvenlikKlubesiVarMi"
+    bilgiGuvenlikKlubesiVarMi: "guvenlikKlubesiVarMi",
+    bilgiIletisimKisileri: "iletisimKisileri"
   };
   const BILGI_LABELS = {
     doldurmaKisi: "Formu Dolduran",
@@ -2150,7 +2259,8 @@
     rampaKapisiVarMi: "Rampa Kapısı Var mı", rampaKapisiAdet: "Rampa Kapısı Sayısı",
     yagmurInisiSistemi: "Yağmur İnişleri Sistemi", logarVarMi: "Depo İçerisinde Logar Var mı",
     yanginSprinklerVarMi: "Yangın Sprinkler Sistemi Var mı", yanginDolabiVarMi: "Yangın Dolabı Var mı",
-    rampaYanasmaMesafesi: "Rampa Yanaşma Mesafesi", guvenlikKlubesiVarMi: "Güvenlik Klübesi Var mı"
+    rampaYanasmaMesafesi: "Rampa Yanaşma Mesafesi", guvenlikKlubesiVarMi: "Güvenlik Klübesi Var mı",
+    iletisimKisileri: "İletişim Kurulan Kişiler"
   };
 
 
@@ -2176,7 +2286,7 @@
 
   function fillBilgiForm(data){
     Object.keys(BILGI_KEY_MAP).forEach(id => {
-      if(id === "bilgiDoldurmaKisi" || id === "bilgiYagmurInisiSistemi") return; // ayrıca özel dolduruluyor
+      if(id === "bilgiDoldurmaKisi" || id === "bilgiYagmurInisiSistemi" || id === "bilgiIletisimKisileri") return; // ayrıca özel dolduruluyor
       const key = BILGI_KEY_MAP[id];
       $(id).value = (data && data[key] != null) ? data[key] : "";
     });
@@ -2185,6 +2295,11 @@
     syncBilgiGpsDisplay();
     bilgiPhotoUrls = (data && data.fotograflar) ? String(data.fotograflar).split("\n").filter(Boolean) : [];
     renderBilgiPhotoGallery();
+    try{
+      bilgiContactMgr.setContacts(data && data.iletisimKisileri ? JSON.parse(data.iletisimKisileri) : []);
+    }catch(e){
+      bilgiContactMgr.setContacts([]);
+    }
   }
 
   function clearBilgiForm(){
@@ -2236,6 +2351,7 @@
       bilgiDisplayFormNo.textContent = result.formNo;
       showBilgiBanner("ok", "Kaydedildi. Kayıt No: " + result.formNo);
       loadBilgiRecent();
+      loadSorguNumbers_("gateNumbersList", "bilgilendirmeFormuNo");
     }catch(e){
       showBilgiBanner("err", "Kaydedilemedi. Bağlantıyı kontrol edip tekrar deneyin.");
     }
@@ -2414,8 +2530,8 @@
   // ---- GLOBAL BARDAKİ TEK "KAYIT GÖRÜNTÜLE / SORGULA" WIDGET'I ----
   const sharedSorguBox = $("sharedSorguBox");
 
-  async function loadSorguNumbers_(){
-    const listEl = $("sorguNumbersList");
+  async function loadSorguNumbers_(listElId, targetInputId){
+    const listEl = $(listElId);
     listEl.innerHTML = '<span class="sorgu-numbers-title">Yükleniyor…</span>';
     try{
       const result = await apiGet({action:"listBilgilendirme"});
@@ -2432,7 +2548,7 @@
         chip.type = "button";
         chip.className = "sorgu-number-chip";
         chip.textContent = r.formNo;
-        chip.addEventListener("click", () => { $("sharedSorguInput").value = r.formNo; });
+        chip.addEventListener("click", () => { $(targetInputId).value = r.formNo; });
         listEl.appendChild(chip);
       });
     }catch(e){
@@ -2445,7 +2561,7 @@
     sharedSorguBox.style.display = isHidden ? "block" : "none";
     if(isHidden){
       $("sharedSorguInput").focus();
-      loadSorguNumbers_();
+      loadSorguNumbers_("sorguNumbersList", "sharedSorguInput");
     }
   });
   $("sharedOpenOnBilgiBtn").addEventListener("click", () => {
@@ -2458,6 +2574,9 @@
   $("statsToggleBtn").addEventListener("click", () => {
     showAllRecordsView();
   });
+
+  // Detay Formu'nun kilit ekranında da önceden kaydedilmiş numaraları göster
+  loadSorguNumbers_("gateNumbersList", "bilgilendirmeFormuNo");
 })();
 </script>
 
