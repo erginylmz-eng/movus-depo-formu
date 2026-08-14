@@ -1179,88 +1179,6 @@
     return cleaned;
   }
 
-  // ---- İLETİŞİM KURULAN KİŞİLER (her iki formda da kullanılan ortak bileşen) ----
-  function setupContactManager_(prefix, hiddenInputId){
-    const listEl = $(prefix + "ContactList");
-    const addBtn = $(prefix + "AddContactBtn");
-    const addForm = $(prefix + "ContactAddForm");
-    const hiddenInput = $(hiddenInputId);
-    const msgEl = $(prefix + "ContactMsg");
-    let contacts = [];
-
-    function render(){
-      listEl.innerHTML = "";
-      contacts.forEach((c, idx) => {
-        const card = document.createElement("div");
-        card.className = "contact-card";
-        const detailBits = [];
-        if(c.mail) detailBits.push(c.mail);
-        if(c.firma) detailBits.push(c.firma);
-        if(c.gorev) detailBits.push(c.gorev);
-        card.innerHTML =
-          '<div><b>' + escapeHtml(c.adSoyad) + '</b> — ' + escapeHtml(c.telefon) +
-          (detailBits.length ? '<div class="contact-details">' + escapeHtml(detailBits.join(" · ")) + '</div>' : '') +
-          '</div>';
-        const rmBtn = document.createElement("button");
-        rmBtn.type = "button";
-        rmBtn.className = "contact-remove-btn";
-        rmBtn.textContent = "✕";
-        rmBtn.addEventListener("click", () => { contacts.splice(idx, 1); sync(); });
-        card.appendChild(rmBtn);
-        listEl.appendChild(card);
-      });
-      addBtn.style.display = contacts.length >= 5 ? "none" : "block";
-    }
-
-    function sync(){
-      hiddenInput.value = contacts.length ? JSON.stringify(contacts) : "";
-      render();
-    }
-
-    function setContacts(arr){
-      contacts = Array.isArray(arr) ? arr.slice(0, 5) : [];
-      sync();
-    }
-
-    addBtn.addEventListener("click", () => {
-      addForm.style.display = (addForm.style.display === "none") ? "block" : "none";
-      msgEl.style.display = "none";
-    });
-
-    $(prefix + "ContactSaveBtn").addEventListener("click", () => {
-      const adSoyad = $(prefix + "ContactAdSoyad").value.trim();
-      const telefon = $(prefix + "ContactTelefon").value.trim();
-      if(!adSoyad || !telefon){
-        msgEl.className = "contact-form-msg msg-err";
-        msgEl.textContent = "Ad Soyad ve Cep Telefonu zorunludur.";
-        msgEl.style.display = "block";
-        return;
-      }
-      if(contacts.length >= 5) return;
-      contacts.push({
-        adSoyad: adSoyad,
-        telefon: telefon,
-        mail: $(prefix + "ContactMail").value.trim(),
-        firma: $(prefix + "ContactFirma").value.trim(),
-        gorev: $(prefix + "ContactGorev").value.trim()
-      });
-      $(prefix + "ContactAdSoyad").value = "";
-      $(prefix + "ContactTelefon").value = "";
-      $(prefix + "ContactMail").value = "";
-      $(prefix + "ContactFirma").value = "";
-      $(prefix + "ContactGorev").value = "";
-      msgEl.style.display = "none";
-      addForm.style.display = "none";
-      sync();
-    });
-
-    render();
-    return { setContacts: setContacts, getRaw: () => hiddenInput.value };
-  }
-
-  const detayContactMgr = setupContactManager_("detay", "iletisimKisileri");
-  const bilgiContactMgr = setupContactManager_("bilgi", "bilgiIletisimKisileri");
-
   const REGION_CITIES = {
     "Marmara Bölgesi": ["Balıkesir","Bilecik","Bursa","Çanakkale","Edirne","İstanbul","Kırklareli","Kocaeli","Sakarya","Tekirdağ","Yalova"],
     "Ege Bölgesi": ["Afyonkarahisar","Aydın","Denizli","İzmir","Kütahya","Manisa","Muğla","Uşak"],
@@ -1343,6 +1261,89 @@
   }
 
   const $ = (id) => document.getElementById(id);
+
+  // ---- İLETİŞİM KURULAN KİŞİLER (her iki formda da kullanılan ortak bileşen) ----
+  function setupContactManager_(prefix, hiddenInputId){
+    const listEl = $(prefix + "ContactList");
+    const addBtn = $(prefix + "AddContactBtn");
+    const addForm = $(prefix + "ContactAddForm");
+    const hiddenInput = $(hiddenInputId);
+    const msgEl = $(prefix + "ContactMsg");
+    let contacts = [];
+
+    function render(){
+      listEl.innerHTML = "";
+      contacts.forEach((c, idx) => {
+        const card = document.createElement("div");
+        card.className = "contact-card";
+        const detailBits = [];
+        if(c.mail) detailBits.push(c.mail);
+        if(c.firma) detailBits.push(c.firma);
+        if(c.gorev) detailBits.push(c.gorev);
+        card.innerHTML =
+          '<div><b>' + escapeHtml(c.adSoyad) + '</b> — ' + escapeHtml(c.telefon) +
+          (detailBits.length ? '<div class="contact-details">' + escapeHtml(detailBits.join(" · ")) + '</div>' : '') +
+          '</div>';
+        const rmBtn = document.createElement("button");
+        rmBtn.type = "button";
+        rmBtn.className = "contact-remove-btn";
+        rmBtn.textContent = "✕";
+        rmBtn.addEventListener("click", () => { contacts.splice(idx, 1); sync(); });
+        card.appendChild(rmBtn);
+        listEl.appendChild(card);
+      });
+      addBtn.style.display = contacts.length >= 5 ? "none" : "block";
+    }
+
+    function sync(){
+      hiddenInput.value = contacts.length ? JSON.stringify(contacts) : "";
+      render();
+    }
+
+    function setContacts(arr){
+      contacts = Array.isArray(arr) ? arr.slice(0, 5) : [];
+      sync();
+    }
+
+    addBtn.addEventListener("click", () => {
+      addForm.style.display = (addForm.style.display === "none") ? "block" : "none";
+      msgEl.style.display = "none";
+    });
+
+    $(prefix + "ContactSaveBtn").addEventListener("click", () => {
+      const adSoyad = $(prefix + "ContactAdSoyad").value.trim();
+      const telefon = $(prefix + "ContactTelefon").value.trim();
+      if(!adSoyad || !telefon){
+        msgEl.className = "contact-form-msg msg-err";
+        msgEl.textContent = "Ad Soyad ve Cep Telefonu zorunludur.";
+        msgEl.style.display = "block";
+        return;
+      }
+      if(contacts.length >= 5) return;
+      contacts.push({
+        adSoyad: adSoyad,
+        telefon: telefon,
+        mail: $(prefix + "ContactMail").value.trim(),
+        firma: $(prefix + "ContactFirma").value.trim(),
+        gorev: $(prefix + "ContactGorev").value.trim()
+      });
+      $(prefix + "ContactAdSoyad").value = "";
+      $(prefix + "ContactTelefon").value = "";
+      $(prefix + "ContactMail").value = "";
+      $(prefix + "ContactFirma").value = "";
+      $(prefix + "ContactGorev").value = "";
+      msgEl.style.display = "none";
+      addForm.style.display = "none";
+      sync();
+    });
+
+    render();
+    return { setContacts: setContacts, getRaw: () => hiddenInput.value };
+  }
+
+  const detayContactMgr = setupContactManager_("detay", "iletisimKisileri");
+  const bilgiContactMgr = setupContactManager_("bilgi", "bilgiIletisimKisileri");
+
   const banner = $("statusBanner");
   const saveBtn = $("saveBtn");
   const newBtn = $("newBtn");
