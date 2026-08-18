@@ -1838,6 +1838,9 @@
       unlockDetayForm_();
       lockAutoFilledFields_();
       document.querySelectorAll("section.card").forEach(el => el.open = true);
+      showFormView();
+      $("megaDepoFormu").open = true;
+      $("megaDepoFormu").scrollIntoView({ behavior:"smooth", block:"start" });
       showBanner("info", formNo + " numaralı kayıt yüklendi. Değişiklik yapıp tekrar kaydedebilirsiniz.");
     }catch(e){
       showBanner("err","Kayıt getirilirken bir hata oluştu. Bağlantıyı kontrol edin.");
@@ -2067,10 +2070,7 @@
       const btn = document.createElement("button");
       btn.textContent = "Aç ve Düzenle";
       btn.type = "button";
-      btn.addEventListener("click", async () => {
-        showFormView();
-        await loadByFormNo(d.formNo);
-      });
+      btn.addEventListener("click", () => loadByFormNo(d.formNo));
       const actionsWrap = document.createElement("div");
       actionsWrap.className = "ar-item-actions";
       actionsWrap.appendChild(btn);
